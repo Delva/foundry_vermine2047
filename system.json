@@ -2,7 +2,7 @@
   "id": "vermine2047",
   "title": "Vermine 2047",
   "description": "Système de jeu non officiel pour le JDR post-apocalyptique Vermine 2047 (© Studio Agate). Fiches, moteur de dés (Main de d10, Réussites), Réserves et Blessures.",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "compatibility": {
     "minimum": "12",
     "verified": "12",
@@ -61,6 +61,20 @@
       "system": "vermine2047"
     },
     {
+      "name": "rites",
+      "label": "Rites chamaniques",
+      "path": "packs/rites",
+      "type": "Item",
+      "system": "vermine2047"
+    },
+    {
+      "name": "profils",
+      "label": "Profils",
+      "path": "packs/profils",
+      "type": "Item",
+      "system": "vermine2047"
+    },
+    {
       "name": "macros",
       "label": "Macros",
       "path": "packs/macros",
@@ -72,7 +86,7 @@
     {
       "name": "Vermine 2047",
       "sorting": "m",
-      "packs": ["adaptations", "traumatismes", "historiques", "afflictions", "macros"]
+      "packs": ["profils", "adaptations", "traumatismes", "historiques", "afflictions", "rites", "macros"]
     }
   ],
   "grid": {

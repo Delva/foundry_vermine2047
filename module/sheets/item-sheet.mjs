@@ -23,6 +23,10 @@ export class VermineItemSheet extends ItemSheet {
     ctx.isTraumatisme = this.item.type === "traumatisme";
     ctx.isHistorique = this.item.type === "historique";
     ctx.isAffliction = this.item.type === "affliction";
+    ctx.isRite = this.item.type === "rite";
+    ctx.isProfil = this.item.type === "profil";
+    ctx.archetypesOptions = Object.entries(VERMINE.archetypes)
+      .map(([key, l]) => ({ key, label: game.i18n.localize(l) }));
 
     ctx.competencesOptions = Object.entries(VERMINE.competences)
       .map(([key, c]) => ({ key, label: game.i18n.localize(c.label) }));

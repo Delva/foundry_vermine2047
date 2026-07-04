@@ -165,6 +165,16 @@ VERMINE.traitsArme = {
   fetiche: "VERMINE.Trait.fetiche"
 };
 
+/** Archétypes de personnage (regroupent les profils). */
+VERMINE.archetypes = {
+  chasseurs:    "VERMINE.Archetype.chasseurs",
+  combattants:  "VERMINE.Archetype.combattants",
+  nomades:      "VERMINE.Archetype.nomades",
+  specialistes: "VERMINE.Archetype.specialistes",
+  survivants:   "VERMINE.Archetype.survivants",
+  chamans:      "VERMINE.Archetype.chamans"
+};
+
 /** Types de Capacités (Totem / Profil). */
 VERMINE.typesCapacite = {
   totem:  "VERMINE.TypeCapacite.totem",

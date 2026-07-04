@@ -6,7 +6,7 @@
     "groupe": {}
   },
   "Item": {
-    "types": ["arme", "protection", "equipement", "capacite", "adaptation", "traumatisme", "historique", "affliction"],
+    "types": ["arme", "protection", "equipement", "capacite", "adaptation", "traumatisme", "historique", "affliction", "rite", "profil"],
     "arme": {},
     "protection": {},
     "equipement": {},
@@ -14,6 +14,8 @@
     "adaptation": {},
     "traumatisme": {},
     "historique": {},
-    "affliction": {}
+    "affliction": {},
+    "rite": {},
+    "profil": {}
   }
 }

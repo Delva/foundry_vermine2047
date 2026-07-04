@@ -106,6 +106,67 @@ const afflictions = [
   ["Fièvre des marais", "maladie", 6, "plusieurs jours", "", "Malus de 1D aux Actions tant que la fièvre dure ; empêche de recharger totalement les Réserves au repos."]
 ];
 
+// --- Rites chamaniques ---
+// Lancement : offrande + transe (pas de jet), puis jet Caractéristique + Niveau du Rite,
+// Difficulté 7 par défaut ; les Réussites déterminent la puissance. Transe interrompue = -2D
+// dans chaque Réserve. (*) = connu gratuitement à la création par les chamans.
+const rites = [
+  ["Rite d'appel", "1 h / 10 min / 1 min", "Jet de Volonté. Attire des animaux sauvages ; Difficulté selon le Gabarit (3 insecte, 5 rat, 7 chien, 9 ours). 1 animal appelé et 1 h de présence par Réussite. Si un animal appelé meurt, le chaman perd 5D de Réserves."],
+  ["Rite d'apprentissage *", "3 j / 12 h / 3 h", "Gratuit à la création. En phase d'Expérience uniquement : apprend un nouveau Rite ou augmente son Niveau (jet d'Expérience, Diff. 5/7/9/10). Vide les deux Réserves."],
+  ["Rite de l'aspect totémique", "1 h / 10 min / 1 min", "Jet de Volonté. Prend l'aspect d'un animal lié à un Totem : Bonus égal aux Réussites pour les Actions liées à cet aspect, une scène. Offrande de sang = 1 Blessure Légère. Interdit pour le Totem opposé."],
+  ["Rite de bénédiction", "12 h / 1 h / 1 min", "Jet = Caractéristique d'usage de l'objet. Rend un objet/arme/outil plus efficace : +1D Bonus par Réussite pendant 1 jour pour son utilisateur. Objets bénis à la fois = Niveau du Rite."],
+  ["Rite de communication animale", "1 min / 10 s / instantané", "Jet d'Empathie (Diff. 3 compagnon, 5 même espèce, 7 mammifères, 9 insectes). 1 information par Réussite. Contact physique requis."],
+  ["Rite de communion", "10 min / 1 min / qq s", "Jet d'Empathie. Perçoit les événements marquants passés d'un lieu (portée temporelle selon le Mode). 1 information par Réussite. Coût : -2D de Sang-Froid. Doit être seul sur place."],
+  ["Rite de contrition *", "12 h / 3 h / 1 h", "Gratuit à la création. Jet de Vigueur. Récupère les Dés de Réserve perdus après un Interdit brisé : 1D par Réussite. Le chaman doit s'infliger de vraies Blessures dont la somme des Seuils égale les Dés récupérés."],
+  ["Rite de divination", "12 h / 3 h / 1 h", "Jet d'Empathie. Pose une question fermée aux Totems ; vision cryptique, 1 indice par Réussite. Coût : 8D / 6D / 4D de Réserves selon le Mode. Transe non interruptible."],
+  ["Rite de fertilité", "3 j / 12 h / 3 h", "Jet de Santé. +10 % de fertilité par Réussite (écosystème, troupeau, communauté). Sacrifice de 2 animaux ; vide l'Effort. Interdit au chaman du Solitaire."],
+  ["Rite de guérison", "1 nuit / 1 h / 10 min", "Jet de Santé. Soigne 1 Blessure Légère par bénéficiaire, +1 par Réussite (répartie). Chaque bénéficiaire paie 1D d'Effort par Blessure soignée. Blessures Graves/Mortelles selon le Mode."],
+  ["Rite du guerrier", "1 h / 10 min / 1 min", "Jet de Vigueur. Ajoute à la Réserve de Groupe des Dés temporaires = Réussites + valeur d'Attaque de l'animal prédateur sacrifié. Les Dés inutilisés disparaissent en fin de combat (ou après 12 h)."],
+  ["Rite d'intercession", "12 h / 3 h / 1 h", "Jet de Volonté. Imprègne une zone (~50 m) de l'esprit d'un Totem : +1D aux Actions respectant ses Instincts, -1D à celles brisant ses Interdits. Offrande de sang = 1 Blessure Légère. Réussites doublées avec son propre Totem."],
+  ["Rite de perception totémique", "2 h / 10 min / 1 min", "Jet d'Empathie. Révèle le Totem dominant de la région (informations supplémentaires selon les Réussites)."],
+  ["Rite de purification", "par point de Virulence", "Jet de Santé. Purge une infection, toxine ou venin : -1 point de Virulence par Réussite (1 Réussite stoppe la contagion). Doit libérer un animal qui mourra de l'infection ; le bénéficiaire partage la transe."],
+  ["Rite du rêve lucide", "6 h (tous Modes)", "Jet de Volonté. Voyage hors du corps pour observer un lieu et transmettre un message à un dormeur (portée et longueur du message selon le Mode). Le sommeil n'est pas réparateur."],
+  ["Rite de transfert", "1 h / 10 min / instantané", "Jet de Volonté. Transfère l'esprit du chaman dans un animal non hostile (utilise ses Caractéristiques physiques) ; 1 min à 1 h par Réussite selon le Mode. Si l'animal meurt, les deux Réserves du chaman sont vidées."]
+];
+
+// --- Profils (24) regroupés par archétype ---
+const boosts = {
+  chasseurs: "Deux Spécialités supplémentaires à la création (Domaines Animal, Arme ou Terre).",
+  combattants: "5D de Matériel supplémentaires à la création (arme ou protection uniquement).",
+  nomades: "Réserves d'Effort et de Sang-Froid augmentées de 1D à la création.",
+  specialistes: "Monte une Compétence d'un cran supplémentaire (Expert→Maître pour Adulte/Ancien, Confirmé→Expert pour Jeune).",
+  survivants: "Un cercle de Blessure Légère supplémentaire à la création.",
+  chamans: "Connaît les Rites d'apprentissage et de contrition, plus deux Rites au choix du profil."
+};
+
+// [nom, archetype, domaine, capaciteNom, capaciteEffet, competences, specialites, rites?]
+const profils = [
+  ["Le Dresseur", "chasseurs", "l'Animal", "Communication", "Empathie + Animalisme (Diff. 7) pour comprendre et communiquer avec son auxiliaire animal (joué par le MJ, valeurs fixes).", "Déb. : Discrétion, Dissection, Environnement, Flore, Répulsion, Soins ; Conf. : Alimentation, Armes de tir, Lancer, Traces ; Exp. : Animalisme, Faune.", "Un type d'animal auxiliaire, une arme de lancer ou de tir."],
+  ["L'Éclaireur", "chasseurs", "la Terre", "Festin", "Savoir + Alimentation (Diff. = repas +3) : un festin qui rend 3D d'Effort et 1D de Sang-Froid (2D d'Effort même en cas d'échec).", "Déb. : Athlétisme, Discrétion, Rumeurs, Toxiques, Vestiges, Vigilance ; Conf. : Faune, Flore, Traces ; Exp. : Alimentation, Environnement.", "Un type de plantes, un type d'environnement."],
+  ["L'Éradicateur", "chasseurs", "l'Animal ou la Machine", "Technicité", "Peut utiliser Technologie au lieu de Bricolage pour les pièges ; Précision + Technologie avec (I) Handicap, réussite = 2 Réussites bonus à répartir.", "Déb. : Armes à feu/tir, Artisanat, Discrétion, Dissection, Environnement, Flore, Traces ; Conf. : Bricolage, Faune, Technologie ; Exp. : Répulsion, Toxiques.", "Pièges, appâts, un type de vermine."],
+  ["Le Fauve", "chasseurs", "l'Animal ou la Survie", "Embuscade", "Une fois une proie repérée, Bonus de 1D à la première Action tentée contre elle.", "Déb. : Alimentation, Animalisme, Dissection, Environnement, Faune, Vigilance ; Conf. : Armes à feu/tir, Athlétisme, Lancer, Traces ; Exp. : Corps à corps, Discrétion, Mêlée.", "Gibier, pistage, un type d'arme, une espèce."],
+  ["L'Artificier", "combattants", "l'Arme ou la Machine", "As", "Ignore les Handicaps de Rareté des Compétences de la Machine qu'il ne possède pas (et de Spécialisation s'il possède la Compétence).", "Déb. : Armes de tir, Lancer, Mécanique, Mêlée, Répulsion, Toxiques, Vestiges ; Conf. : Armes à feu, Bricolage, Technologie ; Exp. : Armurerie, Artisanat.", "Armes lourdes, explosifs, désamorçage, drone/robot."],
+  ["Le Bourreau", "combattants", "l'Arme ou la Survie", "Muraille", "Quiconque tente une Action contre lui ajoute un degré de Handicap à sa première tentative.", "Déb. : Armes de tir, Armurerie, Discrétion, Lancer, Psychologie ; Conf. : Armes à feu, Athlétisme, Vigilance ; Exp. : Corps à corps, Mêlée.", "Duel, un type d'arme de mêlée, intimidation."],
+  ["La Sentinelle", "combattants", "l'Arme ou la Survie", "Patience", "Peut diminuer de 1 le Seuil de Blessure Mortelle d'une cible en ajoutant un degré de Handicap à son jet.", "Déb. : Athlétisme, Corps à corps, Environnement, Lancer, Traces, Vestiges ; Conf. : Armes à feu/tir, Armurerie, Mêlée ; Exp. : Discrétion, Vigilance.", "Camouflage, une arme à feu/tir, espionnage, renseignement."],
+  ["Le Soldat", "combattants", "l'Arme", "Réactivité", "Son jet de Réaction (Réflexes + Vigilance) est au minimum Actif, jamais Passif.", "Déb. : Discrétion, Environnement, Lancer, Psychologie, Traces, Vigilance ; Conf. : Armes de tir, Armurerie, Athlétisme, Corps à corps ; Exp. : Armes à feu, Mêlée.", "Un type d'armes à feu, intimidation, munitions."],
+  ["Le Messager", "nomades", "la Terre ou l'Homme", "Il était une fois", "Réputation initiale -1 ; sur un jet de Savoir, la Réputation de l'information ciblée est aussi diminuée de 1.", "Déb. : Alimentation, Athlétisme, Civilisation, Discrétion, Faune, Flore, Mécanique, Pilotage, Vigilance ; Conf. : Environnement, Psychologie, Vestiges ; Exp. : Route, Rumeurs.", "Recueil d'informations, mythologies, cartographie, itinéraires."],
+  ["Le Pilote", "nomades", "la Machine ou l'Animal", "Transport", "3D de Matériel supplémentaires (véhicule ou monture) ; +1D pour réparer/soigner son véhicule ou sa monture endommagé.", "Déb. : Discrétion, Flore, Rumeurs, Technologie, Traces, Vestiges, Vigilance ; Conf. : Bricolage, Environnement, Faune, Mécanique, Soins ; Exp. : Animalisme, Pilotage, Route.", "Conduite d'un type de véhicule, manœuvres, attelage."],
+  ["Le Prêcheur", "nomades", "l'Homme", "Adage", "+1D aux jets de Volonté pour capter l'attention de plusieurs personnes ; peut utiliser Volonté au lieu de Savoir quand la conviction prime.", "Déb. : Environnement, Soins, Technologie, Vestiges, Vigilance ; Conf. : Arts, Civilisation, Route ; Exp. : Psychologie, Rumeurs.", "Démagogie, mensonge, discrétion."],
+  ["Le Traceur", "nomades", "la Terre", "Chat maigre", "Athlétisme et une Spécialité suivent les règles du Domaine de prédilection (réussites automatiques possibles).", "Déb. : Alimentation, Discrétion, Faune, Flore, Psychologie, Vestiges, Vigilance ; Conf. : Athlétisme, Rumeurs, Traces ; Exp. : Environnement, Route.", "Art du déplacement, escalade, fouille, pièges, repérage."],
+  ["Le Leader", "specialistes", "l'Homme", "Galvanisation", "Volonté ou Empathie + Psychologie (Diff. 7) : chaque membre du Groupe gagne +1D sur une Action (2D si Réussites ≥ nombre de membres).", "Déb. : Armes à feu, Arts, Athlétisme, Corps à corps, Environnement, Mêlée, Soins ; Conf. : Route, Rumeurs, Vestiges ; Exp. : Civilisation, Vigilance ; Maître : Psychologie.", "Mensonge, manipulation, encouragement, démagogie."],
+  ["Le Mentor", "specialistes", "l'Homme", "Enseignement", "Chaque matin, une de ses Compétences Confirmé+ est partagée à tout le Groupe pour la journée (plafonnée à Confirmé).", "Déb. : Artisanat, Arts, Environnement, Rumeurs, Vestiges ; Conf. : Civilisation, Soins, Technologie, Vigilance ; Exp. : Psychologie ; Maître : au choix.", "Évaluation, éducation, une profession, un domaine scientifique."],
+  ["Le Soigneur", "specialistes", "l'Homme", "Pharmacie", "3D de Matériel supplémentaires (matériel médical) ; +1D à chaque phase de Matériel pour du matériel médical.", "Déb. : Alimentation, Artisanat, Arts, Faune, Technologie, Vestiges ; Conf. : Civilisation, Dissection, Flore ; Exp. : Psychologie, Toxiques ; Maître : Soins.", "Diagnostic, premiers secours, chirurgie, un type de pathologies."],
+  ["Le Virtuose", "specialistes", "au choix", "Perfectionniste", "Une fois par scène, en réussissant un jet de Difficulté ≥ 7 via une Spécialité, récupère 1D de Sang-Froid.", "Déb. : Environnement, Bricolage, Faune, Flore, Répulsion, Rumeurs, Toxiques ; Conf. : Artisanat, Mécanique, Vestiges ; Exp. : Arts, Civilisation, Technologie ; Maître : au choix.", "Expertise, estimation, un domaine scientifique, une profession."],
+  ["L'Architecte", "survivants", "l'Homme ou la Terre", "Prospérité", "Quand un Objectif de Groupe est rempli, gagne 1D d'Expérience individuel (3D pour un Objectif majeur).", "Déb. : Armes à feu, Armurerie, Artisanat, Environnement, Mécanique, Route ; Conf. : Arts, Psychologie, Rumeurs ; Exp. : Civilisation, Technologie, Vestiges.", "Restauration, religions, industrie."],
+  ["Le Gardien", "survivants", "l'Arme, la Machine ou la Survie", "Protecteur", "Une fois par combat, défense gratuite (même hors de son tour) pour subir à la place d'un allié proche une attaque qui le visait.", "Déb. : Animalisme, Bricolage, Discrétion, Répulsion, Psychologie, Soins ; Conf. : Athlétisme, Armurerie, Artisanat, Corps à corps ; Exp. : Armes à feu/tir, Mêlée, Vigilance.", "Fortifications, défenses, armures, réparations."],
+  ["L'Invisible", "survivants", "la Survie ou la Terre", "Collectionneur", "Une fois par jour, Savoir + Bricolage vs Rareté d'un objet cherché : réussite = il en trouve un dans son barda (Fiabilité = Réussites +1).", "Déb. : Alimentation, Civilisation, Environnement, Faune, Flore, Mécanique, Rumeurs, Technologie ; Conf. : Bricolage, Route, Vigilance ; Exp. : Discrétion, Vestiges.", "Fouiller, voler, dissimuler."],
+  ["L'Orphelin", "survivants", "la Survie ou la Terre", "Increvable", "Sur un jet de Santé raté, peut dépenser autant de Dés d'Effort que de Réussites manquantes pour éviter les conséquences ; sur un succès, gagne 1D d'Effort (dépassement possible).", "Déb. : Animalisme, Athlétisme, Bricolage, Corps à corps, Faune, Flore, Traces ; Conf. : Discrétion, Environnement, Route ; Exp. : Alimentation, Vigilance.", "Comestibles, repérage, orientation."],
+  ["L'Animiste", "chamans", "l'Animal ou la Terre", "Rituel", "Une fois par séance, un rituel permet à tous les participants de récupérer toute leur Réserve de Sang-Froid.", "Déb. : Alimentation, Dissection, Psychologie, Rumeurs, Traces, Vigilance ; Conf. : Faune, Flore ; Exp. : Animalisme, Environnement.", "Apaisement, une espèce, un environnement, religion.", "Rites : communication animale, guérison, intercession, rêve lucide, transfert."],
+  ["Le Mimétique", "chamans", "l'Animal, la Survie ou la Terre", "Sens de la Nature", "Quand il se fie à son instinct plutôt qu'à ses connaissances, +1D (hors jets de Savoir et Domaine de la Machine).", "Déb. : Animalisme, Athlétisme, Discrétion, Faune, Flore, Route ; Conf. : Alimentation, Traces ; Exp. : Environnement, Vigilance.", "Apaisement, météo, mimétisme, orientation.", "Rites : appel, aspect totémique, purification."],
+  ["L'Oracle", "chamans", "l'Homme, la Survie ou la Terre", "Vision", "Une fois par session, Empathie + Vigilance (Diff. 9) pour obtenir une information vitale, transmise comme une sensation cryptique.", "Déb. : Animalisme, Discrétion, Environnement, Faune, Flore, Route ; Conf. : Psychologie, Traces ; Exp. : Rumeurs, Vigilance.", "Charisme, mensonge, météo, religion.", "Rites : communion, divination, perception totémique, rêve lucide."],
+  ["Le Sorcier", "chamans", "l'Animal, l'Homme, la Survie ou la Terre", "Captivé", "Un rituel choisit deux Domaines : jusqu'au prochain rituel, +1D aux jets du premier Domaine, -1D à ceux du second.", "Déb. : Athlétisme, Environnement, Faune, Flore, Répulsion, Toxiques ; Conf. : Rumeurs, Soins ; Exp. : Psychologie, Vigilance.", "Enseignement, intimidation, manipulation, prestidigitation.", "Rites : bénédiction, fertilité, guérison, guerrier."]
+];
+
 const macroJet = [
   "// Jet Vermine — ouvre le dialogue de jet pour le personnage sélectionné.",
   "const actor = canvas.tokens?.controlled[0]?.actor ?? game.user.character;",
@@ -147,6 +208,33 @@ export const PACKS = [
     docs: afflictions.map(([name, categorie, virulence, duree, frequence, desc]) => ({
       name, type: "affliction", img: "icons/svg/poison.svg",
       system: { description: p(desc), categorie, virulence, duree, frequence }
+    }))
+  },
+  {
+    name: "rites",
+    label: "Rites chamaniques",
+    type: "Item",
+    docs: rites.map(([name, duree, desc]) => ({
+      name, type: "rite", img: "icons/svg/daze.svg",
+      system: { description: p(desc), cout: 0, portee: "", duree }
+    }))
+  },
+  {
+    name: "profils",
+    label: "Profils",
+    type: "Item",
+    docs: profils.map(([name, archetype, domaine, capNom, capEffet, competences, specialites, ritesTxt]) => ({
+      name, type: "profil", img: "icons/svg/mystery-man.svg",
+      system: {
+        archetype,
+        boost: boosts[archetype],
+        capaciteUnique: capNom,
+        competences,
+        description: p(`<strong>Capacité — ${capNom} :</strong> ${capEffet}`)
+          + p(`<strong>Domaine de prédilection :</strong> ${domaine}`)
+          + p(`<strong>Spécialités :</strong> ${specialites}`)
+          + (ritesTxt ? p(`<strong>${ritesTxt}</strong>`) : "")
+      }
     }))
   },
   {

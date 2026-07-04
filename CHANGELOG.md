@@ -8,6 +8,24 @@ Compatibilité : **FoundryVTT v12**.
 
 ---
 
+## [0.5.0] — Rites & Profils (fin de la phase 5)
+
+### Ajouté
+- **Type d'objet Rite chamanique** + compendium **Rites chamaniques** (16 Rites :
+  appel, apprentissage, aspect totémique, bénédiction, communication animale,
+  communion, contrition, divination, fertilité, guérison, guerrier, intercession,
+  perception totémique, purification, rêve lucide, transfert) avec jet, coût et transe.
+- **Type d'objet Profil** + compendium **Profils** (24 profils regroupés par archétype,
+  avec Boost d'archétype, Capacité unique, Domaine de prédilection, Compétences et
+  Spécialités suggérées). Les profils s'ajoutent comme fiches de référence sur le
+  personnage (glisser-déposer ou sélecteur « + »).
+- Constante d'archétypes (Chasseurs, Combattants, Nomades, Spécialistes, Survivants,
+  Chamans) et affichage des Rites/Profils sur la fiche Personnage.
+
+La **phase 5 (Confort)** est ainsi complète.
+
+---
+
 ## [0.4.1] — Sélecteur de compendium
 
 ### Ajouté
@@ -169,6 +187,7 @@ Compatibilité : **FoundryVTT v12**.
 
 ---
 
+[0.5.0]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.5.0
 [0.4.1]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.4.1
 [0.4.0]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.4.0
 [0.3.1]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.3.1

@@ -112,9 +112,9 @@ Certains tableaux du guide en ligne sont des images non exploitables. Valeurs
 - **Phase 3** — Le Groupe ✅ (acteur `groupe` : Réserve de Groupe, Moral, Totem/Instincts/Interdits, Niveau, Objectifs, membres, Capacités ; dépense de la Réserve de Groupe intégrée au jet).
 - **Phase 4** — Compendiums (mécaniques) 🚧 : Adaptations & Mutations, Traumatismes,
   Historique livrés (`npm run build:packs`). Restent armes/protections et bestiaire.
-- **Phase 5** — Confort 🚧 : macros (API `game.vermine`, macro « Jet Vermine ») et
-  Afflictions (maladies/venins/parasites/addictions) livrés. Restent profils/archétypes,
-  rites chamaniques.
+- **Phase 5** — Confort ✅ : macros (API `game.vermine`, macro « Jet Vermine »),
+  Afflictions, Rites chamaniques (16) et Profils par archétype (24) livrés ; sélecteur
+  de compendium au clic sur « + ».
 
 ---
 

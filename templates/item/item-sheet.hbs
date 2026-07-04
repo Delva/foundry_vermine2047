@@ -86,6 +86,30 @@
     </div>
     {{/if}}
 
+    {{#if isRite}}
+    <div class="form-grid">
+      <label>{{localize "VERMINE.Rite.Cout"}}<input type="number" name="system.cout" value="{{system.cout}}" min="0" /></label>
+      <label>{{localize "VERMINE.Rite.Portee"}}<input type="text" name="system.portee" value="{{system.portee}}" /></label>
+      <label>{{localize "VERMINE.Rite.Duree"}}<input type="text" name="system.duree" value="{{system.duree}}" /></label>
+    </div>
+    {{/if}}
+
+    {{#if isProfil}}
+    <div class="form-grid">
+      <label>{{localize "VERMINE.Profil.Archetype"}}
+        <select name="system.archetype">
+          <option value="">—</option>
+          {{#each archetypesOptions as |a|}}
+          <option value="{{a.key}}" {{#if (eq a.key ../system.archetype)}}selected{{/if}}>{{a.label}}</option>
+          {{/each}}
+        </select>
+      </label>
+      <label>{{localize "VERMINE.Profil.Boost"}}<input type="text" name="system.boost" value="{{system.boost}}" /></label>
+      <label class="wide">{{localize "VERMINE.Profil.CapaciteUnique"}}<input type="text" name="system.capaciteUnique" value="{{system.capaciteUnique}}" /></label>
+      <label class="wide">{{localize "VERMINE.Profil.Competences"}}<input type="text" name="system.competences" value="{{system.competences}}" /></label>
+    </div>
+    {{/if}}
+
     {{#if isCapacite}}
     <div class="form-grid">
       <label>{{localize "VERMINE.Capacite.Type"}}

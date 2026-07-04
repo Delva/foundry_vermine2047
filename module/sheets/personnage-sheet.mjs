@@ -134,6 +134,8 @@ export class PersonnageSheet extends ActorSheet {
     ctx.traumatismes = this.actor.items.filter(i => i.type === "traumatisme");
     ctx.historiques = this.actor.items.filter(i => i.type === "historique");
     ctx.afflictions = this.actor.items.filter(i => i.type === "affliction");
+    ctx.rites = this.actor.items.filter(i => i.type === "rite");
+    ctx.profils = this.actor.items.filter(i => i.type === "profil");
 
     ctx.enrichedBio = await TextEditor.enrichHTML(sys.biographie ?? "", { async: true });
     ctx.enrichedNotes = await TextEditor.enrichHTML(sys.notes ?? "", { async: true });

@@ -108,6 +108,33 @@ export class AfflictionData extends foundry.abstract.TypeDataModel {
   }
 }
 
+/** Rite chamanique. */
+export class RiteData extends foundry.abstract.TypeDataModel {
+  static defineSchema() {
+    return {
+      description: new fields.HTMLField(),
+      // Coût éventuel en Dés de Réserve.
+      cout: new fields.NumberField({ required: false, integer: true, min: 0, initial: 0 }),
+      portee: new fields.StringField({ required: false, blank: true, initial: "" }),
+      duree: new fields.StringField({ required: false, blank: true, initial: "" })
+    };
+  }
+}
+
+/** Profil de personnage (fiche de référence : archétype, boost, capacité unique). */
+export class ProfilData extends foundry.abstract.TypeDataModel {
+  static defineSchema() {
+    const archetypes = Object.keys(VERMINE.archetypes);
+    return {
+      description: new fields.HTMLField(),
+      archetype: new fields.StringField({ required: false, blank: true, choices: archetypes, initial: "" }),
+      boost: new fields.StringField({ required: false, blank: true, initial: "" }),
+      capaciteUnique: new fields.StringField({ required: false, blank: true, initial: "" }),
+      competences: new fields.StringField({ required: false, blank: true, initial: "" })
+    };
+  }
+}
+
 /** Capacité (de Totem ou de Profil). */
 export class CapaciteData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
