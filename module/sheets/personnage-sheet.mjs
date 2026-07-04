@@ -1,7 +1,22 @@
 import { VERMINE } from "../config.mjs";
+import { PersonnageOptions } from "../apps/personnage-options.mjs";
 
 /** Fiche du Personnage joueur. */
 export class PersonnageSheet extends ActorSheet {
+  /** @override — ajoute un bouton « Options » dans la barre de titre. */
+  _getHeaderButtons() {
+    const buttons = super._getHeaderButtons();
+    if (this.isEditable) {
+      buttons.unshift({
+        label: game.i18n.localize("VERMINE.Options.Titre"),
+        class: "vermine-options",
+        icon: "fas fa-sliders",
+        onclick: () => new PersonnageOptions(this.actor).render(true)
+      });
+    }
+    return buttons;
+  }
+
   /** @override */
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {

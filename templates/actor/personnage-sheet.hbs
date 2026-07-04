@@ -33,6 +33,10 @@
         <label class="chaman-check">{{localize "VERMINE.Chaman"}}
           <input type="checkbox" name="system.chaman" {{checked system.chaman}} />
         </label>
+        <div class="comp-search-wrap header-search">
+          <i class="fas fa-magnifying-glass"></i>
+          <input type="text" class="comp-search" placeholder="{{localize 'VERMINE.Comp.Rechercher'}}" />
+        </div>
       </div>
     </div>
   </header>
@@ -85,13 +89,7 @@
         <h3>{{localize "VERMINE.Blessure.Titre"}}</h3>
         {{#each blessuresAff as |b bkey|}}
         <div class="blessure-ligne">
-          <span class="blessure-nom">{{b.label}}</span>
-          <label class="seuil">{{localize "VERMINE.Blessure.Seuil"}}
-            <input type="number" name="system.blessures.{{bkey}}.seuil" value="{{b.seuil}}" min="1" max="10" />
-          </label>
-          <label class="nb-cercles">{{localize "VERMINE.Blessure.Cercles"}}
-            <input type="number" name="system.blessures.{{bkey}}.cercles" value="{{b.cercles}}" min="0" max="12" />
-          </label>
+          <span class="blessure-nom" title="{{localize 'VERMINE.Blessure.Seuil'}} {{b.seuil}}">{{b.label}} <small>({{b.seuil}})</small></span>
           <div class="cercles">
             {{#each b.dots as |d|}}
             <span class="cercle {{#if d.coche}}coche{{/if}}" data-blessure="{{bkey}}" data-index="{{d.index}}"></span>
@@ -117,10 +115,6 @@
     {{!-- ONGLET COMPÉTENCES --}}
     <div class="tab competences" data-tab="competences">
       <div class="comp-toolbar">
-        <div class="comp-search-wrap">
-          <i class="fas fa-magnifying-glass"></i>
-          <input type="text" class="comp-search" placeholder="{{localize 'VERMINE.Comp.Rechercher'}}" />
-        </div>
         <div class="pip-legende">
           {{#each pipLevels as |l|}}
           <span class="legende-item"><span class="pips">{{#each l.pipsDemo}}<span class="pip on"></span>{{/each}}</span> {{l.label}}</span>
@@ -141,8 +135,6 @@
               <span class="pip comp-pip {{#if p.on}}on{{/if}}" data-comp="{{p.compKey}}" data-niveau="{{p.niveauKey}}" data-ordre="{{p.ordre}}" title="{{p.label}}"></span>
               {{/each}}
             </span>
-            <input type="text" class="specialites" name="spec.{{c.key}}" value="{{join c.specialites ', '}}"
-                   placeholder="{{localize 'VERMINE.Comp.Specialites'}}" />
           </div>
           {{/each}}
         </div>

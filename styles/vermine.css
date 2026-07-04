@@ -167,6 +167,10 @@
 .vermine2047 .comp-search-wrap i { color: var(--v-muted); }
 .vermine2047 .comp-search { flex: 1; background: transparent; border: none; color: var(--v-text); }
 .vermine2047 .comp-search:focus { box-shadow: none; }
+/* Recherche déplacée dans l'en-tête, alignée à droite. */
+.vermine2047 .header-search {
+  flex: 0 0 auto; width: 210px; margin-left: auto; align-self: flex-end;
+}
 .vermine2047 .pip-legende { display: flex; gap: 12px; flex-wrap: wrap; font-size: 0.72em; color: var(--v-muted); }
 .vermine2047 .legende-item { display: inline-flex; align-items: center; gap: 4px; }
 .vermine2047 .legende-item .pip { width: 9px; height: 9px; border-width: 1px; cursor: default; }
@@ -175,21 +179,13 @@
 .vermine2047 .domaines-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
 .vermine2047 .domaine { background: var(--v-bg2); border: 1px solid var(--v-border); border-radius: 6px; padding: 10px; }
 .vermine2047 .competence-ligne {
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  grid-template-areas: "nom pips pips" "spec spec spec";
-  align-items: center; gap: 4px 8px;
-  padding: 5px 0; border-bottom: 1px solid rgba(66,59,51,0.5);
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 0; border-bottom: 1px solid rgba(66,59,51,0.5);
 }
 .vermine2047 .competence-ligne:last-child { border-bottom: none; }
-.vermine2047 .competence-ligne .comp-nom { grid-area: nom; }
+.vermine2047 .competence-ligne .comp-nom { flex: 1; min-width: 0; }
 .vermine2047 .competence-ligne .rarete { color: var(--v-accent2); font-size: 0.7em; }
-.vermine2047 .competence-ligne .pips { grid-area: pips; }
-.vermine2047 .competence-ligne .specialites {
-  grid-area: spec; width: 100%; font-size: 0.78em; padding: 2px 4px;
-  color: var(--v-muted);
-}
-.vermine2047 .competence-ligne .specialites:not(:placeholder-shown) { color: var(--v-text); }
+.vermine2047 .competence-ligne .pips { margin-left: auto; }
 
 /* ---- Pips (niveau de maîtrise) ---- */
 .vermine2047 .pips { display: inline-flex; gap: 4px; align-items: center; }
@@ -239,6 +235,21 @@
 .vermine2047 .form-grid label { display: flex; flex-direction: column; gap: 3px; font-size: 0.78em; color: var(--v-muted); }
 .vermine2047 .form-grid label.checkbox { flex-direction: row; align-items: center; gap: 6px; }
 .vermine2047 .item-description { margin-top: 12px; }
+
+/* ---- Fenêtre d'options du personnage ---- */
+.vermine2047.personnage-options .window-content { padding: 0; }
+.vermine2047 .personnage-options-form { color: var(--v-text); background: var(--v-bg); padding: 10px; overflow-y: auto; height: 100%; }
+.vermine2047 .options-blessures { width: 100%; border-collapse: collapse; }
+.vermine2047 .options-blessures th { color: var(--v-muted); font-size: 0.72em; text-transform: uppercase; text-align: center; padding-bottom: 4px; }
+.vermine2047 .options-blessures td { padding: 3px; }
+.vermine2047 .options-blessures td.blessure-nom { font-weight: 700; }
+.vermine2047 .options-blessures input { width: 60px; text-align: center; }
+.vermine2047 .options-domaines { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.vermine2047 .options-domaine { background: var(--v-bg2); border: 1px solid var(--v-border); border-radius: 5px; padding: 8px; }
+.vermine2047 .spec-ligne { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+.vermine2047 .spec-ligne .spec-nom { flex: 0 0 40%; font-size: 0.85em; }
+.vermine2047 .spec-ligne input { flex: 1; min-width: 0; font-size: 0.8em; }
+.vermine2047 .personnage-options-form .hint { color: var(--v-muted); font-size: 0.78em; margin: 0 0 8px; }
 
 /* ---- Dialogue de jet ---- */
 .vermine2047.jet-dialog .form-group { margin-bottom: 8px; }

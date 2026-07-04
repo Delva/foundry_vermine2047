@@ -51,6 +51,8 @@
   "VERMINE.Comp.Aucune": "None",
   "VERMINE.Comp.Specialites": "Specialties (comma-separated)",
   "VERMINE.Comp.Rechercher": "Search a skill…",
+  "VERMINE.Comp.SpecialitesTitre": "Specialties",
+  "VERMINE.Options.Titre": "Options",
   "VERMINE.Comp.arts": "Arts",
   "VERMINE.Comp.civilisation": "Civilisation",
   "VERMINE.Comp.psychologie": "Psychology",

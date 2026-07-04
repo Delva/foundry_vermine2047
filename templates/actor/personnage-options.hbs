@@ -1,0 +1,43 @@
+<form class="vermine2047 personnage-options-form" autocomplete="off">
+
+  <section class="bloc">
+    <h3>{{localize "VERMINE.Blessure.Titre"}}</h3>
+    <table class="options-blessures">
+      <thead>
+        <tr>
+          <th></th>
+          <th>{{localize "VERMINE.Blessure.Seuil"}}</th>
+          <th>{{localize "VERMINE.Blessure.Cercles"}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each blessures as |b|}}
+        <tr>
+          <td class="blessure-nom">{{b.label}}</td>
+          <td><input type="number" name="system.blessures.{{b.key}}.seuil" value="{{b.seuil}}" min="1" max="10" /></td>
+          <td><input type="number" name="system.blessures.{{b.key}}.cercles" value="{{b.cercles}}" min="0" max="12" /></td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="bloc">
+    <h3>{{localize "VERMINE.Comp.SpecialitesTitre"}}</h3>
+    <p class="hint">{{localize "VERMINE.Comp.Specialites"}}</p>
+    <div class="options-domaines">
+      {{#each domaines as |dom dkey|}}
+      <div class="options-domaine">
+        <h4>{{dom.label}}</h4>
+        {{#each dom.competences as |c|}}
+        <label class="spec-ligne">
+          <span class="spec-nom">{{c.label}}</span>
+          <input type="text" name="spec.{{c.key}}" value="{{c.specialites}}" placeholder="—" />
+        </label>
+        {{/each}}
+      </div>
+      {{/each}}
+    </div>
+  </section>
+
+</form>
