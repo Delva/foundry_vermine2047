@@ -6,224 +6,257 @@
 .vermine2047 {
   --v-bg: #1c1a17;
   --v-bg2: #262320;
-  --v-accent: #7a8c3f;   /* vert militaire délavé */
-  --v-accent2: #b5502e;  /* rouille */
-  --v-text: #e6e1d6;
-  --v-muted: #9c968a;
-  --v-succes: #7a8c3f;
-  --v-echec: #8a3126;
-  --v-border: #3a352f;
+  --v-bg3: #2f2b26;
+  --v-accent: #8aa04a;   /* vert militaire */
+  --v-accent2: #c25a34;  /* rouille */
+  --v-text: #ece7db;
+  --v-muted: #a49d8e;
+  --v-succes: #8aa04a;
+  --v-echec: #a53a2c;
+  --v-border: #423b33;
 }
 
-/* ---- Fiches d'acteur ---- */
+/* ---- Layout général de la fiche (flex colonne = pas de vide, corps scrollable) ---- */
+.vermine2047.sheet .window-content { padding: 0; }
 .vermine2047.sheet form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   color: var(--v-text);
   background: var(--v-bg);
-  font-family: "Signika", sans-serif;
+  font-size: 14px;
+}
+.vermine2047 .sheet-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 10px;
 }
 
+/* ---- En-tête ---- */
 .vermine2047 .fiche-entete {
   display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  padding: 6px;
+  gap: 12px;
+  align-items: center;
+  padding: 10px;
+  background: var(--v-bg2);
   border-bottom: 2px solid var(--v-accent);
+  flex: 0 0 auto;
 }
-
 .vermine2047 .fiche-entete .portrait {
-  width: 84px;
-  height: 84px;
+  width: 72px; height: 72px;
   object-fit: cover;
   border: 1px solid var(--v-border);
   border-radius: 4px;
   flex: 0 0 auto;
 }
-
-.vermine2047 .entete-champs { flex: 1; }
+.vermine2047 .entete-champs { flex: 1; min-width: 0; }
 .vermine2047 .nom-perso {
-  font-size: 1.5em;
-  font-weight: 700;
-  background: transparent;
-  border: none;
+  font-size: 1.6em; font-weight: 700;
+  background: transparent; border: none;
   border-bottom: 1px solid var(--v-border);
-  color: var(--v-text);
-  width: 100%;
+  color: var(--v-text); width: 100%;
 }
-
 .vermine2047 .entete-ligne {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 6px;
-  align-items: end;
+  display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; align-items: end;
 }
 .vermine2047 .entete-ligne label {
-  display: flex;
-  flex-direction: column;
-  font-size: 0.72em;
-  text-transform: uppercase;
+  display: flex; flex-direction: column; gap: 3px;
+  font-size: 0.72em; text-transform: uppercase; letter-spacing: 0.03em;
   color: var(--v-muted);
-  gap: 2px;
 }
+.vermine2047 .entete-ligne .rep input { width: 56px; }
+.vermine2047 .entete-ligne .chaman-check { align-items: center; }
 
 /* ---- Onglets ---- */
 .vermine2047 .sheet-tabs {
+  display: flex; gap: 4px;
   border-bottom: 1px solid var(--v-border);
-  margin: 4px 0;
+  background: var(--v-bg2);
+  padding: 0 8px; flex: 0 0 auto;
 }
 .vermine2047 .sheet-tabs .item {
-  padding: 4px 10px;
-  color: var(--v-muted);
-  text-transform: uppercase;
-  font-size: 0.85em;
+  padding: 8px 14px; color: var(--v-muted);
+  text-transform: uppercase; font-size: 0.82em; font-weight: 600;
+  border-bottom: 2px solid transparent;
 }
+.vermine2047 .sheet-tabs .item:hover { color: var(--v-text); }
 .vermine2047 .sheet-tabs .item.active {
-  color: var(--v-accent);
-  border-bottom: 2px solid var(--v-accent);
+  color: var(--v-accent); border-bottom-color: var(--v-accent);
 }
 
-.vermine2047 .sheet-body { padding: 6px; overflow-y: auto; }
-
-/* ---- Caractéristiques ---- */
-.vermine2047 .groupes-carac {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
-}
-.vermine2047 .groupe {
+/* ---- Blocs / cartes ---- */
+.vermine2047 .bloc {
   background: var(--v-bg2);
   border: 1px solid var(--v-border);
-  border-radius: 4px;
-  padding: 6px;
+  border-radius: 6px;
+  padding: 10px; margin-bottom: 10px;
 }
-.vermine2047 .groupe h4 {
-  margin: 0 0 4px;
-  color: var(--v-accent);
-  font-size: 0.8em;
-  text-transform: uppercase;
+.vermine2047 h3 {
+  margin: 0 0 8px; padding-bottom: 4px;
+  border-bottom: 1px solid var(--v-border);
+  color: var(--v-accent); font-size: 0.95em;
+  text-transform: uppercase; letter-spacing: 0.04em;
 }
-.vermine2047 .carac-ligne,
-.vermine2047 .competence-ligne {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-bottom: 3px;
+.vermine2047 h4 { margin: 0 0 6px; color: var(--v-accent); font-size: 0.82em; text-transform: uppercase; }
+.vermine2047 input, .vermine2047 select {
+  background: var(--v-bg3); color: var(--v-text);
+  border: 1px solid var(--v-border); border-radius: 3px;
 }
-.vermine2047 .carac-nom,
-.vermine2047 .comp-nom {
-  flex: 1;
-  cursor: pointer;
-  color: var(--v-text);
+.vermine2047 input:focus, .vermine2047 select:focus { border-color: var(--v-accent); box-shadow: 0 0 4px rgba(138,160,74,0.5); }
+
+/* ---- Onglet principal : deux colonnes ---- */
+.vermine2047 .tab.principal { display: flex; gap: 10px; align-items: flex-start; }
+.vermine2047 .colonne-gauche { flex: 1.1; min-width: 0; }
+.vermine2047 .colonne-droite { flex: 1; min-width: 0; }
+
+/* ---- Caractéristiques ---- */
+.vermine2047 .groupes-carac { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.vermine2047 .groupe { background: var(--v-bg3); border: 1px solid var(--v-border); border-radius: 4px; padding: 8px; }
+.vermine2047 .carac-ligne { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+.vermine2047 .carac-ligne:last-child { margin-bottom: 0; }
+.vermine2047 .carac-nom, .vermine2047 .comp-nom {
+  flex: 1; cursor: pointer; color: var(--v-text); font-weight: 500;
 }
-.vermine2047 .carac-nom:hover,
-.vermine2047 .comp-nom:hover { color: var(--v-accent2); text-shadow: 0 0 4px var(--v-accent2); }
-.vermine2047 .carac-ligne input[type="number"] { width: 42px; text-align: center; }
+.vermine2047 .carac-nom i { color: var(--v-muted); font-size: 0.85em; margin-right: 2px; }
+.vermine2047 .carac-nom:hover, .vermine2047 .comp-nom:hover { color: var(--v-accent2); }
+.vermine2047 .carac-nom:hover i { color: var(--v-accent2); }
+.vermine2047 .carac-ligne input[type="number"] { width: 46px; text-align: center; font-weight: 700; }
 .vermine2047 .unite { color: var(--v-muted); font-size: 0.8em; }
 
 /* ---- Réserves ---- */
-.vermine2047 .reserve {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 4px;
-}
-.vermine2047 .reserve label { flex: 0 0 90px; text-transform: uppercase; font-size: 0.8em; }
-.vermine2047 .reserve input { width: 50px; text-align: center; }
-.vermine2047 .reserve .max { color: var(--v-accent); font-weight: 700; }
+.vermine2047 .reserve { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.vermine2047 .reserve label { flex: 0 0 96px; text-transform: uppercase; font-size: 0.8em; color: var(--v-muted); }
+.vermine2047 .reserve input { width: 54px; text-align: center; font-weight: 700; }
+.vermine2047 .reserve .sep { color: var(--v-muted); }
+.vermine2047 .reserve .max { color: var(--v-accent); font-weight: 700; font-size: 1.1em; }
 
 /* ---- Blessures ---- */
 .vermine2047 .blessure-ligne {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 3px 0;
-  border-bottom: 1px dashed var(--v-border);
-  flex-wrap: wrap;
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 6px 0; border-bottom: 1px dashed var(--v-border);
 }
-.vermine2047 .blessure-nom { flex: 0 0 70px; font-weight: 700; }
-.vermine2047 .blessure-ligne label { font-size: 0.72em; color: var(--v-muted); display: flex; flex-direction: column; }
-.vermine2047 .blessure-ligne input { width: 44px; text-align: center; }
-.vermine2047 .cercles { display: flex; gap: 4px; }
+.vermine2047 .blessure-ligne:last-of-type { border-bottom: none; }
+.vermine2047 .blessure-nom { flex: 0 0 72px; font-weight: 700; }
+.vermine2047 .blessure-ligne label { font-size: 0.7em; color: var(--v-muted); display: flex; flex-direction: column; gap: 2px; }
+.vermine2047 .blessure-ligne input { width: 46px; text-align: center; }
+.vermine2047 .cercles { display: flex; gap: 5px; }
 .vermine2047 .cercle {
-  width: 16px; height: 16px;
-  border: 2px solid var(--v-muted);
-  border-radius: 50%;
-  cursor: pointer;
-  transition: background 0.1s;
+  width: 16px; height: 16px; border: 2px solid var(--v-muted); border-radius: 50%;
+  cursor: pointer; transition: background 0.1s, border-color 0.1s;
 }
+.vermine2047 .cercle:hover { border-color: var(--v-echec); }
 .vermine2047 .cercle.coche { background: var(--v-echec); border-color: var(--v-echec); }
-.vermine2047 .malus { color: var(--v-accent2); font-weight: 700; }
+.vermine2047 .malus { color: var(--v-accent2); font-weight: 700; margin: 6px 0 0; }
 
-/* ---- Compétences ---- */
-.vermine2047 .domaines-grid {
+/* ---- Onglet Compétences : barre d'outils + recherche + légende ---- */
+.vermine2047 .comp-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap; margin-bottom: 10px;
+}
+.vermine2047 .comp-search-wrap {
+  display: flex; align-items: center; gap: 6px; flex: 1; min-width: 180px;
+  background: var(--v-bg3); border: 1px solid var(--v-border); border-radius: 4px; padding: 4px 8px;
+}
+.vermine2047 .comp-search-wrap i { color: var(--v-muted); }
+.vermine2047 .comp-search { flex: 1; background: transparent; border: none; color: var(--v-text); }
+.vermine2047 .comp-search:focus { box-shadow: none; }
+.vermine2047 .pip-legende { display: flex; gap: 12px; flex-wrap: wrap; font-size: 0.72em; color: var(--v-muted); }
+.vermine2047 .legende-item { display: inline-flex; align-items: center; gap: 4px; }
+.vermine2047 .legende-item .pip { width: 9px; height: 9px; border-width: 1px; cursor: default; }
+
+/* ---- Compétences : grille de domaines + pips ---- */
+.vermine2047 .domaines-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.vermine2047 .domaine { background: var(--v-bg2); border: 1px solid var(--v-border); border-radius: 6px; padding: 10px; }
+.vermine2047 .competence-ligne {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+  grid-template-columns: 1fr auto auto;
+  grid-template-areas: "nom pips pips" "spec spec spec";
+  align-items: center; gap: 4px 8px;
+  padding: 5px 0; border-bottom: 1px solid rgba(66,59,51,0.5);
 }
-.vermine2047 .domaine {
-  background: var(--v-bg2);
-  border: 1px solid var(--v-border);
-  border-radius: 4px;
-  padding: 6px;
+.vermine2047 .competence-ligne:last-child { border-bottom: none; }
+.vermine2047 .competence-ligne .comp-nom { grid-area: nom; }
+.vermine2047 .competence-ligne .rarete { color: var(--v-accent2); font-size: 0.7em; }
+.vermine2047 .competence-ligne .pips { grid-area: pips; }
+.vermine2047 .competence-ligne .specialites {
+  grid-area: spec; width: 100%; font-size: 0.78em; padding: 2px 4px;
+  color: var(--v-muted);
 }
-.vermine2047 .domaine h4 { margin: 0 0 4px; color: var(--v-accent); font-size: 0.8em; text-transform: uppercase; }
-.vermine2047 .rarete { color: var(--v-accent2); font-size: 0.7em; }
-.vermine2047 .competence-ligne select { flex: 0 0 90px; }
-.vermine2047 .competence-ligne .specialites { flex: 1; min-width: 60px; font-size: 0.75em; }
+.vermine2047 .competence-ligne .specialites:not(:placeholder-shown) { color: var(--v-text); }
+
+/* ---- Pips (niveau de maîtrise) ---- */
+.vermine2047 .pips { display: inline-flex; gap: 4px; align-items: center; }
+.vermine2047 .pip {
+  width: 15px; height: 15px; border: 2px solid var(--v-muted); border-radius: 50%;
+  cursor: pointer; transition: background 0.1s, border-color 0.1s, transform 0.05s;
+}
+.vermine2047 .pip:hover { border-color: var(--v-accent); transform: scale(1.15); }
+.vermine2047 .pip.on { background: var(--v-accent); border-color: var(--v-accent); }
 
 /* ---- Objets ---- */
-.vermine2047 .liste-entete { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
-.vermine2047 .objets { list-style: none; margin: 0; padding: 0; }
+.vermine2047 .liste-objets { margin-bottom: 12px; }
+.vermine2047 .liste-entete { display: flex; justify-content: space-between; align-items: center; }
+.vermine2047 .liste-entete .ajout-objet, .vermine2047 .liste-entete a { cursor: pointer; color: var(--v-accent); }
+.vermine2047 .objets { list-style: none; margin: 4px 0 0; padding: 0; }
 .vermine2047 .objet {
-  display: flex; align-items: center; gap: 6px;
-  padding: 3px; border-bottom: 1px solid var(--v-border);
+  display: flex; align-items: center; gap: 8px;
+  padding: 5px 4px; border-bottom: 1px solid var(--v-border);
 }
-.vermine2047 .objet-img { width: 22px; height: 22px; }
+.vermine2047 .objet-img { width: 24px; height: 24px; border-radius: 3px; }
 .vermine2047 .objet-nom { flex: 1; }
-.vermine2047 .objet-info { color: var(--v-muted); font-size: 0.8em; }
-.vermine2047 .objet-controls a { margin-left: 4px; cursor: pointer; color: var(--v-muted); }
+.vermine2047 .objet-info { color: var(--v-muted); font-size: 0.82em; }
+.vermine2047 .objet-controls a { margin-left: 6px; cursor: pointer; color: var(--v-muted); }
 .vermine2047 .objet-controls a:hover { color: var(--v-accent2); }
 
+/* ---- Onglet Bio ---- */
+.vermine2047 .tab.bio .predilection { display: flex; flex-direction: column; gap: 3px; font-size: 0.8em; color: var(--v-muted); margin-bottom: 10px; max-width: 260px; }
+.vermine2047 .tab.bio .editor { min-height: 140px; border: 1px solid var(--v-border); border-radius: 4px; }
+
 /* ---- Créature ---- */
-.vermine2047 .caracs-inline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
-.vermine2047 .bloc-combat { display: flex; flex-direction: column; gap: 4px; margin: 8px 0; }
-.vermine2047 .bloc-combat label { display: flex; flex-direction: column; font-size: 0.75em; color: var(--v-muted); }
+.vermine2047 .creature-body .caracs-inline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.vermine2047 .creature-body .bloc-combat { display: flex; flex-direction: column; gap: 6px; margin: 10px 0; }
+.vermine2047 .creature-body .bloc-combat label { display: flex; flex-direction: column; gap: 3px; font-size: 0.78em; color: var(--v-muted); }
 
 /* ---- Fiche d'objet ---- */
-.vermine2047.sheet.item .item-entete { display: flex; gap: 8px; align-items: center; padding: 6px; border-bottom: 2px solid var(--v-accent); }
-.vermine2047.sheet.item .item-img { width: 48px; height: 48px; }
-.vermine2047.sheet.item .item-nom { flex: 1; font-size: 1.3em; font-weight: 700; background: transparent; border: none; border-bottom: 1px solid var(--v-border); }
-.vermine2047 .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; padding: 6px; }
-.vermine2047 .form-grid label { display: flex; flex-direction: column; font-size: 0.78em; color: var(--v-muted); gap: 2px; }
+.vermine2047.sheet.item .item-entete { display: flex; gap: 10px; align-items: center; padding: 10px; background: var(--v-bg2); border-bottom: 2px solid var(--v-accent); }
+.vermine2047.sheet.item .item-img { width: 48px; height: 48px; border-radius: 4px; }
+.vermine2047.sheet.item .item-nom { flex: 1; font-size: 1.3em; font-weight: 700; background: transparent; border: none; border-bottom: 1px solid var(--v-border); color: var(--v-text); }
+.vermine2047.sheet.item .item-body { padding: 10px; overflow-y: auto; }
+.vermine2047 .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.vermine2047 .form-grid label { display: flex; flex-direction: column; gap: 3px; font-size: 0.78em; color: var(--v-muted); }
+.vermine2047 .form-grid label.checkbox { flex-direction: row; align-items: center; gap: 6px; }
+.vermine2047 .item-description { margin-top: 12px; }
 
 /* ---- Dialogue de jet ---- */
-.vermine2047.jet-dialog .form-group { margin-bottom: 6px; }
-.vermine2047.jet-dialog .form-group.split { display: flex; gap: 10px; }
+.vermine2047.jet-dialog .form-group { margin-bottom: 8px; }
+.vermine2047.jet-dialog .form-group.split { display: flex; gap: 12px; }
 .vermine2047.jet-dialog .form-group.split > div { flex: 1; }
-.vermine-jet-form label { font-weight: 600; display: block; margin-bottom: 2px; }
+.vermine-jet-form label { font-weight: 600; display: block; margin-bottom: 3px; }
+.vermine-jet-form fieldset { border: 1px solid #999; border-radius: 4px; padding: 8px; margin: 8px 0; }
+.vermine-jet-form legend { padding: 0 6px; font-weight: 700; }
 .vermine-jet-form .hint { color: #888; font-weight: 400; font-size: 0.8em; }
-.vermine-jet-form .apercu { text-align: center; font-size: 1.05em; margin-top: 8px; }
-.vermine-jet-form .apercu-main { color: #b5502e; font-size: 1.3em; }
-.vermine-jet-form .malus-blessure { color: #b5502e; text-align: center; }
-.vermine-jet-form label.checkbox { display: inline-flex; align-items: center; gap: 4px; font-weight: 400; }
+.vermine-jet-form .apercu { text-align: center; font-size: 1.05em; margin-top: 10px; }
+.vermine-jet-form .apercu-main { color: #c25a34; font-size: 1.35em; }
+.vermine-jet-form .malus-blessure { color: #c25a34; text-align: center; }
+.vermine-jet-form label.checkbox { display: inline-flex; align-items: center; gap: 5px; font-weight: 400; }
 
 /* ---- Carte de chat ---- */
-.vermine-carte-jet { border: 1px solid #3a352f; border-radius: 4px; padding: 6px; background: rgba(0,0,0,0.06); }
+.vermine-carte-jet { border: 1px solid #423b33; border-radius: 5px; padding: 8px; background: rgba(0,0,0,0.05); }
 .vermine-carte-jet .carte-flavor { font-weight: 700; margin-bottom: 4px; }
-.vermine-carte-jet .carte-ligne-diff { display: flex; gap: 12px; font-size: 0.85em; color: #555; margin-bottom: 6px; }
-.vermine-des { list-style: none; display: flex; flex-wrap: wrap; gap: 4px; margin: 0 0 6px; padding: 0; }
+.vermine-carte-jet .carte-ligne-diff { display: flex; gap: 14px; font-size: 0.85em; color: #666; margin-bottom: 6px; }
+.vermine-des { list-style: none; display: flex; flex-wrap: wrap; gap: 5px; margin: 0 0 8px; padding: 0; }
 .vermine-des .de {
-  width: 30px; height: 30px; line-height: 30px; text-align: center;
-  border-radius: 4px; font-weight: 700; color: #fff;
-  background: #8a3126; border: 1px solid #611f18;
+  width: 32px; height: 32px; line-height: 32px; text-align: center;
+  border-radius: 5px; font-weight: 700; color: #fff;
+  background: #a53a2c; border: 1px solid #7a291f;
 }
-.vermine-des .de.reussite { background: #7a8c3f; border-color: #566127; }
-.vermine-carte-jet .carte-resultat { display: flex; align-items: baseline; gap: 6px; padding: 4px; border-radius: 4px; }
-.vermine-carte-jet .carte-resultat.succes { background: rgba(122,140,63,0.25); }
-.vermine-carte-jet .carte-resultat.echec { background: rgba(138,49,38,0.25); }
-.vermine-carte-jet .nb-reussites { font-size: 1.6em; font-weight: 700; }
+.vermine-des .de.reussite { background: #8aa04a; border-color: #63753a; }
+.vermine-carte-jet .carte-resultat { display: flex; align-items: baseline; gap: 8px; padding: 6px; border-radius: 4px; }
+.vermine-carte-jet .carte-resultat.succes { background: rgba(138,160,74,0.25); }
+.vermine-carte-jet .carte-resultat.echec { background: rgba(165,58,44,0.25); }
+.vermine-carte-jet .nb-reussites { font-size: 1.7em; font-weight: 700; }
 .vermine-carte-jet .issue { font-weight: 700; text-transform: uppercase; margin-left: auto; }
-.vermine-carte-jet .surplus { color: #666; font-size: 0.85em; }
-.vermine-carte-jet .echec-auto { font-style: italic; color: #8a3126; }
-.vermine-carte-jet .carte-relances { display: flex; gap: 6px; margin-top: 6px; }
-.vermine-carte-jet .vermine-relance { flex: 1; font-size: 0.8em; }
+.vermine-carte-jet .surplus { color: #777; font-size: 0.85em; }
+.vermine-carte-jet .echec-auto { font-style: italic; color: #a53a2c; }
+.vermine-carte-jet .carte-relances { display: flex; gap: 6px; margin-top: 8px; }
+.vermine-carte-jet .vermine-relance { flex: 1; font-size: 0.82em; }

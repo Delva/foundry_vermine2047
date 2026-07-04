@@ -31,6 +31,18 @@ export class PersonnageSheet extends ActorSheet {
       });
     }
 
+    // Niveaux affichés sous forme de pips (Débutant → Légende ; on exclut "Aucun").
+    const pipLevels = Object.entries(VERMINE.niveauxCompetence)
+      .filter(([, n]) => n.ordre >= 1)
+      .sort((a, b) => a[1].ordre - b[1].ordre)
+      .map(([key, n]) => ({
+        key, ordre: n.ordre, label: game.i18n.localize(n.label),
+        pipsDemo: Array.from({ length: n.ordre })
+      }));
+    ctx.pipLevels = pipLevels;
+
+    const norm = (s) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+
     // Compétences regroupées par domaine.
     ctx.domaines = {};
     for (const [dKey, dLabel] of Object.entries(VERMINE.domaines)) {
@@ -38,12 +50,20 @@ export class PersonnageSheet extends ActorSheet {
     }
     for (const [key, c] of Object.entries(VERMINE.competences)) {
       const comp = sys.competences[key];
+      const niveauOrdre = VERMINE.niveauxCompetence[comp.niveau]?.ordre ?? 0;
+      const label = game.i18n.localize(c.label);
       ctx.domaines[c.domaine].competences.push({
         key,
-        label: game.i18n.localize(c.label),
+        label,
+        search: norm(label),
         rarete: c.rarete,
         niveau: comp.niveau,
-        specialites: comp.specialites ?? []
+        niveauLabel: game.i18n.localize(VERMINE.niveauxCompetence[comp.niveau].label),
+        niveauOrdre,
+        specialites: comp.specialites ?? [],
+        pips: pipLevels.map((l) => ({
+          compKey: key, niveauKey: l.key, ordre: l.ordre, label: l.label, on: l.ordre <= niveauOrdre
+        }))
       });
     }
 
@@ -59,10 +79,6 @@ export class PersonnageSheet extends ActorSheet {
         dots: Array.from({ length: b.cercles }, (_, i) => ({ index: i, coche: i < b.coches }))
       };
     }
-
-    // Options de niveau pour les <select>.
-    ctx.niveauxOptions = Object.entries(VERMINE.niveauxCompetence)
-      .map(([key, n]) => ({ key, label: game.i18n.localize(n.label) }));
 
     // Objets classés par type.
     ctx.armes = this.actor.items.filter(i => i.type === "arme");
@@ -90,15 +106,47 @@ export class PersonnageSheet extends ActorSheet {
       this.actor.rollAction({ competence: comp });
     });
 
+    // Recherche de compétences (filtre en temps réel, même en lecture seule).
+    html.find(".comp-search").on("input", (ev) => this._onSearchCompetence(ev, html));
+
     if (!this.isEditable) return;
 
     // Cercles de blessure cliquables.
     html.find("[data-blessure]").on("click", (ev) => this._onToggleBlessure(ev));
 
+    // Niveau de compétence via pips cliquables.
+    html.find(".pip").on("click", (ev) => this._onTogglePip(ev));
+
     // Gestion des objets.
     html.find("[data-item-create]").on("click", (ev) => this._onItemCreate(ev));
     html.find("[data-item-edit]").on("click", (ev) => this._onItemEdit(ev));
     html.find("[data-item-delete]").on("click", (ev) => this._onItemDelete(ev));
+  }
+
+  /** Clic sur un pip : fixe le niveau ; re-clic sur le niveau courant = retour à « Aucun ». */
+  _onTogglePip(ev) {
+    const el = ev.currentTarget;
+    const comp = el.dataset.comp;
+    const ordre = Number(el.dataset.ordre);
+    const niveauActuel = this.actor.system.competences[comp].niveau;
+    const ordreActuel = CONFIG.VERMINE.niveauxCompetence[niveauActuel]?.ordre ?? 0;
+    const nouveau = (ordre === ordreActuel) ? "aucun" : el.dataset.niveau;
+    this.actor.update({ [`system.competences.${comp}.niveau`]: nouveau });
+  }
+
+  /** Filtre les compétences affichées selon la recherche (insensible à la casse et aux accents). */
+  _onSearchCompetence(ev, html) {
+    const q = ev.currentTarget.value.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+    const root = html[0] ?? html;
+    root.querySelectorAll(".competence-ligne").forEach((row) => {
+      const match = !q || (row.dataset.compLabel ?? "").includes(q);
+      row.style.display = match ? "" : "none";
+    });
+    // Masque les domaines sans résultat.
+    root.querySelectorAll(".domaine").forEach((dom) => {
+      const visible = [...dom.querySelectorAll(".competence-ligne")].some((r) => r.style.display !== "none");
+      dom.style.display = visible ? "" : "none";
+    });
   }
 
   _onToggleBlessure(ev) {
