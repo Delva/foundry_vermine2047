@@ -215,6 +215,7 @@
 
   "VERMINE.Item.Nouveau": "Nouveau {type}",
   "VERMINE.Item.Ajouter": "Ajouter",
+  "VERMINE.Item.CreerVide": "Créer vide",
   "VERMINE.Item.Editer": "Éditer",
   "VERMINE.Item.Supprimer": "Supprimer",
   "VERMINE.Item.Armes": "Armes",

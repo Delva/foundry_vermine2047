@@ -1,4 +1,5 @@
 import { VERMINE } from "../config.mjs";
+import { ajouterObjet } from "../apps/compendium-picker.mjs";
 
 /** Fiche des Créatures et PNJ. */
 export class CreatureSheet extends ActorSheet {
@@ -50,12 +51,7 @@ export class CreatureSheet extends ActorSheet {
       const nouveau = (actuel === index + 1) ? index : index + 1;
       this.actor.update({ [`system.blessures.${niveau}.coches`]: nouveau });
     });
-    html.find("[data-item-create]").on("click", async () => {
-      await this.actor.createEmbeddedDocuments("Item", [{
-        name: game.i18n.format("VERMINE.Item.Nouveau", { type: game.i18n.localize("TYPES.Item.capacite") }),
-        type: "capacite"
-      }]);
-    });
+    html.find("[data-item-create]").on("click", () => ajouterObjet(this.actor, "capacite"));
     html.find("[data-item-edit]").on("click", (ev) =>
       this.actor.items.get(ev.currentTarget.closest("[data-item-id]").dataset.itemId)?.sheet.render(true));
     html.find("[data-item-delete]").on("click", (ev) =>

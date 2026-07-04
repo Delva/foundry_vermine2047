@@ -8,6 +8,21 @@ Compatibilité : **FoundryVTT v12**.
 
 ---
 
+## [0.4.1] — Sélecteur de compendium
+
+### Ajouté
+- **Sélecteur de compendium au clic sur « + »** : sur les fiches (Personnage,
+  Créature, Groupe), ajouter un objet ouvre la liste des entrées de compendium du
+  type concerné (avec recherche), ou permet de créer un objet vide. Fonctionne pour
+  tous les types (Adaptations/Mutations, Traumatismes, Historique, Afflictions,
+  Capacités, et les futurs compendiums).
+
+### Note
+- Le **glisser-déposer** d'une entrée de compendium directement sur une fiche
+  fonctionnait déjà nativement et reste disponible.
+
+---
+
 ## [0.4.0] — Confort (phase 5, 1ᵉʳ lot)
 
 ### Ajouté
@@ -154,6 +169,7 @@ Compatibilité : **FoundryVTT v12**.
 
 ---
 
+[0.4.1]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.4.1
 [0.4.0]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.4.0
 [0.3.1]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.3.1
 [0.3.0]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.3.0

@@ -1,5 +1,6 @@
 import { VERMINE } from "../config.mjs";
 import { PersonnageOptions } from "../apps/personnage-options.mjs";
+import { ajouterObjet } from "../apps/compendium-picker.mjs";
 
 /** Fiche du Personnage joueur. */
 export class PersonnageSheet extends ActorSheet {
@@ -222,10 +223,7 @@ export class PersonnageSheet extends ActorSheet {
 
   async _onItemCreate(ev) {
     const type = ev.currentTarget.dataset.itemCreate;
-    const name = game.i18n.format("VERMINE.Item.Nouveau", {
-      type: game.i18n.localize(`TYPES.Item.${type}`)
-    });
-    await this.actor.createEmbeddedDocuments("Item", [{ name, type }]);
+    await ajouterObjet(this.actor, type);
   }
 
   _onItemEdit(ev) {
