@@ -1,0 +1,56 @@
+name: Release
+
+# Déclenché en poussant un tag de version, ex. : git tag v0.1.0 && git push --tags
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Déduire la version depuis le tag
+        id: version
+        run: echo "value=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Injecter version / manifest / download dans system.json
+        env:
+          VERSION: ${{ steps.version.outputs.value }}
+          REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+          SERVER: ${{ github.server_url }}
+        run: |
+          node <<'EOF'
+          const fs = require("fs");
+          const s = JSON.parse(fs.readFileSync("system.json", "utf8"));
+          const { VERSION, REPO, TAG, SERVER } = process.env;
+          s.version = VERSION;
+          // Manifest stable = system.json de la dernière release (utilisé par Foundry pour l'install ET les MAJ).
+          s.manifest = `${SERVER}/${REPO}/releases/latest/download/system.json`;
+          // Download = le zip de CETTE version précise.
+          s.download = `${SERVER}/${REPO}/releases/download/${TAG}/system.zip`;
+          fs.writeFileSync("system.json", JSON.stringify(s, null, 2) + "\n");
+          console.log(`system.json -> version ${VERSION}`);
+          EOF
+
+      - name: Construire l'archive du système
+        run: |
+          zip -r system.zip . \
+            -x ".git/*" ".github/*" "*.zip" ".gitignore"
+
+      - name: Publier la release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Vermine 2047 ${{ github.ref_name }}
+          files: |
+            system.json
+            system.zip
+          fail_on_unmatched_files: true
+          generate_release_notes: true

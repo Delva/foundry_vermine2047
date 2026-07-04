@@ -6,6 +6,28 @@ Système de jeu pour **FoundryVTT v12** implémentant les règles de **Vermine 2
 > État : **MVP (v0.1.0)** — fiches Personnage & Créature, moteur de dés assisté
 > (Main de d10, comptage des Réussites, Relances), Réserves et Blessures.
 
+## Installation par manifest (recommandé)
+
+> Nécessite un **dépôt public**. La distribution passe par les **Releases GitHub**
+> (workflow `.github/workflows/release.yml`).
+
+Publier une version :
+
+```bash
+git tag v0.1.0
+git push --tags
+```
+
+Le workflow construit `system.zip`, injecte la version + les URL dans `system.json`
+et crée la release. URL de manifest **stable** à coller dans Foundry
+(*Configuration → Systèmes de jeu → Installer un système → URL du manifeste*) :
+
+```
+https://github.com/Delva/foundry_vermine2047/releases/latest/download/system.json
+```
+
+Foundry détectera automatiquement les futures versions (nouveaux tags `v*`).
+
 ## Installation (développement)
 
 Foundry charge les systèmes depuis `<userData>/Data/systems/`. Sous Windows, le dossier

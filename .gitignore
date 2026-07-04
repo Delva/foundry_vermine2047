@@ -5,6 +5,9 @@ Thumbs.db
 .idea/
 .vscode/
 
+# Archive de release construite en CI
+*.zip
+
 # Node (outils de build futurs)
 node_modules/
 npm-debug.log*
