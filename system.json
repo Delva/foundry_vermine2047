@@ -38,7 +38,7 @@
   },
   "primaryTokenAttribute": "reserves.effort",
   "secondaryTokenAttribute": "reserves.sangFroid",
-  "url": "",
-  "manifest": "",
-  "download": ""
+  "url": "https://github.com/Delva/foundry_vermine2047",
+  "manifest": "https://raw.githubusercontent.com/Delva/foundry_vermine2047/main/system.json",
+  "download": "https://github.com/Delva/foundry_vermine2047/archive/refs/heads/main.zip"
 }
