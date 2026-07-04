@@ -8,6 +8,25 @@ Compatibilité : **FoundryVTT v12**.
 
 ---
 
+## [0.3.0] — Compendiums (phase 4)
+
+### Ajouté
+- **Nouveaux types d'objets** : Adaptation / Mutation, Traumatisme, Historique
+  (modèles de données, fiche d'objet dédiée, affichage sur la fiche Personnage).
+- **Compendiums (mécaniques)**, générés depuis des données curées et paraphrasées :
+  - **Adaptations & Mutations** (41 entrées : Adaptations 1D/2D, Mutations 3D/4D).
+  - **Traumatismes** (18 entrées : physiques et psychologiques).
+  - **Historique** (12 éléments).
+- **Chaîne de génération des packs** : `tools/pack-data.mjs` (contenu) +
+  `tools/build-packs.mjs` (compilation LevelDB via `classic-level`), commande
+  `npm run build:packs`. Les packs sont compilés automatiquement à la release (CI) et
+  inclus dans l'archive ; ils ne sont pas versionnés dans le dépôt.
+
+### Notes
+- Compendiums Armes / Protections et Bestiaire reportés (tableaux en images à extraire).
+
+---
+
 ## [0.2.0] — Le Groupe
 
 ### Ajouté
@@ -106,6 +125,7 @@ Compatibilité : **FoundryVTT v12**.
 
 ---
 
+[0.3.0]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.3.0
 [0.2.0]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.2.0
 [0.1.3]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.1.3
 [0.1.2]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.1.2

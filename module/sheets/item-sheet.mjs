@@ -19,6 +19,9 @@ export class VermineItemSheet extends ItemSheet {
     ctx.isProtection = this.item.type === "protection";
     ctx.isEquipement = this.item.type === "equipement";
     ctx.isCapacite = this.item.type === "capacite";
+    ctx.isAdaptation = this.item.type === "adaptation";
+    ctx.isTraumatisme = this.item.type === "traumatisme";
+    ctx.isHistorique = this.item.type === "historique";
 
     ctx.competencesOptions = Object.entries(VERMINE.competences)
       .map(([key, c]) => ({ key, label: game.i18n.localize(c.label) }));

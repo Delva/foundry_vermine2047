@@ -118,6 +118,9 @@ export class PersonnageSheet extends ActorSheet {
     ctx.protections = this.actor.items.filter(i => i.type === "protection");
     ctx.equipements = this.actor.items.filter(i => i.type === "equipement");
     ctx.capacites = this.actor.items.filter(i => i.type === "capacite");
+    ctx.adaptations = this.actor.items.filter(i => i.type === "adaptation");
+    ctx.traumatismes = this.actor.items.filter(i => i.type === "traumatisme");
+    ctx.historiques = this.actor.items.filter(i => i.type === "historique");
 
     ctx.enrichedBio = await TextEditor.enrichHTML(sys.biographie ?? "", { async: true });
     ctx.enrichedNotes = await TextEditor.enrichHTML(sys.notes ?? "", { async: true });

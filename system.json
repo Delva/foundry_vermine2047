@@ -2,7 +2,7 @@
   "id": "vermine2047",
   "title": "Vermine 2047",
   "description": "Système de jeu non officiel pour le JDR post-apocalyptique Vermine 2047 (© Studio Agate). Fiches, moteur de dés (Main de d10, Réussites), Réserves et Blessures.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "compatibility": {
     "minimum": "12",
     "verified": "12",
@@ -31,7 +31,36 @@
       "path": "lang/en.json"
     }
   ],
-  "packs": [],
+  "packs": [
+    {
+      "name": "adaptations",
+      "label": "Adaptations & Mutations",
+      "path": "packs/adaptations",
+      "type": "Item",
+      "system": "vermine2047"
+    },
+    {
+      "name": "traumatismes",
+      "label": "Traumatismes",
+      "path": "packs/traumatismes",
+      "type": "Item",
+      "system": "vermine2047"
+    },
+    {
+      "name": "historiques",
+      "label": "Historique",
+      "path": "packs/historiques",
+      "type": "Item",
+      "system": "vermine2047"
+    }
+  ],
+  "packFolders": [
+    {
+      "name": "Vermine 2047",
+      "sorting": "m",
+      "packs": ["adaptations", "traumatismes", "historiques"]
+    }
+  ],
   "grid": {
     "distance": 1,
     "units": "m"

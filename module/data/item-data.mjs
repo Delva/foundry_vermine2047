@@ -57,6 +57,40 @@ export class EquipementData extends foundry.abstract.TypeDataModel {
   }
 }
 
+/** Adaptation ou Mutation (Dés d'Évolution). */
+export class AdaptationData extends foundry.abstract.TypeDataModel {
+  static defineSchema() {
+    return {
+      description: new fields.HTMLField(),
+      // "adaptation" (1D/2D) ou "mutation" (3D/4D).
+      categorie: new fields.StringField({ required: true, choices: ["adaptation", "mutation"], initial: "adaptation" }),
+      // Coût en Dés d'Évolution (1 à 4).
+      cout: new fields.NumberField({ required: true, integer: true, min: 1, max: 4, initial: 1 })
+    };
+  }
+}
+
+/** Traumatisme (faiblesse héritée du passé). */
+export class TraumatismeData extends foundry.abstract.TypeDataModel {
+  static defineSchema() {
+    return {
+      description: new fields.HTMLField(),
+      categorie: new fields.StringField({ required: true, choices: ["physique", "psychologique"], initial: "physique" })
+    };
+  }
+}
+
+/** Élément d'Historique. */
+export class HistoriqueData extends foundry.abstract.TypeDataModel {
+  static defineSchema() {
+    return {
+      description: new fields.HTMLField(),
+      // Coût en points (les Historiques marqués d'un astérisque coûtent 2).
+      cout: new fields.NumberField({ required: true, integer: true, min: 1, max: 2, initial: 1 })
+    };
+  }
+}
+
 /** Capacité (de Totem ou de Profil). */
 export class CapaciteData extends foundry.abstract.TypeDataModel {
   static defineSchema() {

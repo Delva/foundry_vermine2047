@@ -40,10 +40,20 @@ jobs:
           console.log(`system.json -> version ${VERSION}`);
           EOF
 
+      - name: Installer Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Compiler les compendiums
+        run: |
+          npm install --no-audit --no-fund
+          npm run build:packs
+
       - name: Construire l'archive du système
         run: |
           zip -r system.zip . \
-            -x ".git/*" ".github/*" "*.zip" ".gitignore"
+            -x ".git/*" ".github/*" "node_modules/*" "tools/*" "*.zip" ".gitignore" "package.json" "package-lock.json"
 
       - name: Publier la release
         uses: softprops/action-gh-release@v2

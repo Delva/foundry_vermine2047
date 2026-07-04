@@ -13,9 +13,5 @@ node_modules/
 npm-debug.log*
 package-lock.json
 
-# Artefacts de packs compilés (LevelDB) — sources conservées, build ignoré
-packs/**/*.ldb
-packs/**/*.log
-packs/**/LOCK
-packs/**/CURRENT
-packs/**/MANIFEST-*
+# Packs compilés (LevelDB) — construits par tools/build-packs.mjs, sources dans tools/pack-data.mjs
+/packs/

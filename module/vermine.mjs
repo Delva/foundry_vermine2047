@@ -2,7 +2,7 @@ import { VERMINE } from "./config.mjs";
 import { PersonnageData } from "./data/actor-personnage.mjs";
 import { CreatureData } from "./data/actor-creature.mjs";
 import { GroupeData } from "./data/actor-groupe.mjs";
-import { ArmeData, ProtectionData, EquipementData, CapaciteData } from "./data/item-data.mjs";
+import { ArmeData, ProtectionData, EquipementData, CapaciteData, AdaptationData, TraumatismeData, HistoriqueData } from "./data/item-data.mjs";
 import { VermineActor } from "./documents/actor.mjs";
 import { PersonnageSheet } from "./sheets/personnage-sheet.mjs";
 import { CreatureSheet } from "./sheets/creature-sheet.mjs";
@@ -30,6 +30,9 @@ Hooks.once("init", function () {
   CONFIG.Item.dataModels.protection = ProtectionData;
   CONFIG.Item.dataModels.equipement = EquipementData;
   CONFIG.Item.dataModels.capacite = CapaciteData;
+  CONFIG.Item.dataModels.adaptation = AdaptationData;
+  CONFIG.Item.dataModels.traumatisme = TraumatismeData;
+  CONFIG.Item.dataModels.historique = HistoriqueData;
 
   // Fiches.
   Actors.unregisterSheet("core", ActorSheet);

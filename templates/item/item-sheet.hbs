@@ -41,6 +41,35 @@
     </div>
     {{/if}}
 
+    {{#if isAdaptation}}
+    <div class="form-grid">
+      <label>{{localize "VERMINE.Adaptation.Categorie"}}
+        <select name="system.categorie">
+          <option value="adaptation" {{#if (eq "adaptation" system.categorie)}}selected{{/if}}>{{localize "VERMINE.Adaptation.Adaptation"}}</option>
+          <option value="mutation" {{#if (eq "mutation" system.categorie)}}selected{{/if}}>{{localize "VERMINE.Adaptation.Mutation"}}</option>
+        </select>
+      </label>
+      <label>{{localize "VERMINE.Adaptation.Cout"}}<input type="number" name="system.cout" value="{{system.cout}}" min="1" max="4" /></label>
+    </div>
+    {{/if}}
+
+    {{#if isTraumatisme}}
+    <div class="form-grid">
+      <label>{{localize "VERMINE.Traumatisme.Categorie"}}
+        <select name="system.categorie">
+          <option value="physique" {{#if (eq "physique" system.categorie)}}selected{{/if}}>{{localize "VERMINE.Traumatisme.Physique"}}</option>
+          <option value="psychologique" {{#if (eq "psychologique" system.categorie)}}selected{{/if}}>{{localize "VERMINE.Traumatisme.Psychologique"}}</option>
+        </select>
+      </label>
+    </div>
+    {{/if}}
+
+    {{#if isHistorique}}
+    <div class="form-grid">
+      <label>{{localize "VERMINE.Historique.Cout"}}<input type="number" name="system.cout" value="{{system.cout}}" min="1" max="2" /></label>
+    </div>
+    {{/if}}
+
     {{#if isCapacite}}
     <div class="form-grid">
       <label>{{localize "VERMINE.Capacite.Type"}}

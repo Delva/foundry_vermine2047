@@ -1,0 +1,13 @@
+{
+  "name": "vermine2047",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Outils de build du système FoundryVTT Vermine 2047 (génération des compendiums).",
+  "scripts": {
+    "build:packs": "node tools/build-packs.mjs"
+  },
+  "devDependencies": {
+    "classic-level": "^1.4.1"
+  }
+}

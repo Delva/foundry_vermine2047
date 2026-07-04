@@ -6,10 +6,13 @@
     "groupe": {}
   },
   "Item": {
-    "types": ["arme", "protection", "equipement", "capacite"],
+    "types": ["arme", "protection", "equipement", "capacite", "adaptation", "traumatisme", "historique"],
     "arme": {},
     "protection": {},
     "equipement": {},
-    "capacite": {}
+    "capacite": {},
+    "adaptation": {},
+    "traumatisme": {},
+    "historique": {}
   }
 }
