@@ -1,6 +1,7 @@
 {
   "TYPES.Actor.personnage": "Character",
   "TYPES.Actor.creature": "Creature / NPC",
+  "TYPES.Actor.groupe": "Group",
   "TYPES.Item.arme": "Weapon",
   "TYPES.Item.protection": "Protection",
   "TYPES.Item.equipement": "Gear",
@@ -16,7 +17,29 @@
 
   "VERMINE.Fiche.Personnage": "Character Sheet",
   "VERMINE.Fiche.Creature": "Creature Sheet",
+  "VERMINE.Fiche.Groupe": "Group Sheet",
   "VERMINE.Fiche.Objet": "Item Sheet",
+
+  "VERMINE.Moral.bon": "High",
+  "VERMINE.Moral.neutre": "Neutral",
+  "VERMINE.Moral.bas": "Low",
+
+  "VERMINE.Groupe.Nom": "Group name",
+  "VERMINE.Groupe.Niveau": "Level",
+  "VERMINE.Groupe.Moral": "Morale",
+  "VERMINE.Groupe.Reserve": "Group Reserve",
+  "VERMINE.Groupe.ReserveMax": "Max",
+  "VERMINE.Groupe.Instincts": "Instincts",
+  "VERMINE.Groupe.Interdits": "Taboos",
+  "VERMINE.Groupe.UnParLigne": "One entry per line",
+  "VERMINE.Groupe.Objectifs": "Objectives",
+  "VERMINE.Groupe.ObjectifMajeur": "Major objective",
+  "VERMINE.Groupe.ObjectifsMineurs": "Minor objectives",
+  "VERMINE.Groupe.Membres": "Members",
+  "VERMINE.Groupe.MembresAstuce": "(drag characters here)",
+  "VERMINE.Groupe.Capacites": "Group Abilities",
+
+  "VERMINE.Jet.Groupe": "Group Reserve to spend",
 
   "VERMINE.Onglet.Principal": "Main",
   "VERMINE.Onglet.Competences": "Skills",

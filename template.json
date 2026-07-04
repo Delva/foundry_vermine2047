@@ -1,8 +1,9 @@
 {
   "Actor": {
-    "types": ["personnage", "creature"],
+    "types": ["personnage", "creature", "groupe"],
     "personnage": {},
-    "creature": {}
+    "creature": {},
+    "groupe": {}
   },
   "Item": {
     "types": ["arme", "protection", "equipement", "capacite"],

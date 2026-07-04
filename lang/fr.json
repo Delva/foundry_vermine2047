@@ -1,6 +1,7 @@
 {
   "TYPES.Actor.personnage": "Personnage",
   "TYPES.Actor.creature": "Créature / PNJ",
+  "TYPES.Actor.groupe": "Groupe",
   "TYPES.Item.arme": "Arme",
   "TYPES.Item.protection": "Protection",
   "TYPES.Item.equipement": "Équipement",
@@ -16,7 +17,29 @@
 
   "VERMINE.Fiche.Personnage": "Fiche de Personnage",
   "VERMINE.Fiche.Creature": "Fiche de Créature",
+  "VERMINE.Fiche.Groupe": "Fiche de Groupe",
   "VERMINE.Fiche.Objet": "Fiche d'Objet",
+
+  "VERMINE.Moral.bon": "Bon",
+  "VERMINE.Moral.neutre": "Neutre",
+  "VERMINE.Moral.bas": "Bas",
+
+  "VERMINE.Groupe.Nom": "Nom du Groupe",
+  "VERMINE.Groupe.Niveau": "Niveau",
+  "VERMINE.Groupe.Moral": "Moral",
+  "VERMINE.Groupe.Reserve": "Réserve de Groupe",
+  "VERMINE.Groupe.ReserveMax": "Max",
+  "VERMINE.Groupe.Instincts": "Instincts",
+  "VERMINE.Groupe.Interdits": "Interdits",
+  "VERMINE.Groupe.UnParLigne": "Une entrée par ligne",
+  "VERMINE.Groupe.Objectifs": "Objectifs",
+  "VERMINE.Groupe.ObjectifMajeur": "Objectif majeur",
+  "VERMINE.Groupe.ObjectifsMineurs": "Objectifs mineurs",
+  "VERMINE.Groupe.Membres": "Membres",
+  "VERMINE.Groupe.MembresAstuce": "(glissez des personnages ici)",
+  "VERMINE.Groupe.Capacites": "Capacités de Groupe",
+
+  "VERMINE.Jet.Groupe": "Réserve de Groupe à dépenser",
 
   "VERMINE.Onglet.Principal": "Principal",
   "VERMINE.Onglet.Competences": "Compétences",

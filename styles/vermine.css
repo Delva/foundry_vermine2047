@@ -226,6 +226,27 @@
 .vermine2047 .creature-body .bloc-combat { display: flex; flex-direction: column; gap: 6px; margin: 10px 0; }
 .vermine2047 .creature-body .bloc-combat label { display: flex; flex-direction: column; gap: 3px; font-size: 0.78em; color: var(--v-muted); }
 
+/* ---- Fiche de Groupe ---- */
+.vermine2047 .groupe-body { flex: 1; overflow-y: auto; padding: 10px; }
+.vermine2047 .groupe-colonnes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: start; }
+.vermine2047 .groupe .champ-bloc { display: flex; flex-direction: column; gap: 3px; font-size: 0.8em; color: var(--v-muted); margin-bottom: 8px; }
+.vermine2047 .groupe .champ-bloc:last-child { margin-bottom: 0; }
+.vermine2047 .groupe textarea {
+  background: var(--v-bg3); color: var(--v-text); border: 1px solid var(--v-border);
+  border-radius: 3px; resize: vertical; font-family: inherit; padding: 4px;
+}
+.vermine2047 .groupe .bloc-reserve-groupe .reserve { flex-direction: column; align-items: flex-start; gap: 6px; }
+.vermine2047 .groupe .max-edit { display: flex; align-items: center; gap: 6px; font-size: 0.75em; color: var(--v-muted); text-transform: uppercase; }
+.vermine2047 .groupe .max-edit input { width: 56px; text-align: center; }
+.vermine2047 .membres { list-style: none; margin: 0; padding: 0; }
+.vermine2047 .membre { display: flex; align-items: center; gap: 8px; padding: 5px 4px; border-bottom: 1px solid var(--v-border); }
+.vermine2047 .membre img { width: 30px; height: 30px; border-radius: 3px; object-fit: cover; }
+.vermine2047 .membre-nom { flex: 1; font-weight: 500; }
+.vermine2047 .membre-res { font-size: 0.72em; color: var(--v-muted); background: var(--v-bg3); border-radius: 3px; padding: 1px 5px; }
+.vermine2047 .membre-controls a { margin-left: 6px; cursor: pointer; color: var(--v-muted); }
+.vermine2047 .membre-controls a:hover { color: var(--v-accent2); }
+.vermine2047 .bloc-membres .hint { font-size: 0.7em; font-weight: 400; color: var(--v-muted); text-transform: none; }
+
 /* ---- Fiche d'objet ---- */
 .vermine2047.sheet.item .item-entete { display: flex; gap: 10px; align-items: center; padding: 10px; background: var(--v-bg2); border-bottom: 2px solid var(--v-accent); }
 .vermine2047.sheet.item .item-img { width: 48px; height: 48px; border-radius: 4px; }

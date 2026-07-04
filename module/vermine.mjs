@@ -1,10 +1,12 @@
 import { VERMINE } from "./config.mjs";
 import { PersonnageData } from "./data/actor-personnage.mjs";
 import { CreatureData } from "./data/actor-creature.mjs";
+import { GroupeData } from "./data/actor-groupe.mjs";
 import { ArmeData, ProtectionData, EquipementData, CapaciteData } from "./data/item-data.mjs";
 import { VermineActor } from "./documents/actor.mjs";
 import { PersonnageSheet } from "./sheets/personnage-sheet.mjs";
 import { CreatureSheet } from "./sheets/creature-sheet.mjs";
+import { GroupeSheet } from "./sheets/groupe-sheet.mjs";
 import { VermineItemSheet } from "./sheets/item-sheet.mjs";
 import { preloadTemplates, registerHandlebarsHelpers } from "./helpers/templates.mjs";
 import { registerStatusEffects } from "./helpers/effects.mjs";
@@ -21,6 +23,7 @@ Hooks.once("init", function () {
   // DataModels des Acteurs.
   CONFIG.Actor.dataModels.personnage = PersonnageData;
   CONFIG.Actor.dataModels.creature = CreatureData;
+  CONFIG.Actor.dataModels.groupe = GroupeData;
 
   // DataModels des Objets.
   CONFIG.Item.dataModels.arme = ArmeData;
@@ -35,6 +38,9 @@ Hooks.once("init", function () {
   });
   Actors.registerSheet("vermine2047", CreatureSheet, {
     types: ["creature"], makeDefault: true, label: "VERMINE.Fiche.Creature"
+  });
+  Actors.registerSheet("vermine2047", GroupeSheet, {
+    types: ["groupe"], makeDefault: true, label: "VERMINE.Fiche.Groupe"
   });
 
   Items.unregisterSheet("core", ItemSheet);

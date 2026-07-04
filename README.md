@@ -95,7 +95,7 @@ Certains tableaux du guide en ligne sont des images non exploitables. Valeurs
 
 - **Phase 2** — Combat & Santé : Dommages = base + Réussites, Protection→Blessures,
   Réaction/initiative, ActiveEffects des Malus.
-- **Phase 3** — Le Groupe (Réserve de Groupe, Moral, Totem, Objectifs, Capacités).
+- **Phase 3** — Le Groupe ✅ (acteur `groupe` : Réserve de Groupe, Moral, Totem/Instincts/Interdits, Niveau, Objectifs, membres, Capacités ; dépense de la Réserve de Groupe intégrée au jet).
 - **Phase 4** — Compendiums (mécaniques) générés depuis les données du guide.
 - **Phase 5** — Profils/archétypes, Rites chamaniques, maladies/venins, macros, thème.
 

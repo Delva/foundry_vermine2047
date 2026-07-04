@@ -49,6 +49,12 @@
       <label class="checkbox"><input type="checkbox" name="materiel" /> {{localize "VERMINE.Jet.Materiel"}}</label>
       <label class="checkbox"><input type="checkbox" name="specialite" /> {{localize "VERMINE.Jet.Specialite"}}</label>
     </div>
+    {{#if groupe}}
+    <div class="form-group">
+      <label>{{localize "VERMINE.Jet.Groupe"}} — {{groupe.nom}} <span class="hint">(max {{groupe.dispo}})</span></label>
+      <input type="number" name="groupe" value="0" min="0" max="{{groupe.dispo}}" step="1" />
+    </div>
+    {{/if}}
   </fieldset>
 
   {{#if malusBlessure}}

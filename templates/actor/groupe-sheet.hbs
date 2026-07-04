@@ -1,0 +1,118 @@
+<form class="vermine2047 sheet groupe" autocomplete="off">
+
+  <header class="fiche-entete">
+    <img class="portrait" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" />
+    <div class="entete-champs">
+      <input type="text" name="name" value="{{actor.name}}" class="nom-perso" placeholder="{{localize 'VERMINE.Groupe.Nom'}}" />
+      <div class="entete-ligne">
+        <label>{{localize "VERMINE.Totem.Label"}}
+          <select name="system.totem">
+            <option value="">—</option>
+            {{#each VERMINE.totems as |t tkey|}}
+            <option value="{{tkey}}" {{#if (eq tkey ../system.totem)}}selected{{/if}}>{{localize t}}</option>
+            {{/each}}
+          </select>
+        </label>
+        <label>{{localize "VERMINE.Groupe.Niveau"}}
+          <input type="number" name="system.niveau" value="{{system.niveau}}" min="1" max="5" />
+        </label>
+        <label>{{localize "VERMINE.Groupe.Moral"}}
+          <select name="system.moral">
+            {{#each moralOptions as |m|}}
+            <option value="{{m.key}}" {{#if (eq m.key ../system.moral)}}selected{{/if}}>{{m.label}}</option>
+            {{/each}}
+          </select>
+        </label>
+        <label class="rep">{{localize "VERMINE.Reputation"}}
+          <input type="number" name="system.reputation" value="{{system.reputation}}" min="0" />
+        </label>
+      </div>
+    </div>
+  </header>
+
+  <section class="groupe-body">
+    <div class="groupe-colonnes">
+
+      <div class="colonne">
+        <section class="bloc bloc-reserve-groupe">
+          <h3>{{localize "VERMINE.Groupe.Reserve"}}</h3>
+          <div class="reserve">
+            <span class="pips value-pips reserve-pips">
+              {{#each reservePips as |p|}}
+              <span class="pip value-pip {{#if p.on}}on{{/if}}" data-pos="{{p.pos}}"></span>
+              {{/each}}
+            </span>
+            <span class="val-num">{{system.reserveGroupe.value}}/{{system.reserveGroupe.max}}</span>
+            <label class="max-edit">{{localize "VERMINE.Groupe.ReserveMax"}}
+              <input type="number" name="system.reserveGroupe.max" value="{{system.reserveGroupe.max}}" min="0" max="30" />
+            </label>
+          </div>
+        </section>
+
+        <section class="bloc">
+          <h3>{{localize "VERMINE.Totem.Label"}}</h3>
+          <label class="champ-bloc">{{localize "VERMINE.Groupe.Instincts"}}
+            <textarea name="system.instincts" rows="3" placeholder="{{localize 'VERMINE.Groupe.UnParLigne'}}">{{system.instincts}}</textarea>
+          </label>
+          <label class="champ-bloc">{{localize "VERMINE.Groupe.Interdits"}}
+            <textarea name="system.interdits" rows="3" placeholder="{{localize 'VERMINE.Groupe.UnParLigne'}}">{{system.interdits}}</textarea>
+          </label>
+        </section>
+
+        <section class="bloc">
+          <h3>{{localize "VERMINE.Groupe.Objectifs"}}</h3>
+          <label class="champ-bloc">{{localize "VERMINE.Groupe.ObjectifMajeur"}}
+            <input type="text" name="system.objectifMajeur" value="{{system.objectifMajeur}}" />
+          </label>
+          <label class="champ-bloc">{{localize "VERMINE.Groupe.ObjectifsMineurs"}}
+            <textarea name="system.objectifsMineurs" rows="2" placeholder="{{localize 'VERMINE.Groupe.UnParLigne'}}">{{system.objectifsMineurs}}</textarea>
+          </label>
+        </section>
+      </div>
+
+      <div class="colonne">
+        <section class="bloc bloc-membres">
+          <h3>{{localize "VERMINE.Groupe.Membres"}} <span class="hint">{{localize "VERMINE.Groupe.MembresAstuce"}}</span></h3>
+          <ol class="membres">
+            {{#each membres as |m|}}
+            <li class="membre" data-uuid="{{m.uuid}}">
+              <img src="{{m.img}}" />
+              <span class="membre-nom">{{m.name}}</span>
+              {{#if m.sf}}<span class="membre-res" title="{{localize 'VERMINE.Reserve.sangFroid'}}">SF {{m.sf.value}}/{{m.sf.max}}</span>{{/if}}
+              {{#if m.ef}}<span class="membre-res" title="{{localize 'VERMINE.Reserve.effort'}}">EF {{m.ef.value}}/{{m.ef.max}}</span>{{/if}}
+              <span class="membre-controls">
+                <a data-membre-open title="{{localize 'VERMINE.Item.Editer'}}"><i class="fas fa-up-right-from-square"></i></a>
+                <a data-membre-delete title="{{localize 'VERMINE.Item.Supprimer'}}"><i class="fas fa-user-minus"></i></a>
+              </span>
+            </li>
+            {{/each}}
+          </ol>
+        </section>
+
+        <section class="bloc bloc-capacites">
+          <div class="liste-entete">
+            <h3>{{localize "VERMINE.Groupe.Capacites"}}</h3>
+            <a data-item-create title="{{localize 'VERMINE.Item.Ajouter'}}"><i class="fas fa-plus"></i></a>
+          </div>
+          <ol class="objets">
+            {{#each capacites as |item|}}
+            <li class="objet" data-item-id="{{item.id}}">
+              <span class="objet-nom">{{item.name}}</span>
+              <span class="objet-controls">
+                <a data-item-edit><i class="fas fa-edit"></i></a>
+                <a data-item-delete><i class="fas fa-trash"></i></a>
+              </span>
+            </li>
+            {{/each}}
+          </ol>
+        </section>
+
+        <section class="bloc">
+          <h3>{{localize "VERMINE.Notes"}}</h3>
+          {{editor enrichedNotes target="system.notes" button=true editable=editable}}
+        </section>
+      </div>
+
+    </div>
+  </section>
+</form>
