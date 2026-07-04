@@ -1,0 +1,20 @@
+<div class="liste-objets" data-item-type="{{type}}">
+  <div class="liste-entete">
+    <h4>{{titre}}</h4>
+    <a class="ajout-objet" data-item-create="{{type}}" title="{{localize 'VERMINE.Item.Ajouter'}}"><i class="fas fa-plus"></i></a>
+  </div>
+  <ol class="objets">
+    {{#each items as |item|}}
+    <li class="objet" data-item-id="{{item.id}}">
+      <img class="objet-img" src="{{item.img}}" />
+      <span class="objet-nom">{{item.name}}</span>
+      {{#if (eq item.type "arme")}}<span class="objet-info">{{item.system.dommages}}</span>{{/if}}
+      {{#if (eq item.type "protection")}}<span class="objet-info">{{item.system.indice}}</span>{{/if}}
+      <span class="objet-controls">
+        <a data-item-edit title="{{localize 'VERMINE.Item.Editer'}}"><i class="fas fa-edit"></i></a>
+        <a data-item-delete title="{{localize 'VERMINE.Item.Supprimer'}}"><i class="fas fa-trash"></i></a>
+      </span>
+    </li>
+    {{/each}}
+  </ol>
+</div>

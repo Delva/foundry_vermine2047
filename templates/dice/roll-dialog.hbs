@@ -1,0 +1,59 @@
+<form class="vermine-jet-form">
+  <div class="form-group">
+    <label>{{localize "VERMINE.Carac.Label"}}</label>
+    <select name="caracteristique">
+      {{#each caracs as |c|}}
+      <option value="{{c.key}}" {{#if (eq c.key ../caracDefaut)}}selected{{/if}}>{{c.label}} ({{c.value}}D)</option>
+      {{/each}}
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>{{localize "VERMINE.Comp.Label"}}</label>
+    <select name="competence">
+      <option value="" {{#if (eq "" compDefaut)}}selected{{/if}}>{{localize "VERMINE.Comp.Aucune"}}</option>
+      {{#each domaines as |dom dkey|}}
+      <optgroup label="{{dom.label}}">
+        {{#each dom.competences as |c|}}
+        <option value="{{c.key}}" {{#if (eq c.key ../../compDefaut)}}selected{{/if}}>{{c.label}} — {{c.niveauLabel}}</option>
+        {{/each}}
+      </optgroup>
+      {{/each}}
+    </select>
+  </div>
+
+  <div class="form-group split">
+    <div>
+      <label>{{localize "VERMINE.Jet.Difficulte"}}</label>
+      <input type="number" name="difficulte" value="{{diffDefaut}}" min="3" max="10" step="1" />
+    </div>
+    <div>
+      <label>{{localize "VERMINE.Jet.Handicap"}}</label>
+      <input type="number" name="handicap" value="{{handicapDefaut}}" min="0" max="5" step="1" />
+    </div>
+  </div>
+
+  <fieldset class="vermine-bonus">
+    <legend>{{localize "VERMINE.Jet.Bonus"}}</legend>
+    <div class="form-group split">
+      <div>
+        <label>{{localize "VERMINE.Jet.SangFroid"}} <span class="hint">(max {{sangFroidDispo}})</span></label>
+        <input type="number" name="sangFroid" value="0" min="0" max="{{sangFroidDispo}}" step="1" />
+      </div>
+      <div>
+        <label>{{localize "VERMINE.Jet.Entraide"}}</label>
+        <input type="number" name="entraide" value="0" min="0" step="1" />
+      </div>
+    </div>
+    <div class="form-group split">
+      <label class="checkbox"><input type="checkbox" name="materiel" /> {{localize "VERMINE.Jet.Materiel"}}</label>
+      <label class="checkbox"><input type="checkbox" name="specialite" /> {{localize "VERMINE.Jet.Specialite"}}</label>
+    </div>
+  </fieldset>
+
+  {{#if malusBlessure}}
+  <p class="malus-blessure">{{localize "VERMINE.Jet.MalusBlessure"}} : −{{malusBlessure}}D</p>
+  {{/if}}
+
+  <p class="apercu">{{localize "VERMINE.Jet.TailleMain"}} : <strong class="apercu-main">0</strong> d10</p>
+</form>

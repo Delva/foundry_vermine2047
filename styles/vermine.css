@@ -1,0 +1,229 @@
+/* ============================================================
+   Vermine 2047 — feuille de style
+   Palette sombre post-apocalyptique.
+   ============================================================ */
+
+.vermine2047 {
+  --v-bg: #1c1a17;
+  --v-bg2: #262320;
+  --v-accent: #7a8c3f;   /* vert militaire délavé */
+  --v-accent2: #b5502e;  /* rouille */
+  --v-text: #e6e1d6;
+  --v-muted: #9c968a;
+  --v-succes: #7a8c3f;
+  --v-echec: #8a3126;
+  --v-border: #3a352f;
+}
+
+/* ---- Fiches d'acteur ---- */
+.vermine2047.sheet form {
+  color: var(--v-text);
+  background: var(--v-bg);
+  font-family: "Signika", sans-serif;
+}
+
+.vermine2047 .fiche-entete {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 6px;
+  border-bottom: 2px solid var(--v-accent);
+}
+
+.vermine2047 .fiche-entete .portrait {
+  width: 84px;
+  height: 84px;
+  object-fit: cover;
+  border: 1px solid var(--v-border);
+  border-radius: 4px;
+  flex: 0 0 auto;
+}
+
+.vermine2047 .entete-champs { flex: 1; }
+.vermine2047 .nom-perso {
+  font-size: 1.5em;
+  font-weight: 700;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--v-border);
+  color: var(--v-text);
+  width: 100%;
+}
+
+.vermine2047 .entete-ligne {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+  align-items: end;
+}
+.vermine2047 .entete-ligne label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.72em;
+  text-transform: uppercase;
+  color: var(--v-muted);
+  gap: 2px;
+}
+
+/* ---- Onglets ---- */
+.vermine2047 .sheet-tabs {
+  border-bottom: 1px solid var(--v-border);
+  margin: 4px 0;
+}
+.vermine2047 .sheet-tabs .item {
+  padding: 4px 10px;
+  color: var(--v-muted);
+  text-transform: uppercase;
+  font-size: 0.85em;
+}
+.vermine2047 .sheet-tabs .item.active {
+  color: var(--v-accent);
+  border-bottom: 2px solid var(--v-accent);
+}
+
+.vermine2047 .sheet-body { padding: 6px; overflow-y: auto; }
+
+/* ---- Caractéristiques ---- */
+.vermine2047 .groupes-carac {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+.vermine2047 .groupe {
+  background: var(--v-bg2);
+  border: 1px solid var(--v-border);
+  border-radius: 4px;
+  padding: 6px;
+}
+.vermine2047 .groupe h4 {
+  margin: 0 0 4px;
+  color: var(--v-accent);
+  font-size: 0.8em;
+  text-transform: uppercase;
+}
+.vermine2047 .carac-ligne,
+.vermine2047 .competence-ligne {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 3px;
+}
+.vermine2047 .carac-nom,
+.vermine2047 .comp-nom {
+  flex: 1;
+  cursor: pointer;
+  color: var(--v-text);
+}
+.vermine2047 .carac-nom:hover,
+.vermine2047 .comp-nom:hover { color: var(--v-accent2); text-shadow: 0 0 4px var(--v-accent2); }
+.vermine2047 .carac-ligne input[type="number"] { width: 42px; text-align: center; }
+.vermine2047 .unite { color: var(--v-muted); font-size: 0.8em; }
+
+/* ---- Réserves ---- */
+.vermine2047 .reserve {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.vermine2047 .reserve label { flex: 0 0 90px; text-transform: uppercase; font-size: 0.8em; }
+.vermine2047 .reserve input { width: 50px; text-align: center; }
+.vermine2047 .reserve .max { color: var(--v-accent); font-weight: 700; }
+
+/* ---- Blessures ---- */
+.vermine2047 .blessure-ligne {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 0;
+  border-bottom: 1px dashed var(--v-border);
+  flex-wrap: wrap;
+}
+.vermine2047 .blessure-nom { flex: 0 0 70px; font-weight: 700; }
+.vermine2047 .blessure-ligne label { font-size: 0.72em; color: var(--v-muted); display: flex; flex-direction: column; }
+.vermine2047 .blessure-ligne input { width: 44px; text-align: center; }
+.vermine2047 .cercles { display: flex; gap: 4px; }
+.vermine2047 .cercle {
+  width: 16px; height: 16px;
+  border: 2px solid var(--v-muted);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.vermine2047 .cercle.coche { background: var(--v-echec); border-color: var(--v-echec); }
+.vermine2047 .malus { color: var(--v-accent2); font-weight: 700; }
+
+/* ---- Compétences ---- */
+.vermine2047 .domaines-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+.vermine2047 .domaine {
+  background: var(--v-bg2);
+  border: 1px solid var(--v-border);
+  border-radius: 4px;
+  padding: 6px;
+}
+.vermine2047 .domaine h4 { margin: 0 0 4px; color: var(--v-accent); font-size: 0.8em; text-transform: uppercase; }
+.vermine2047 .rarete { color: var(--v-accent2); font-size: 0.7em; }
+.vermine2047 .competence-ligne select { flex: 0 0 90px; }
+.vermine2047 .competence-ligne .specialites { flex: 1; min-width: 60px; font-size: 0.75em; }
+
+/* ---- Objets ---- */
+.vermine2047 .liste-entete { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
+.vermine2047 .objets { list-style: none; margin: 0; padding: 0; }
+.vermine2047 .objet {
+  display: flex; align-items: center; gap: 6px;
+  padding: 3px; border-bottom: 1px solid var(--v-border);
+}
+.vermine2047 .objet-img { width: 22px; height: 22px; }
+.vermine2047 .objet-nom { flex: 1; }
+.vermine2047 .objet-info { color: var(--v-muted); font-size: 0.8em; }
+.vermine2047 .objet-controls a { margin-left: 4px; cursor: pointer; color: var(--v-muted); }
+.vermine2047 .objet-controls a:hover { color: var(--v-accent2); }
+
+/* ---- Créature ---- */
+.vermine2047 .caracs-inline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.vermine2047 .bloc-combat { display: flex; flex-direction: column; gap: 4px; margin: 8px 0; }
+.vermine2047 .bloc-combat label { display: flex; flex-direction: column; font-size: 0.75em; color: var(--v-muted); }
+
+/* ---- Fiche d'objet ---- */
+.vermine2047.sheet.item .item-entete { display: flex; gap: 8px; align-items: center; padding: 6px; border-bottom: 2px solid var(--v-accent); }
+.vermine2047.sheet.item .item-img { width: 48px; height: 48px; }
+.vermine2047.sheet.item .item-nom { flex: 1; font-size: 1.3em; font-weight: 700; background: transparent; border: none; border-bottom: 1px solid var(--v-border); }
+.vermine2047 .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; padding: 6px; }
+.vermine2047 .form-grid label { display: flex; flex-direction: column; font-size: 0.78em; color: var(--v-muted); gap: 2px; }
+
+/* ---- Dialogue de jet ---- */
+.vermine2047.jet-dialog .form-group { margin-bottom: 6px; }
+.vermine2047.jet-dialog .form-group.split { display: flex; gap: 10px; }
+.vermine2047.jet-dialog .form-group.split > div { flex: 1; }
+.vermine-jet-form label { font-weight: 600; display: block; margin-bottom: 2px; }
+.vermine-jet-form .hint { color: #888; font-weight: 400; font-size: 0.8em; }
+.vermine-jet-form .apercu { text-align: center; font-size: 1.05em; margin-top: 8px; }
+.vermine-jet-form .apercu-main { color: #b5502e; font-size: 1.3em; }
+.vermine-jet-form .malus-blessure { color: #b5502e; text-align: center; }
+.vermine-jet-form label.checkbox { display: inline-flex; align-items: center; gap: 4px; font-weight: 400; }
+
+/* ---- Carte de chat ---- */
+.vermine-carte-jet { border: 1px solid #3a352f; border-radius: 4px; padding: 6px; background: rgba(0,0,0,0.06); }
+.vermine-carte-jet .carte-flavor { font-weight: 700; margin-bottom: 4px; }
+.vermine-carte-jet .carte-ligne-diff { display: flex; gap: 12px; font-size: 0.85em; color: #555; margin-bottom: 6px; }
+.vermine-des { list-style: none; display: flex; flex-wrap: wrap; gap: 4px; margin: 0 0 6px; padding: 0; }
+.vermine-des .de {
+  width: 30px; height: 30px; line-height: 30px; text-align: center;
+  border-radius: 4px; font-weight: 700; color: #fff;
+  background: #8a3126; border: 1px solid #611f18;
+}
+.vermine-des .de.reussite { background: #7a8c3f; border-color: #566127; }
+.vermine-carte-jet .carte-resultat { display: flex; align-items: baseline; gap: 6px; padding: 4px; border-radius: 4px; }
+.vermine-carte-jet .carte-resultat.succes { background: rgba(122,140,63,0.25); }
+.vermine-carte-jet .carte-resultat.echec { background: rgba(138,49,38,0.25); }
+.vermine-carte-jet .nb-reussites { font-size: 1.6em; font-weight: 700; }
+.vermine-carte-jet .issue { font-weight: 700; text-transform: uppercase; margin-left: auto; }
+.vermine-carte-jet .surplus { color: #666; font-size: 0.85em; }
+.vermine-carte-jet .echec-auto { font-style: italic; color: #8a3126; }
+.vermine-carte-jet .carte-relances { display: flex; gap: 6px; margin-top: 6px; }
+.vermine-carte-jet .vermine-relance { flex: 1; font-size: 0.8em; }

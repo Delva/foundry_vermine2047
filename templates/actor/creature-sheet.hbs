@@ -1,0 +1,74 @@
+<form class="vermine2047 sheet creature" autocomplete="off">
+  <header class="fiche-entete">
+    <img class="portrait" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" />
+    <div class="entete-champs">
+      <input type="text" name="name" value="{{actor.name}}" class="nom-perso" />
+      <div class="entete-ligne">
+        <label>{{localize "VERMINE.Creature.Type"}}<input type="text" name="system.type" value="{{system.type}}" /></label>
+        <label>{{localize "VERMINE.Creature.Gabarit"}}<input type="text" name="system.gabarit" value="{{system.gabarit}}" /></label>
+        <label>{{localize "VERMINE.Creature.Taille"}}<input type="number" name="system.taille" value="{{system.taille}}" min="0" max="3" /></label>
+        <label>{{localize "VERMINE.Creature.Niveau"}}<input type="number" name="system.niveau" value="{{system.niveau}}" min="1" max="3" /></label>
+      </div>
+    </div>
+  </header>
+
+  <section class="sheet-body creature-body">
+    <div class="bloc-caracs">
+      <h3>{{localize "VERMINE.Carac.Titre"}}</h3>
+      <div class="caracs-inline">
+        {{#each caracs as |c|}}
+        <div class="carac-ligne">
+          <a class="carac-nom" data-roll-carac="{{c.key}}" title="{{localize 'VERMINE.Jet.Lancer'}}">{{c.label}}</a>
+          <input type="number" name="system.caracteristiques.{{c.key}}.value" value="{{c.value}}" min="0" max="12" />
+          <span class="unite">D</span>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="bloc-combat">
+      <label>{{localize "VERMINE.Creature.ValeursAction"}}<input type="text" name="system.valeursAction" value="{{system.valeursAction}}" placeholder="Pister 4D, Attaquer 3D…" /></label>
+      <label>{{localize "VERMINE.Creature.Dommages"}}<input type="text" name="system.dommages" value="{{system.dommages}}" placeholder="3 (L)" /></label>
+      <label>{{localize "VERMINE.Creature.Protection"}}<input type="text" name="system.protection" value="{{system.protection}}" /></label>
+    </div>
+
+    <div class="bloc-blessures">
+      <h3>{{localize "VERMINE.Blessure.Titre"}}</h3>
+      {{#each blessuresAff as |b bkey|}}
+      <div class="blessure-ligne">
+        <span class="blessure-nom">{{b.label}}</span>
+        <label class="seuil">{{localize "VERMINE.Blessure.Seuil"}}<input type="number" name="system.blessures.{{bkey}}.seuil" value="{{b.seuil}}" min="1" max="10" /></label>
+        <label class="nb-cercles">{{localize "VERMINE.Blessure.Cercles"}}<input type="number" name="system.blessures.{{bkey}}.cercles" value="{{b.cercles}}" min="0" max="12" /></label>
+        <div class="cercles">
+          {{#each b.dots as |d|}}
+          <span class="cercle {{#if d.coche}}coche{{/if}}" data-blessure="{{bkey}}" data-index="{{d.index}}"></span>
+          {{/each}}
+        </div>
+      </div>
+      {{/each}}
+    </div>
+
+    <div class="bloc-capacites">
+      <div class="liste-entete">
+        <h3>{{localize "VERMINE.Item.Capacites"}}</h3>
+        <a data-item-create title="{{localize 'VERMINE.Item.Ajouter'}}"><i class="fas fa-plus"></i></a>
+      </div>
+      <ol class="objets">
+        {{#each capacites as |item|}}
+        <li class="objet" data-item-id="{{item.id}}">
+          <span class="objet-nom">{{item.name}}</span>
+          <span class="objet-controls">
+            <a data-item-edit><i class="fas fa-edit"></i></a>
+            <a data-item-delete><i class="fas fa-trash"></i></a>
+          </span>
+        </li>
+        {{/each}}
+      </ol>
+    </div>
+
+    <div class="bloc-notes">
+      <h3>{{localize "VERMINE.Notes"}}</h3>
+      {{editor enrichedNotes target="system.notes" button=true editable=editable}}
+    </div>
+  </section>
+</form>

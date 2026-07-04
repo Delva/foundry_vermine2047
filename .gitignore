@@ -1,0 +1,18 @@
+# OS / éditeurs
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Node (outils de build futurs)
+node_modules/
+npm-debug.log*
+package-lock.json
+
+# Artefacts de packs compilés (LevelDB) — sources conservées, build ignoré
+packs/**/*.ldb
+packs/**/*.log
+packs/**/LOCK
+packs/**/CURRENT
+packs/**/MANIFEST-*

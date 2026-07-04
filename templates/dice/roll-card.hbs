@@ -1,0 +1,38 @@
+<div class="vermine-carte-jet">
+  {{#if flavor}}<header class="carte-flavor">{{flavor}}</header>{{/if}}
+
+  <div class="carte-ligne-diff">
+    <span>{{localize "VERMINE.Jet.Difficulte"}} : <strong>{{etat.difficulte}}</strong></span>
+    <span>{{localize "VERMINE.Jet.Requises"}} : <strong>{{requises}}</strong></span>
+  </div>
+
+  {{#if mainVide}}
+  <p class="echec-auto">{{localize "VERMINE.Jet.MainVide"}}</p>
+  {{else}}
+  <ol class="vermine-des">
+    {{#each des as |d|}}
+    <li class="de {{#if d.reussite}}reussite{{else}}echec{{/if}}">{{d.valeur}}</li>
+    {{/each}}
+  </ol>
+  {{/if}}
+
+  <div class="carte-resultat {{#if succes}}succes{{else}}echec{{/if}}">
+    <span class="nb-reussites">{{reussites}}</span>
+    <span class="lbl-reussites">{{localize "VERMINE.Jet.Reussites"}}</span>
+    <span class="issue">{{#if succes}}{{localize "VERMINE.Jet.Succes"}}{{else}}{{localize "VERMINE.Jet.Echec"}}{{/if}}</span>
+    {{#if surplus}}<span class="surplus">(+{{surplus}} {{localize "VERMINE.Jet.Surplus"}})</span>{{/if}}
+  </div>
+
+  <div class="carte-relances">
+    {{#if peutRelancerCompetence}}
+    <button type="button" class="vermine-relance" data-source="competence">
+      <i class="fas fa-redo"></i> {{localize "VERMINE.Jet.RelanceCompetence"}} ({{relancesCompetence}})
+    </button>
+    {{/if}}
+    {{#if peutRelancerEffort}}
+    <button type="button" class="vermine-relance" data-source="effort">
+      <i class="fas fa-redo"></i> {{localize "VERMINE.Jet.RelanceEffort"}} ({{effortDispo}})
+    </button>
+    {{/if}}
+  </div>
+</div>

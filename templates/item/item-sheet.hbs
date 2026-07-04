@@ -1,0 +1,70 @@
+<form class="vermine2047 sheet item" autocomplete="off">
+  <header class="item-entete">
+    <img class="item-img" src="{{item.img}}" data-edit="img" />
+    <input type="text" name="name" value="{{item.name}}" class="item-nom" />
+  </header>
+
+  <section class="item-body">
+
+    {{#if isArme}}
+    <div class="form-grid">
+      <label>{{localize "VERMINE.Arme.Dommages"}}<input type="text" name="system.dommages" value="{{system.dommages}}" /></label>
+      <label>{{localize "VERMINE.Arme.Competence"}}
+        <select name="system.competence">
+          {{#each competencesOptions as |c|}}
+          <option value="{{c.key}}" {{#if (eq c.key ../system.competence)}}selected{{/if}}>{{c.label}}</option>
+          {{/each}}
+        </select>
+      </label>
+      <label>{{localize "VERMINE.Arme.Portees"}}<input type="text" name="system.portees" value="{{system.portees}}" /></label>
+      <label>{{localize "VERMINE.Arme.Fiabilite"}}<input type="number" name="system.fiabilite" value="{{system.fiabilite}}" min="0" /></label>
+      <label>{{localize "VERMINE.Arme.Protection"}}<input type="number" name="system.protection" value="{{system.protection}}" min="0" /></label>
+      <label>{{localize "VERMINE.Rarete"}}<input type="number" name="system.rarete" value="{{system.rarete}}" min="0" /></label>
+    </div>
+    {{/if}}
+
+    {{#if isProtection}}
+    <div class="form-grid">
+      <label>{{localize "VERMINE.Protection.Indice"}}<input type="text" name="system.indice" value="{{system.indice}}" placeholder="3 ou 3/5" /></label>
+      <label>{{localize "VERMINE.Protection.Zones"}}<input type="text" name="system.zones" value="{{system.zones}}" /></label>
+      <label>{{localize "VERMINE.Protection.HandicapMobilite"}}<input type="number" name="system.handicapMobilite" value="{{system.handicapMobilite}}" min="0" max="3" /></label>
+      <label class="checkbox">{{localize "VERMINE.Protection.Equipee"}}<input type="checkbox" name="system.equipee" {{checked system.equipee}} /></label>
+      <label>{{localize "VERMINE.Rarete"}}<input type="number" name="system.rarete" value="{{system.rarete}}" min="0" /></label>
+    </div>
+    {{/if}}
+
+    {{#if isEquipement}}
+    <div class="form-grid">
+      <label>{{localize "VERMINE.Equipement.Quantite"}}<input type="number" name="system.quantite" value="{{system.quantite}}" min="0" /></label>
+      <label>{{localize "VERMINE.Equipement.Poids"}}<input type="number" name="system.poids" value="{{system.poids}}" min="0" step="0.1" /></label>
+      <label>{{localize "VERMINE.Rarete"}}<input type="number" name="system.rarete" value="{{system.rarete}}" min="0" /></label>
+    </div>
+    {{/if}}
+
+    {{#if isCapacite}}
+    <div class="form-grid">
+      <label>{{localize "VERMINE.Capacite.Type"}}
+        <select name="system.type">
+          {{#each typesCapacite as |t|}}
+          <option value="{{t.key}}" {{#if (eq t.key ../system.type)}}selected{{/if}}>{{t.label}}</option>
+          {{/each}}
+        </select>
+      </label>
+      <label>{{localize "VERMINE.Totem.Label"}}
+        <select name="system.totem">
+          <option value="">—</option>
+          {{#each totemsOptions as |t|}}
+          <option value="{{t.key}}" {{#if (eq t.key ../system.totem)}}selected{{/if}}>{{t.label}}</option>
+          {{/each}}
+        </select>
+      </label>
+      <label>{{localize "VERMINE.Capacite.Niveau"}}<input type="number" name="system.niveau" value="{{system.niveau}}" min="1" max="3" /></label>
+    </div>
+    {{/if}}
+
+    <div class="item-description">
+      <h4>{{localize "VERMINE.Description"}}</h4>
+      {{editor enrichedDesc target="system.description" button=true editable=editable}}
+    </div>
+  </section>
+</form>

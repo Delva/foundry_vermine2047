@@ -1,0 +1,14 @@
+{
+  "Actor": {
+    "types": ["personnage", "creature"],
+    "personnage": {},
+    "creature": {}
+  },
+  "Item": {
+    "types": ["arme", "protection", "equipement", "capacite"],
+    "arme": {},
+    "protection": {},
+    "equipement": {},
+    "capacite": {}
+  }
+}
