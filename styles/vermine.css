@@ -104,31 +104,38 @@
 }
 .vermine2047 input:focus, .vermine2047 select:focus { border-color: var(--v-accent); box-shadow: 0 0 4px rgba(138,160,74,0.5); }
 
-/* ---- Onglet principal : deux colonnes ---- */
-.vermine2047 .tab.principal { display: flex; gap: 10px; align-items: flex-start; }
-.vermine2047 .colonne-gauche { flex: 1.1; min-width: 0; }
-.vermine2047 .colonne-droite { flex: 1; min-width: 0; }
+/* ---- Bloc permanent : Caractéristiques (2/3) | Réserves + Blessures (1/3) ---- */
+.vermine2047 .bloc-permanent {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 10px; background: var(--v-bg); border-bottom: 1px solid var(--v-border);
+  flex: 0 0 auto;
+}
+.vermine2047 .perm-caracs { flex: 2; min-width: 0; }
+.vermine2047 .perm-cote { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.vermine2047 .perm-cote .bloc { margin-bottom: 8px; }
+.vermine2047 .perm-cote .bloc:last-child { margin-bottom: 0; }
 
-/* ---- Caractéristiques ---- */
-.vermine2047 .groupes-carac { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-.vermine2047 .groupe { background: var(--v-bg3); border: 1px solid var(--v-border); border-radius: 4px; padding: 8px; }
-.vermine2047 .carac-ligne { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
-.vermine2047 .carac-ligne:last-child { margin-bottom: 0; }
+/* ---- Caractéristiques : 4 blocs côte à côte ---- */
+.vermine2047 .perm-caracs .groupes-carac { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.vermine2047 .groupe { background: var(--v-bg2); border: 1px solid var(--v-border); border-radius: 5px; padding: 8px; }
+.vermine2047 .perm-caracs .carac-ligne { display: flex; flex-direction: column; gap: 3px; margin-bottom: 8px; }
+.vermine2047 .perm-caracs .carac-ligne:last-child { margin-bottom: 0; }
 .vermine2047 .carac-nom, .vermine2047 .comp-nom {
-  flex: 1; cursor: pointer; color: var(--v-text); font-weight: 500;
+  cursor: pointer; color: var(--v-text); font-weight: 500;
 }
 .vermine2047 .carac-nom i { color: var(--v-muted); font-size: 0.85em; margin-right: 2px; }
 .vermine2047 .carac-nom:hover, .vermine2047 .comp-nom:hover { color: var(--v-accent2); }
 .vermine2047 .carac-nom:hover i { color: var(--v-accent2); }
-.vermine2047 .carac-ligne input[type="number"] { width: 46px; text-align: center; font-weight: 700; }
-.vermine2047 .unite { color: var(--v-muted); font-size: 0.8em; }
+.vermine2047 .ligne-pips { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.vermine2047 .val-num { color: var(--v-accent); font-weight: 700; font-size: 1.05em; }
+.vermine2047 .val-num small { color: var(--v-muted); font-weight: 400; font-size: 0.7em; margin-left: 1px; }
 
 /* ---- Réserves ---- */
-.vermine2047 .reserve { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-.vermine2047 .reserve label { flex: 0 0 96px; text-transform: uppercase; font-size: 0.8em; color: var(--v-muted); }
-.vermine2047 .reserve input { width: 54px; text-align: center; font-weight: 700; }
-.vermine2047 .reserve .sep { color: var(--v-muted); }
-.vermine2047 .reserve .max { color: var(--v-accent); font-weight: 700; font-size: 1.1em; }
+.vermine2047 .reserve { display: flex; flex-direction: column; gap: 3px; margin-bottom: 8px; }
+.vermine2047 .reserve:last-child { margin-bottom: 0; }
+.vermine2047 .reserve label { text-transform: uppercase; font-size: 0.78em; color: var(--v-muted); font-weight: 600; }
+.vermine2047 .reserve .val-num { font-size: 0.85em; }
+.vermine2047 .reserve-pips { flex-wrap: wrap; }
 
 /* ---- Blessures ---- */
 .vermine2047 .blessure-ligne {
@@ -192,6 +199,10 @@
 }
 .vermine2047 .pip:hover { border-color: var(--v-accent); transform: scale(1.15); }
 .vermine2047 .pip.on { background: var(--v-accent); border-color: var(--v-accent); }
+/* Pips de valeur (Caractéristiques / Réserves) : un peu plus compacts. */
+.vermine2047 .value-pips { flex-wrap: wrap; }
+.vermine2047 .value-pip { width: 13px; height: 13px; }
+.vermine2047 .reserve-pips .value-pip { width: 12px; height: 12px; }
 
 /* ---- Objets ---- */
 .vermine2047 .liste-objets { margin-bottom: 12px; }
@@ -214,6 +225,8 @@
 
 /* ---- Créature ---- */
 .vermine2047 .creature-body .caracs-inline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.vermine2047 .creature-body .carac-ligne { display: flex; align-items: center; gap: 6px; }
+.vermine2047 .creature-body .carac-ligne input[type="number"] { width: 46px; text-align: center; font-weight: 700; }
 .vermine2047 .creature-body .bloc-combat { display: flex; flex-direction: column; gap: 6px; margin: 10px 0; }
 .vermine2047 .creature-body .bloc-combat label { display: flex; flex-direction: column; gap: 3px; font-size: 0.78em; color: var(--v-muted); }
 

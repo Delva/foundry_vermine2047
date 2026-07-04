@@ -37,80 +37,82 @@
     </div>
   </header>
 
+  {{!-- BLOC PERMANENT (toujours affiché) : Caractéristiques (2/3) | Réserves + Blessures (1/3) --}}
+  <section class="bloc-permanent">
+    <div class="perm-caracs">
+      <h3>{{localize "VERMINE.Carac.Titre"}}</h3>
+      <div class="groupes-carac">
+        {{#each groupes as |g gkey|}}
+        <div class="groupe">
+          <h4>{{g.label}}</h4>
+          {{#each g.caracs as |c|}}
+          <div class="carac-ligne">
+            <a class="carac-nom" data-roll-carac="{{c.key}}" title="{{localize 'VERMINE.Jet.Lancer'}}">
+              <i class="fas fa-dice-d10"></i> {{c.label}}
+            </a>
+            <div class="ligne-pips">
+              <span class="pips value-pips">
+                {{#each c.pips as |p|}}
+                <span class="pip value-pip {{#if p.on}}on{{/if}}" data-target="system.caracteristiques.{{c.key}}.value" data-pos="{{p.pos}}"></span>
+                {{/each}}
+              </span>
+              <span class="val-num">{{c.value}}<small>D</small></span>
+            </div>
+          </div>
+          {{/each}}
+        </div>
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="perm-cote">
+      <section class="bloc bloc-reserves">
+        <h3>{{localize "VERMINE.Reserve.Titre"}}</h3>
+        {{#each reservesAff as |r rkey|}}
+        <div class="reserve">
+          <label>{{r.label}}</label>
+          <span class="pips value-pips reserve-pips">
+            {{#each r.pips as |p|}}
+            <span class="pip value-pip {{#if p.on}}on{{/if}}" data-target="system.reserves.{{rkey}}.value" data-pos="{{p.pos}}"></span>
+            {{/each}}
+          </span>
+          <span class="val-num">{{r.value}}/{{r.max}}</span>
+        </div>
+        {{/each}}
+      </section>
+
+      <section class="bloc bloc-blessures">
+        <h3>{{localize "VERMINE.Blessure.Titre"}}</h3>
+        {{#each blessuresAff as |b bkey|}}
+        <div class="blessure-ligne">
+          <span class="blessure-nom">{{b.label}}</span>
+          <label class="seuil">{{localize "VERMINE.Blessure.Seuil"}}
+            <input type="number" name="system.blessures.{{bkey}}.seuil" value="{{b.seuil}}" min="1" max="10" />
+          </label>
+          <label class="nb-cercles">{{localize "VERMINE.Blessure.Cercles"}}
+            <input type="number" name="system.blessures.{{bkey}}.cercles" value="{{b.cercles}}" min="0" max="12" />
+          </label>
+          <div class="cercles">
+            {{#each b.dots as |d|}}
+            <span class="cercle {{#if d.coche}}coche{{/if}}" data-blessure="{{bkey}}" data-index="{{d.index}}"></span>
+            {{/each}}
+          </div>
+        </div>
+        {{/each}}
+        {{#if system.malusBlessure}}
+        <p class="malus">{{localize "VERMINE.Jet.MalusBlessure"}} : −{{system.malusBlessure}}D</p>
+        {{/if}}
+      </section>
+    </div>
+  </section>
+
   <nav class="sheet-tabs tabs">
-    <a class="item" data-tab="principal"><i class="fas fa-heart-pulse"></i> {{localize "VERMINE.Onglet.Principal"}}</a>
     <a class="item" data-tab="competences"><i class="fas fa-list-check"></i> {{localize "VERMINE.Onglet.Competences"}}</a>
     <a class="item" data-tab="objets"><i class="fas fa-box-open"></i> {{localize "VERMINE.Onglet.Objets"}}</a>
     <a class="item" data-tab="bio"><i class="fas fa-book"></i> {{localize "VERMINE.Onglet.Bio"}}</a>
   </nav>
 
   <section class="sheet-body">
-
-    {{!-- ONGLET PRINCIPAL --}}
-    <div class="tab principal" data-tab="principal">
-      <div class="colonne-gauche">
-        <section class="bloc bloc-caracs">
-          <h3>{{localize "VERMINE.Carac.Titre"}}</h3>
-          <div class="groupes-carac">
-            {{#each groupes as |g gkey|}}
-            <div class="groupe">
-              <h4>{{g.label}}</h4>
-              {{#each g.caracs as |c|}}
-              <div class="carac-ligne">
-                <a class="carac-nom" data-roll-carac="{{c.key}}" title="{{localize 'VERMINE.Jet.Lancer'}}">
-                  <i class="fas fa-dice-d10"></i> {{c.label}}
-                </a>
-                <input type="number" name="system.caracteristiques.{{c.key}}.value" value="{{c.value}}" min="0" max="5" />
-                <span class="unite">D</span>
-              </div>
-              {{/each}}
-            </div>
-            {{/each}}
-          </div>
-        </section>
-      </div>
-
-      <div class="colonne-droite">
-        <section class="bloc bloc-reserves">
-          <h3>{{localize "VERMINE.Reserve.Titre"}}</h3>
-          <div class="reserve">
-            <label>{{localize "VERMINE.Reserve.sangFroid"}}</label>
-            <input type="number" name="system.reserves.sangFroid.value" value="{{system.reserves.sangFroid.value}}" min="0" />
-            <span class="sep">/</span>
-            <span class="max">{{system.reserves.sangFroid.max}}</span>
-          </div>
-          <div class="reserve">
-            <label>{{localize "VERMINE.Reserve.effort"}}</label>
-            <input type="number" name="system.reserves.effort.value" value="{{system.reserves.effort.value}}" min="0" />
-            <span class="sep">/</span>
-            <span class="max">{{system.reserves.effort.max}}</span>
-          </div>
-        </section>
-
-        <section class="bloc bloc-blessures">
-          <h3>{{localize "VERMINE.Blessure.Titre"}}</h3>
-          {{#each blessuresAff as |b bkey|}}
-          <div class="blessure-ligne">
-            <span class="blessure-nom">{{b.label}}</span>
-            <label class="seuil">{{localize "VERMINE.Blessure.Seuil"}}
-              <input type="number" name="system.blessures.{{bkey}}.seuil" value="{{b.seuil}}" min="1" max="10" />
-            </label>
-            <label class="nb-cercles">{{localize "VERMINE.Blessure.Cercles"}}
-              <input type="number" name="system.blessures.{{bkey}}.cercles" value="{{b.cercles}}" min="0" max="12" />
-            </label>
-            <div class="cercles">
-              {{#each b.dots as |d|}}
-              <span class="cercle {{#if d.coche}}coche{{/if}}" data-blessure="{{bkey}}" data-index="{{d.index}}"></span>
-              {{/each}}
-            </div>
-          </div>
-          {{/each}}
-          {{#if system.malusBlessure}}
-          <p class="malus">{{localize "VERMINE.Jet.MalusBlessure"}} : −{{system.malusBlessure}}D</p>
-          {{/if}}
-        </section>
-      </div>
-    </div>
 
     {{!-- ONGLET COMPÉTENCES --}}
     <div class="tab competences" data-tab="competences">
@@ -136,7 +138,7 @@
             {{#if c.rarete}}<span class="rarete" title="{{localize 'VERMINE.Rarete'}}">({{#if (eq c.rarete 1)}}I{{else}}II{{/if}})</span>{{/if}}
             <span class="pips" title="{{c.niveauLabel}}">
               {{#each c.pips as |p|}}
-              <span class="pip {{#if p.on}}on{{/if}}" data-comp="{{p.compKey}}" data-niveau="{{p.niveauKey}}" data-ordre="{{p.ordre}}" title="{{p.label}}"></span>
+              <span class="pip comp-pip {{#if p.on}}on{{/if}}" data-comp="{{p.compKey}}" data-niveau="{{p.niveauKey}}" data-ordre="{{p.ordre}}" title="{{p.label}}"></span>
               {{/each}}
             </span>
             <input type="text" class="specialites" name="spec.{{c.key}}" value="{{join c.specialites ', '}}"

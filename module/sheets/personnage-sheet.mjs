@@ -9,7 +9,7 @@ export class PersonnageSheet extends ActorSheet {
       template: "systems/vermine2047/templates/actor/personnage-sheet.hbs",
       width: 740,
       height: 800,
-      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "principal" }]
+      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "competences" }]
     });
   }
 
@@ -25,10 +25,28 @@ export class PersonnageSheet extends ActorSheet {
     for (const gKey of Object.keys(VERMINE.groupesCarac)) {
       ctx.groupes[gKey] = { label: game.i18n.localize(VERMINE.groupesCarac[gKey]), caracs: [] };
     }
+    const MAX_CARAC = 5;
     for (const [key, c] of Object.entries(VERMINE.caracteristiques)) {
+      const value = sys.caracteristiques[key].value;
       ctx.groupes[c.groupe].caracs.push({
-        key, label: game.i18n.localize(c.label), value: sys.caracteristiques[key].value
+        key,
+        label: game.i18n.localize(c.label),
+        value,
+        pips: Array.from({ length: MAX_CARAC }, (_, i) => ({ pos: i + 1, on: i < value }))
       });
+    }
+
+    // Réserves affichées en pips (0 → max dérivé).
+    ctx.reservesAff = {};
+    for (const rKey of Object.keys(VERMINE.reserves)) {
+      const r = sys.reserves[rKey];
+      const max = r.max ?? 0;
+      ctx.reservesAff[rKey] = {
+        label: game.i18n.localize(`VERMINE.Reserve.${rKey}`),
+        value: r.value,
+        max,
+        pips: Array.from({ length: max }, (_, i) => ({ pos: i + 1, on: i < r.value }))
+      };
     }
 
     // Niveaux affichés sous forme de pips (Débutant → Légende ; on exclut "Aucun").
@@ -115,7 +133,10 @@ export class PersonnageSheet extends ActorSheet {
     html.find("[data-blessure]").on("click", (ev) => this._onToggleBlessure(ev));
 
     // Niveau de compétence via pips cliquables.
-    html.find(".pip").on("click", (ev) => this._onTogglePip(ev));
+    html.find(".comp-pip").on("click", (ev) => this._onTogglePip(ev));
+
+    // Valeurs (Caractéristiques, Réserves) via pips cliquables.
+    html.find(".value-pip").on("click", (ev) => this._onValuePip(ev));
 
     // Gestion des objets.
     html.find("[data-item-create]").on("click", (ev) => this._onItemCreate(ev));
@@ -132,6 +153,16 @@ export class PersonnageSheet extends ActorSheet {
     const ordreActuel = CONFIG.VERMINE.niveauxCompetence[niveauActuel]?.ordre ?? 0;
     const nouveau = (ordre === ordreActuel) ? "aucun" : el.dataset.niveau;
     this.actor.update({ [`system.competences.${comp}.niveau`]: nouveau });
+  }
+
+  /** Clic sur un pip de valeur (Caractéristique / Réserve) : fixe la valeur ; re-clic = décrémente. */
+  _onValuePip(ev) {
+    const el = ev.currentTarget;
+    const path = el.dataset.target;      // ex. system.caracteristiques.vigueur.value
+    const pos = Number(el.dataset.pos);
+    const current = foundry.utils.getProperty(this.actor, path) ?? 0;
+    const nouveau = (pos === current) ? pos - 1 : pos;
+    this.actor.update({ [path]: Math.max(0, nouveau) });
   }
 
   /** Filtre les compétences affichées selon la recherche (insensible à la casse et aux accents). */
