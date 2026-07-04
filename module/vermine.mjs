@@ -2,7 +2,8 @@ import { VERMINE } from "./config.mjs";
 import { PersonnageData } from "./data/actor-personnage.mjs";
 import { CreatureData } from "./data/actor-creature.mjs";
 import { GroupeData } from "./data/actor-groupe.mjs";
-import { ArmeData, ProtectionData, EquipementData, CapaciteData, AdaptationData, TraumatismeData, HistoriqueData } from "./data/item-data.mjs";
+import { ArmeData, ProtectionData, EquipementData, CapaciteData, AdaptationData, TraumatismeData, HistoriqueData, AfflictionData } from "./data/item-data.mjs";
+import { ouvrirDialogueJet } from "./dice/roll-dialog.mjs";
 import { VermineActor } from "./documents/actor.mjs";
 import { PersonnageSheet } from "./sheets/personnage-sheet.mjs";
 import { CreatureSheet } from "./sheets/creature-sheet.mjs";
@@ -33,6 +34,7 @@ Hooks.once("init", function () {
   CONFIG.Item.dataModels.adaptation = AdaptationData;
   CONFIG.Item.dataModels.traumatisme = TraumatismeData;
   CONFIG.Item.dataModels.historique = HistoriqueData;
+  CONFIG.Item.dataModels.affliction = AfflictionData;
 
   // Fiches.
   Actors.unregisterSheet("core", ActorSheet);
@@ -58,6 +60,14 @@ Hooks.once("init", function () {
 
 Hooks.once("ready", function () {
   console.log("Vermine 2047 | Système prêt");
+  // API publique pour les macros.
+  game.vermine = {
+    rollDialog: (actor, preset = {}) => {
+      const a = actor ?? canvas.tokens?.controlled[0]?.actor ?? game.user.character;
+      if (!a) return ui.notifications.warn(game.i18n.localize("VERMINE.Macro.AucunActeur"));
+      return ouvrirDialogueJet(a, preset);
+    }
+  };
 });
 
 // Câblage des boutons de Relance sur les cartes de chat.

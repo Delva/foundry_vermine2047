@@ -8,6 +8,20 @@ Compatibilité : **FoundryVTT v12**.
 
 ---
 
+## [0.4.0] — Confort (phase 5, 1ᵉʳ lot)
+
+### Ajouté
+- **Macros** : API `game.vermine.rollDialog(actor)` et compendium **Macros** avec une
+  macro « Jet Vermine » prête à poser sur la barre — elle ouvre le dialogue de jet
+  pour le jeton sélectionné ou le personnage assigné.
+- **Type d'objet Affliction** (maladie / toxine-venin / parasite / addiction) :
+  Virulence, durée, fréquence, effets ; fiche dédiée et affichage sur la fiche
+  Personnage.
+- **Compendium Afflictions** (7 entrées curées : venin de scorpion, veuve noire,
+  frelon, feuille de coca, scolopendre, infection de plaie, fièvre des marais).
+
+---
+
 ## [0.3.1] — Refonte visuelle de la fiche Personnage
 
 ### Modifié
@@ -140,6 +154,7 @@ Compatibilité : **FoundryVTT v12**.
 
 ---
 
+[0.4.0]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.4.0
 [0.3.1]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.3.1
 [0.3.0]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.3.0
 [0.2.0]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.2.0

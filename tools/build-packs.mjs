@@ -20,22 +20,24 @@ function makeId(seed) {
   return (h + "0000000000000000").slice(0, 16);
 }
 
-/** Document Item minimal attendu dans un pack v12. */
-function buildDoc(doc) {
-  const _id = makeId(`${doc.type}:${doc.name}`);
-  return {
+/** Construit un document minimal (Item ou Macro) attendu dans un pack v12. */
+function buildDoc(doc, pack) {
+  const collection = pack.type === "Macro" ? "macros" : "items";
+  const _id = makeId(`${pack.name}:${doc.name}`);
+  const base = {
     _id,
-    _key: `!items!${_id}`,
+    _key: `!${collection}!${_id}`,
     name: doc.name,
-    type: doc.type,
-    img: doc.img ?? "icons/svg/item-bag.svg",
-    system: doc.system ?? {},
-    effects: [],
+    img: doc.img ?? (pack.type === "Macro" ? "icons/svg/d20.svg" : "icons/svg/item-bag.svg"),
     folder: null,
     sort: 0,
     flags: {},
     _stats: { systemId: "vermine2047", coreVersion: "12" }
   };
+  if (pack.type === "Macro") {
+    return { ...base, type: "script", scope: "global", command: doc.command ?? "", author: null };
+  }
+  return { ...base, type: doc.type, system: doc.system ?? {}, effects: [] };
 }
 
 async function buildPack(pack) {
@@ -46,7 +48,7 @@ async function buildPack(pack) {
   const db = new ClassicLevel(dest, { keyEncoding: "utf8", valueEncoding: "json" });
   const batch = db.batch();
   for (const raw of pack.docs) {
-    const doc = buildDoc(raw);
+    const doc = buildDoc(raw, pack);
     batch.put(doc._key, doc);
   }
   await batch.write();

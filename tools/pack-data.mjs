@@ -93,6 +93,27 @@ const historiques = [
   ["Vieil ami", 1, "Un ami intime redevable, prêt à prendre des risques une fois pour s'acquitter de sa dette ; l'Historique est ensuite perdu."]
 ];
 
+// --- Afflictions (maladies, toxines/venins, parasites, addictions) ---
+// Jet de résistance : Santé vs Virulence (Volonté vs Virulence pour une addiction),
+// sans Réserve, sans Relance, sans Compétence.
+const afflictions = [
+  ["Venin de scorpion", "toxine", 7, "24 h", "", "Perte de 3D dans chaque Réserve ; 1 Blessure Légère par heure. Chaque Réussite au jet de Santé réduit la perte de Dés ou la durée."],
+  ["Morsure de veuve noire", "toxine", 5, "24 h", "", "(II) Handicaps à toutes les Actions pendant la durée. Effet continu : aucun jet ne l'interrompt une fois déclaré."],
+  ["Piqûre de frelon", "toxine", 3, "", "", "Douleur et gonflement. Plusieurs piqûres d'un même essaim augmentent le nombre de Réussites requises au jet de Santé."],
+  ["Feuille de coca", "addiction", 5, "", "2 heures", "Stimulant : +1D d'Effort tant qu'il en consomme. En manque, l'effet s'inverse. Sevrage : se passer d'autant de doses que la Virulence (+1 Handicap par dose sautée)."],
+  ["Scolopendre (parasite)", "parasite", 5, "", "", "Tant que le parasite est présent : -1D en Précision et Réflexes, -2D de Sang-Froid, et -1D à la récupération des Réserves. Extraction : Action de soin (Difficulté = Virulence)."],
+  ["Infection de plaie", "maladie", 5, "", "", "Une Blessure non soignée s'infecte : empêche la récupération complète des Réserves et peut s'aggraver. Soin : Savoir + Soins vs Virulence."],
+  ["Fièvre des marais", "maladie", 6, "plusieurs jours", "", "Malus de 1D aux Actions tant que la fièvre dure ; empêche de recharger totalement les Réserves au repos."]
+];
+
+const macroJet = [
+  "// Jet Vermine — ouvre le dialogue de jet pour le personnage sélectionné.",
+  "const actor = canvas.tokens?.controlled[0]?.actor ?? game.user.character;",
+  "if (!actor) { ui.notifications.warn('Vermine 2047 : sélectionnez un jeton ou assignez un personnage.'); }",
+  "else if (game.vermine?.rollDialog) { game.vermine.rollDialog(actor); }",
+  "else if (actor.rollAction) { actor.rollAction(); }"
+].join("\n");
+
 export const PACKS = [
   {
     name: "adaptations",
@@ -118,5 +139,22 @@ export const PACKS = [
       name, type: "historique", img: "icons/svg/book.svg",
       system: { description: p(desc), cout }
     }))
+  },
+  {
+    name: "afflictions",
+    label: "Afflictions",
+    type: "Item",
+    docs: afflictions.map(([name, categorie, virulence, duree, frequence, desc]) => ({
+      name, type: "affliction", img: "icons/svg/poison.svg",
+      system: { description: p(desc), categorie, virulence, duree, frequence }
+    }))
+  },
+  {
+    name: "macros",
+    label: "Macros",
+    type: "Macro",
+    docs: [
+      { name: "Jet Vermine", img: "icons/svg/d20-black.svg", command: macroJet }
+    ]
   }
 ];

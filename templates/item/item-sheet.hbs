@@ -70,6 +70,22 @@
     </div>
     {{/if}}
 
+    {{#if isAffliction}}
+    <div class="form-grid">
+      <label>{{localize "VERMINE.Affliction.Categorie"}}
+        <select name="system.categorie">
+          <option value="maladie" {{#if (eq "maladie" system.categorie)}}selected{{/if}}>{{localize "VERMINE.Affliction.maladie"}}</option>
+          <option value="toxine" {{#if (eq "toxine" system.categorie)}}selected{{/if}}>{{localize "VERMINE.Affliction.toxine"}}</option>
+          <option value="parasite" {{#if (eq "parasite" system.categorie)}}selected{{/if}}>{{localize "VERMINE.Affliction.parasite"}}</option>
+          <option value="addiction" {{#if (eq "addiction" system.categorie)}}selected{{/if}}>{{localize "VERMINE.Affliction.addiction"}}</option>
+        </select>
+      </label>
+      <label>{{localize "VERMINE.Affliction.Virulence"}}<input type="number" name="system.virulence" value="{{system.virulence}}" min="0" max="10" /></label>
+      <label>{{localize "VERMINE.Affliction.Duree"}}<input type="text" name="system.duree" value="{{system.duree}}" /></label>
+      <label>{{localize "VERMINE.Affliction.Frequence"}}<input type="text" name="system.frequence" value="{{system.frequence}}" /></label>
+    </div>
+    {{/if}}
+
     {{#if isCapacite}}
     <div class="form-grid">
       <label>{{localize "VERMINE.Capacite.Type"}}

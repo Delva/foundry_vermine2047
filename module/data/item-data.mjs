@@ -91,6 +91,23 @@ export class HistoriqueData extends foundry.abstract.TypeDataModel {
   }
 }
 
+/** Affliction : maladie, toxine, parasite ou addiction (Virulence + effets). */
+export class AfflictionData extends foundry.abstract.TypeDataModel {
+  static defineSchema() {
+    return {
+      description: new fields.HTMLField(),
+      categorie: new fields.StringField({
+        required: true, choices: ["maladie", "toxine", "parasite", "addiction"], initial: "toxine"
+      }),
+      // Virulence = Difficulté du jet de Santé (ou de Volonté pour une addiction).
+      virulence: new fields.NumberField({ required: true, integer: true, min: 0, max: 10, initial: 5 }),
+      duree: new fields.StringField({ required: false, blank: true, initial: "" }),
+      // Fréquence entre deux doses (addictions).
+      frequence: new fields.StringField({ required: false, blank: true, initial: "" })
+    };
+  }
+}
+
 /** Capacité (de Totem ou de Profil). */
 export class CapaciteData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
