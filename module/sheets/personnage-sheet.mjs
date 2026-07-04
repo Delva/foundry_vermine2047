@@ -24,7 +24,7 @@ export class PersonnageSheet extends ActorSheet {
       template: "systems/vermine2047/templates/actor/personnage-sheet.hbs",
       width: 740,
       height: 800,
-      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "competences" }]
+      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "feuille" }]
     });
   }
 
@@ -64,14 +64,25 @@ export class PersonnageSheet extends ActorSheet {
       };
     }
 
-    // Niveaux affichés sous forme de pips (Débutant → Légende ; on exclut "Aucun").
-    const pipLevels = Object.entries(VERMINE.niveauxCompetence)
+    // Sous-titre latéral (mode · totem).
+    ctx.modeLabel = game.i18n.localize(VERMINE.modes[sys.mode] ?? "");
+    ctx.totemLabel = sys.totem ? game.i18n.localize(VERMINE.totems[sys.totem]) : "";
+
+    // Niveaux affichés en pips (Débutant → Légende ; on exclut "Aucun").
+    // Un niveau qui octroie une Relance supplémentaire est marqué "relance" (croix ✕),
+    // sinon "bonus" (dé, cercle plein) — à la manière de la fiche officielle.
+    const niveauxTri = Object.entries(VERMINE.niveauxCompetence)
       .filter(([, n]) => n.ordre >= 1)
-      .sort((a, b) => a[1].ordre - b[1].ordre)
-      .map(([key, n]) => ({
-        key, ordre: n.ordre, label: game.i18n.localize(n.label),
-        pipsDemo: Array.from({ length: n.ordre })
-      }));
+      .sort((a, b) => a[1].ordre - b[1].ordre);
+    let prevRelances = 0;
+    const kindsByOrdre = [];
+    const pipLevels = niveauxTri.map(([key, n]) => {
+      const kind = n.relances > prevRelances ? "relance" : "bonus";
+      prevRelances = n.relances;
+      kindsByOrdre[n.ordre - 1] = kind;
+      return { key, ordre: n.ordre, label: game.i18n.localize(n.label), kind };
+    });
+    for (const l of pipLevels) l.pipsDemo = kindsByOrdre.slice(0, l.ordre).map((k) => ({ kind: k }));
     ctx.pipLevels = pipLevels;
 
     const norm = (s) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
@@ -95,7 +106,7 @@ export class PersonnageSheet extends ActorSheet {
         niveauOrdre,
         specialites: comp.specialites ?? [],
         pips: pipLevels.map((l) => ({
-          compKey: key, niveauKey: l.key, ordre: l.ordre, label: l.label, on: l.ordre <= niveauOrdre
+          compKey: key, niveauKey: l.key, ordre: l.ordre, label: l.label, kind: l.kind, on: l.ordre <= niveauOrdre
         }))
       });
     }

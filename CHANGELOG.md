@@ -8,6 +8,21 @@ Compatibilité : **FoundryVTT v12**.
 
 ---
 
+## [0.3.1] — Refonte visuelle de la fiche Personnage
+
+### Modifié
+- **Nouvelle disposition applicative** : barre latérale gauche (identité + navigation
+  Feuille / Objets / Biographie), en-tête avec les champs et la recherche, et un
+  **rail droit permanent** pour les Réserves et les Blessures.
+- L'onglet **Feuille** réunit désormais Caractéristiques et Compétences.
+- **Pips de Relance affichés par une croix (✕)** : les niveaux de compétence qui
+  octroient une Relance (Confirmé, Expert, Légende) sont matérialisés par une croix
+  plutôt qu'une pastille pleine, comme sur la fiche officielle (`●✕✕`). La légende
+  reflète cette distinction.
+- Palette et contrastes retravaillés (vert acide, fond plus sombre).
+
+---
+
 ## [0.3.0] — Compendiums (phase 4)
 
 ### Ajouté
@@ -125,6 +140,7 @@ Compatibilité : **FoundryVTT v12**.
 
 ---
 
+[0.3.1]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.3.1
 [0.3.0]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.3.0
 [0.2.0]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.2.0
 [0.1.3]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.1.3

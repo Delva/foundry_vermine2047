@@ -4,222 +4,188 @@
    ============================================================ */
 
 .vermine2047 {
-  --v-bg: #1c1a17;
-  --v-bg2: #262320;
-  --v-bg3: #2f2b26;
-  --v-accent: #8aa04a;   /* vert militaire */
+  --v-bg: #14140f;
+  --v-bg2: #1b1b15;
+  --v-bg3: #24241c;
+  --v-accent: #9ab534;   /* vert acide */
   --v-accent2: #c25a34;  /* rouille */
   --v-text: #ece7db;
-  --v-muted: #a49d8e;
-  --v-succes: #8aa04a;
+  --v-muted: #8f897b;
+  --v-succes: #9ab534;
   --v-echec: #a53a2c;
-  --v-border: #423b33;
+  --v-border: #33322a;
 }
 
-/* ---- Layout général de la fiche (flex colonne = pas de vide, corps scrollable) ---- */
+/* ---- Base commune (fiches créature / groupe / objet : colonne flex) ---- */
 .vermine2047.sheet .window-content { padding: 0; }
 .vermine2047.sheet form {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  color: var(--v-text);
-  background: var(--v-bg);
-  font-size: 14px;
+  display: flex; flex-direction: column; height: 100%;
+  color: var(--v-text); background: var(--v-bg); font-size: 14px;
 }
-.vermine2047 .sheet-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 8px 10px;
-}
+.vermine2047 .sheet-body { flex: 1; overflow-y: auto; padding: 8px 10px; }
 
-/* ---- En-tête ---- */
-.vermine2047 .fiche-entete {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  padding: 10px;
-  background: var(--v-bg2);
-  border-bottom: 2px solid var(--v-accent);
-  flex: 0 0 auto;
+.vermine2047 h3 {
+  margin: 0 0 8px; padding-bottom: 4px; border-bottom: 1px solid var(--v-border);
+  color: var(--v-accent); font-size: 0.9em; text-transform: uppercase; letter-spacing: 0.05em;
 }
-.vermine2047 .fiche-entete .portrait {
-  width: 72px; height: 72px;
-  object-fit: cover;
-  border: 1px solid var(--v-border);
-  border-radius: 4px;
-  flex: 0 0 auto;
+.vermine2047 h4 { margin: 0 0 6px; color: var(--v-accent); font-size: 0.8em; text-transform: uppercase; }
+.vermine2047 input, .vermine2047 select, .vermine2047 textarea {
+  background: var(--v-bg3); color: var(--v-text); border: 1px solid var(--v-border); border-radius: 3px;
 }
-.vermine2047 .entete-champs { flex: 1; min-width: 0; }
-.vermine2047 .nom-perso {
-  font-size: 1.6em; font-weight: 700;
-  background: transparent; border: none;
-  border-bottom: 1px solid var(--v-border);
-  color: var(--v-text); width: 100%;
+.vermine2047 input:focus, .vermine2047 select:focus, .vermine2047 textarea:focus {
+  border-color: var(--v-accent); box-shadow: 0 0 4px rgba(154,181,52,0.5);
 }
-.vermine2047 .entete-ligne {
-  display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; align-items: end;
-}
-.vermine2047 .entete-ligne label {
-  display: flex; flex-direction: column; gap: 3px;
-  font-size: 0.72em; text-transform: uppercase; letter-spacing: 0.03em;
-  color: var(--v-muted);
-}
-.vermine2047 .entete-ligne .rep input { width: 56px; }
-.vermine2047 .entete-ligne .chaman-check { align-items: center; }
-
-/* ---- Onglets ---- */
-.vermine2047 .sheet-tabs {
-  display: flex; gap: 4px;
-  border-bottom: 1px solid var(--v-border);
-  background: var(--v-bg2);
-  padding: 0 8px; flex: 0 0 auto;
-}
-.vermine2047 .sheet-tabs .item {
-  padding: 8px 14px; color: var(--v-muted);
-  text-transform: uppercase; font-size: 0.82em; font-weight: 600;
-  border-bottom: 2px solid transparent;
-}
-.vermine2047 .sheet-tabs .item:hover { color: var(--v-text); }
-.vermine2047 .sheet-tabs .item.active {
-  color: var(--v-accent); border-bottom-color: var(--v-accent);
-}
-
-/* ---- Blocs / cartes ---- */
 .vermine2047 .bloc {
-  background: var(--v-bg2);
-  border: 1px solid var(--v-border);
-  border-radius: 6px;
+  background: var(--v-bg2); border: 1px solid var(--v-border); border-radius: 6px;
   padding: 10px; margin-bottom: 10px;
 }
-.vermine2047 h3 {
-  margin: 0 0 8px; padding-bottom: 4px;
-  border-bottom: 1px solid var(--v-border);
-  color: var(--v-accent); font-size: 0.95em;
-  text-transform: uppercase; letter-spacing: 0.04em;
-}
-.vermine2047 h4 { margin: 0 0 6px; color: var(--v-accent); font-size: 0.82em; text-transform: uppercase; }
-.vermine2047 input, .vermine2047 select {
-  background: var(--v-bg3); color: var(--v-text);
-  border: 1px solid var(--v-border); border-radius: 3px;
-}
-.vermine2047 input:focus, .vermine2047 select:focus { border-color: var(--v-accent); box-shadow: 0 0 4px rgba(138,160,74,0.5); }
 
-/* ---- Bloc permanent : Caractéristiques (2/3) | Réserves + Blessures (1/3) ---- */
-.vermine2047 .bloc-permanent {
-  display: flex; gap: 10px; align-items: flex-start;
-  padding: 10px; background: var(--v-bg); border-bottom: 1px solid var(--v-border);
-  flex: 0 0 auto;
+/* ============================================================
+   FICHE PERSONNAGE — layout applicatif (barre latérale | corps | rail)
+   ============================================================ */
+.vermine2047.personnage.layout-app {
+  display: grid;
+  grid-template-columns: 188px minmax(0, 1fr) 236px;
+  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-areas:
+    "side header header"
+    "side body   rail";
+  height: 100%;
 }
-.vermine2047 .perm-caracs { flex: 2; min-width: 0; }
-.vermine2047 .perm-cote { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-.vermine2047 .perm-cote .bloc { margin-bottom: 8px; }
-.vermine2047 .perm-cote .bloc:last-child { margin-bottom: 0; }
+
+/* Barre latérale */
+.vermine2047 .v-sidebar {
+  grid-area: side; background: var(--v-bg2); border-right: 1px solid var(--v-border);
+  display: flex; flex-direction: column;
+}
+.vermine2047 .side-ident { padding: 12px 10px; border-bottom: 1px solid var(--v-border); display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; }
+.vermine2047 .side-portrait { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; border: 2px solid var(--v-accent); }
+.vermine2047 .side-nom { font-weight: 700; text-transform: uppercase; font-size: 0.9em; color: var(--v-accent); letter-spacing: 0.03em; }
+.vermine2047 .side-sub { font-size: 0.68em; color: var(--v-muted); text-transform: uppercase; }
+.vermine2047 .v-sidebar .sheet-tabs { display: flex; flex-direction: column; padding: 8px 0; border: none; }
+.vermine2047 .v-sidebar .sheet-tabs .item {
+  padding: 10px 14px; color: var(--v-muted); font-size: 0.82em; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.03em; border-left: 3px solid transparent; text-align: left;
+}
+.vermine2047 .v-sidebar .sheet-tabs .item i { width: 18px; text-align: center; margin-right: 6px; }
+.vermine2047 .v-sidebar .sheet-tabs .item:hover { color: var(--v-text); background: rgba(255,255,255,0.03); }
+.vermine2047 .v-sidebar .sheet-tabs .item.active { color: var(--v-accent); border-left-color: var(--v-accent); background: rgba(154,181,52,0.08); }
+
+/* En-tête */
+.vermine2047.personnage .fiche-entete {
+  grid-area: header; display: flex; gap: 12px; align-items: center;
+  padding: 10px 14px; background: var(--v-bg); border-bottom: 1px solid var(--v-border);
+}
+.vermine2047.personnage .fiche-entete .portrait { width: 60px; height: 60px; object-fit: cover; border: 1px solid var(--v-border); border-radius: 4px; }
+.vermine2047 .entete-champs { flex: 1; min-width: 0; }
+.vermine2047 .nom-perso { font-size: 1.5em; font-weight: 700; background: transparent; border: none; border-bottom: 1px solid transparent; color: var(--v-text); width: 100%; }
+.vermine2047 .nom-perso:hover, .vermine2047 .nom-perso:focus { border-bottom-color: var(--v-border); }
+.vermine2047 .entete-ligne { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; align-items: end; }
+.vermine2047 .entete-ligne label { display: flex; flex-direction: column; gap: 2px; font-size: 0.68em; text-transform: uppercase; letter-spacing: 0.03em; color: var(--v-muted); }
+.vermine2047 .entete-ligne .rep input { width: 52px; }
+.vermine2047 .entete-ligne .chaman-check { align-items: center; }
+
+/* Recherche dans l'en-tête, alignée à droite */
+.vermine2047 .header-search {
+  flex: 0 0 auto; width: 210px; align-self: center;
+  display: flex; align-items: center; gap: 6px;
+  background: var(--v-bg3); border: 1px solid var(--v-border); border-radius: 16px; padding: 5px 12px;
+}
+.vermine2047 .header-search i { color: var(--v-muted); }
+.vermine2047 .header-search .comp-search { flex: 1; background: transparent; border: none; color: var(--v-text); }
+.vermine2047 .header-search .comp-search:focus { box-shadow: none; }
+
+/* Corps + rail */
+.vermine2047.personnage .sheet-body { grid-area: body; overflow-y: auto; padding: 12px; }
+.vermine2047 .v-rail { grid-area: rail; background: var(--v-bg2); border-left: 1px solid var(--v-border); overflow-y: auto; padding: 12px; }
+.vermine2047 .v-rail .bloc { background: var(--v-bg3); }
 
 /* ---- Caractéristiques : 4 blocs côte à côte ---- */
-.vermine2047 .perm-caracs .groupes-carac { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-.vermine2047 .groupe { background: var(--v-bg2); border: 1px solid var(--v-border); border-radius: 5px; padding: 8px; }
-.vermine2047 .perm-caracs .carac-ligne { display: flex; flex-direction: column; gap: 3px; margin-bottom: 8px; }
-.vermine2047 .perm-caracs .carac-ligne:last-child { margin-bottom: 0; }
-.vermine2047 .carac-nom, .vermine2047 .comp-nom {
-  cursor: pointer; color: var(--v-text); font-weight: 500;
-}
+.vermine2047 .bloc-caracs .groupes-carac { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.vermine2047 .groupe { background: var(--v-bg3); border: 1px solid var(--v-border); border-radius: 5px; padding: 8px; }
+.vermine2047 .bloc-caracs .carac-ligne { display: flex; flex-direction: column; gap: 3px; margin-bottom: 8px; }
+.vermine2047 .bloc-caracs .carac-ligne:last-child { margin-bottom: 0; }
+.vermine2047 .carac-nom, .vermine2047 .comp-nom { cursor: pointer; color: var(--v-text); font-weight: 500; }
 .vermine2047 .carac-nom i { color: var(--v-muted); font-size: 0.85em; margin-right: 2px; }
 .vermine2047 .carac-nom:hover, .vermine2047 .comp-nom:hover { color: var(--v-accent2); }
 .vermine2047 .carac-nom:hover i { color: var(--v-accent2); }
-.vermine2047 .ligne-pips { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-.vermine2047 .val-num { color: var(--v-accent); font-weight: 700; font-size: 1.05em; }
+.vermine2047 .carac-ligne .pips { flex-wrap: wrap; }
+.vermine2047 .val-num { color: var(--v-accent); font-weight: 700; }
 .vermine2047 .val-num small { color: var(--v-muted); font-weight: 400; font-size: 0.7em; margin-left: 1px; }
 
-/* ---- Réserves ---- */
-.vermine2047 .reserve { display: flex; flex-direction: column; gap: 3px; margin-bottom: 8px; }
-.vermine2047 .reserve:last-child { margin-bottom: 0; }
-.vermine2047 .reserve label { text-transform: uppercase; font-size: 0.78em; color: var(--v-muted); font-weight: 600; }
-.vermine2047 .reserve .val-num { font-size: 0.85em; }
-.vermine2047 .reserve-pips { flex-wrap: wrap; }
+/* ---- Légende des niveaux ---- */
+.vermine2047 .comp-toolbar { margin: 4px 0 10px; }
+.vermine2047 .pip-legende { display: flex; gap: 14px; flex-wrap: wrap; font-size: 0.72em; color: var(--v-muted); }
+.vermine2047 .legende-item { display: inline-flex; align-items: center; gap: 5px; }
+.vermine2047 .legende-item .pip { width: 11px; height: 11px; cursor: default; }
+.vermine2047 .legende-item .pip.relance { font-size: 10px; }
 
-/* ---- Blessures ---- */
-.vermine2047 .blessure-ligne {
-  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-  padding: 6px 0; border-bottom: 1px dashed var(--v-border);
-}
-.vermine2047 .blessure-ligne:last-of-type { border-bottom: none; }
-.vermine2047 .blessure-nom { flex: 0 0 72px; font-weight: 700; }
-.vermine2047 .blessure-ligne label { font-size: 0.7em; color: var(--v-muted); display: flex; flex-direction: column; gap: 2px; }
-.vermine2047 .blessure-ligne input { width: 46px; text-align: center; }
-.vermine2047 .cercles { display: flex; gap: 5px; }
-.vermine2047 .cercle {
-  width: 16px; height: 16px; border: 2px solid var(--v-muted); border-radius: 50%;
-  cursor: pointer; transition: background 0.1s, border-color 0.1s;
-}
-.vermine2047 .cercle:hover { border-color: var(--v-echec); }
-.vermine2047 .cercle.coche { background: var(--v-echec); border-color: var(--v-echec); }
-.vermine2047 .malus { color: var(--v-accent2); font-weight: 700; margin: 6px 0 0; }
-
-/* ---- Onglet Compétences : barre d'outils + recherche + légende ---- */
-.vermine2047 .comp-toolbar {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 12px; flex-wrap: wrap; margin-bottom: 10px;
-}
-.vermine2047 .comp-search-wrap {
-  display: flex; align-items: center; gap: 6px; flex: 1; min-width: 180px;
-  background: var(--v-bg3); border: 1px solid var(--v-border); border-radius: 4px; padding: 4px 8px;
-}
-.vermine2047 .comp-search-wrap i { color: var(--v-muted); }
-.vermine2047 .comp-search { flex: 1; background: transparent; border: none; color: var(--v-text); }
-.vermine2047 .comp-search:focus { box-shadow: none; }
-/* Recherche déplacée dans l'en-tête, alignée à droite. */
-.vermine2047 .header-search {
-  flex: 0 0 auto; width: 210px; margin-left: auto; align-self: flex-end;
-}
-.vermine2047 .pip-legende { display: flex; gap: 12px; flex-wrap: wrap; font-size: 0.72em; color: var(--v-muted); }
-.vermine2047 .legende-item { display: inline-flex; align-items: center; gap: 4px; }
-.vermine2047 .legende-item .pip { width: 9px; height: 9px; border-width: 1px; cursor: default; }
-
-/* ---- Compétences : grille de domaines + pips ---- */
-.vermine2047 .domaines-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-.vermine2047 .domaine { background: var(--v-bg2); border: 1px solid var(--v-border); border-radius: 6px; padding: 10px; }
-.vermine2047 .competence-ligne {
-  display: flex; align-items: center; gap: 6px;
-  padding: 4px 0; border-bottom: 1px solid rgba(66,59,51,0.5);
-}
+/* ---- Compétences : grille de domaines ---- */
+.vermine2047 .domaines-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.vermine2047 .domaine { background: var(--v-bg3); border: 1px solid var(--v-border); border-radius: 6px; padding: 10px; }
+.vermine2047 .competence-ligne { display: flex; align-items: center; gap: 6px; padding: 4px 0; border-bottom: 1px solid rgba(51,50,42,0.6); }
 .vermine2047 .competence-ligne:last-child { border-bottom: none; }
-.vermine2047 .competence-ligne .comp-nom { flex: 1; min-width: 0; }
-.vermine2047 .competence-ligne .rarete { color: var(--v-accent2); font-size: 0.7em; }
+.vermine2047 .competence-ligne .comp-nom { flex: 1; min-width: 0; font-size: 0.92em; }
+.vermine2047 .competence-ligne .rarete { color: var(--v-accent2); font-size: 0.68em; }
 .vermine2047 .competence-ligne .pips { margin-left: auto; }
 
-/* ---- Pips (niveau de maîtrise) ---- */
+/* ---- Pips ---- */
 .vermine2047 .pips { display: inline-flex; gap: 4px; align-items: center; }
 .vermine2047 .pip {
   width: 15px; height: 15px; border: 2px solid var(--v-muted); border-radius: 50%;
   cursor: pointer; transition: background 0.1s, border-color 0.1s, transform 0.05s;
+  box-sizing: border-box;
 }
 .vermine2047 .pip:hover { border-color: var(--v-accent); transform: scale(1.15); }
 .vermine2047 .pip.on { background: var(--v-accent); border-color: var(--v-accent); }
-/* Pips de valeur (Caractéristiques / Réserves) : un peu plus compacts. */
+/* Pips de valeur (Caractéristiques / Réserves), plus compacts */
 .vermine2047 .value-pips { flex-wrap: wrap; }
 .vermine2047 .value-pip { width: 13px; height: 13px; }
 .vermine2047 .reserve-pips .value-pip { width: 12px; height: 12px; }
+/* Pips « relance » : croix ✕ au lieu d'une bulle pleine */
+.vermine2047 .pip.relance {
+  border: none; background: none; border-radius: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 13px; line-height: 1; color: var(--v-muted);
+}
+.vermine2047 .pip.relance.on { color: var(--v-accent); background: none; }
+.vermine2047 .pip.relance:hover { color: var(--v-accent2); background: none; }
+
+/* ---- Réserves (rail) ---- */
+.vermine2047 .reserve { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+.vermine2047 .reserve:last-child { margin-bottom: 0; }
+.vermine2047 .reserve label { display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; font-size: 0.76em; color: var(--v-muted); font-weight: 600; }
+
+/* ---- Blessures ---- */
+.vermine2047 .blessure-ligne { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 0; border-bottom: 1px dashed var(--v-border); flex-wrap: wrap; }
+.vermine2047 .v-rail .blessure-ligne:last-of-type { border-bottom: none; }
+.vermine2047 .blessure-nom { font-weight: 600; }
+.vermine2047 .blessure-nom small { color: var(--v-muted); font-weight: 400; }
+.vermine2047 .cercles { display: flex; gap: 5px; }
+.vermine2047 .cercle { width: 16px; height: 16px; border: 2px solid var(--v-muted); border-radius: 50%; cursor: pointer; transition: background 0.1s, border-color 0.1s; box-sizing: border-box; }
+.vermine2047 .cercle:hover { border-color: var(--v-echec); }
+.vermine2047 .cercle.coche { background: var(--v-echec); border-color: var(--v-echec); }
+.vermine2047 .malus { color: var(--v-accent2); font-weight: 700; margin: 8px 0 0; }
 
 /* ---- Objets ---- */
 .vermine2047 .liste-objets { margin-bottom: 12px; }
 .vermine2047 .liste-entete { display: flex; justify-content: space-between; align-items: center; }
 .vermine2047 .liste-entete .ajout-objet, .vermine2047 .liste-entete a { cursor: pointer; color: var(--v-accent); }
 .vermine2047 .objets { list-style: none; margin: 4px 0 0; padding: 0; }
-.vermine2047 .objet {
-  display: flex; align-items: center; gap: 8px;
-  padding: 5px 4px; border-bottom: 1px solid var(--v-border);
-}
+.vermine2047 .objet { display: flex; align-items: center; gap: 8px; padding: 5px 4px; border-bottom: 1px solid var(--v-border); }
 .vermine2047 .objet-img { width: 24px; height: 24px; border-radius: 3px; }
 .vermine2047 .objet-nom { flex: 1; }
 .vermine2047 .objet-info { color: var(--v-muted); font-size: 0.82em; }
 .vermine2047 .objet-controls a { margin-left: 6px; cursor: pointer; color: var(--v-muted); }
 .vermine2047 .objet-controls a:hover { color: var(--v-accent2); }
 
-/* ---- Onglet Bio ---- */
+/* ---- Onglet Biographie ---- */
 .vermine2047 .tab.bio .predilection { display: flex; flex-direction: column; gap: 3px; font-size: 0.8em; color: var(--v-muted); margin-bottom: 10px; max-width: 260px; }
 .vermine2047 .tab.bio .editor { min-height: 140px; border: 1px solid var(--v-border); border-radius: 4px; }
 
 /* ---- Créature ---- */
+.vermine2047 .fiche-entete { display: flex; gap: 12px; align-items: center; padding: 10px; background: var(--v-bg2); border-bottom: 2px solid var(--v-accent); flex: 0 0 auto; }
+.vermine2047 .fiche-entete .portrait { width: 72px; height: 72px; object-fit: cover; border: 1px solid var(--v-border); border-radius: 4px; flex: 0 0 auto; }
 .vermine2047 .creature-body .caracs-inline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
 .vermine2047 .creature-body .carac-ligne { display: flex; align-items: center; gap: 6px; }
 .vermine2047 .creature-body .carac-ligne input[type="number"] { width: 46px; text-align: center; font-weight: 700; }
@@ -231,10 +197,7 @@
 .vermine2047 .groupe-colonnes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: start; }
 .vermine2047 .groupe .champ-bloc { display: flex; flex-direction: column; gap: 3px; font-size: 0.8em; color: var(--v-muted); margin-bottom: 8px; }
 .vermine2047 .groupe .champ-bloc:last-child { margin-bottom: 0; }
-.vermine2047 .groupe textarea {
-  background: var(--v-bg3); color: var(--v-text); border: 1px solid var(--v-border);
-  border-radius: 3px; resize: vertical; font-family: inherit; padding: 4px;
-}
+.vermine2047 .groupe textarea { resize: vertical; font-family: inherit; padding: 4px; }
 .vermine2047 .groupe .bloc-reserve-groupe .reserve { flex-direction: column; align-items: flex-start; gap: 6px; }
 .vermine2047 .groupe .max-edit { display: flex; align-items: center; gap: 6px; font-size: 0.75em; color: var(--v-muted); text-transform: uppercase; }
 .vermine2047 .groupe .max-edit input { width: 56px; text-align: center; }
@@ -246,16 +209,6 @@
 .vermine2047 .membre-controls a { margin-left: 6px; cursor: pointer; color: var(--v-muted); }
 .vermine2047 .membre-controls a:hover { color: var(--v-accent2); }
 .vermine2047 .bloc-membres .hint { font-size: 0.7em; font-weight: 400; color: var(--v-muted); text-transform: none; }
-
-/* ---- Fiche d'objet ---- */
-.vermine2047.sheet.item .item-entete { display: flex; gap: 10px; align-items: center; padding: 10px; background: var(--v-bg2); border-bottom: 2px solid var(--v-accent); }
-.vermine2047.sheet.item .item-img { width: 48px; height: 48px; border-radius: 4px; }
-.vermine2047.sheet.item .item-nom { flex: 1; font-size: 1.3em; font-weight: 700; background: transparent; border: none; border-bottom: 1px solid var(--v-border); color: var(--v-text); }
-.vermine2047.sheet.item .item-body { padding: 10px; overflow-y: auto; }
-.vermine2047 .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-.vermine2047 .form-grid label { display: flex; flex-direction: column; gap: 3px; font-size: 0.78em; color: var(--v-muted); }
-.vermine2047 .form-grid label.checkbox { flex-direction: row; align-items: center; gap: 6px; }
-.vermine2047 .item-description { margin-top: 12px; }
 
 /* ---- Fenêtre d'options du personnage ---- */
 .vermine2047.personnage-options .window-content { padding: 0; }
@@ -285,19 +238,25 @@
 .vermine-jet-form .malus-blessure { color: #c25a34; text-align: center; }
 .vermine-jet-form label.checkbox { display: inline-flex; align-items: center; gap: 5px; font-weight: 400; }
 
+/* ---- Fiche d'objet ---- */
+.vermine2047.sheet.item .item-entete { display: flex; gap: 10px; align-items: center; padding: 10px; background: var(--v-bg2); border-bottom: 2px solid var(--v-accent); }
+.vermine2047.sheet.item .item-img { width: 48px; height: 48px; border-radius: 4px; }
+.vermine2047.sheet.item .item-nom { flex: 1; font-size: 1.3em; font-weight: 700; background: transparent; border: none; border-bottom: 1px solid var(--v-border); color: var(--v-text); }
+.vermine2047.sheet.item .item-body { padding: 10px; overflow-y: auto; }
+.vermine2047 .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.vermine2047 .form-grid label { display: flex; flex-direction: column; gap: 3px; font-size: 0.78em; color: var(--v-muted); }
+.vermine2047 .form-grid label.checkbox { flex-direction: row; align-items: center; gap: 6px; }
+.vermine2047 .item-description { margin-top: 12px; }
+
 /* ---- Carte de chat ---- */
-.vermine-carte-jet { border: 1px solid #423b33; border-radius: 5px; padding: 8px; background: rgba(0,0,0,0.05); }
+.vermine-carte-jet { border: 1px solid #33322a; border-radius: 5px; padding: 8px; background: rgba(0,0,0,0.05); }
 .vermine-carte-jet .carte-flavor { font-weight: 700; margin-bottom: 4px; }
 .vermine-carte-jet .carte-ligne-diff { display: flex; gap: 14px; font-size: 0.85em; color: #666; margin-bottom: 6px; }
 .vermine-des { list-style: none; display: flex; flex-wrap: wrap; gap: 5px; margin: 0 0 8px; padding: 0; }
-.vermine-des .de {
-  width: 32px; height: 32px; line-height: 32px; text-align: center;
-  border-radius: 5px; font-weight: 700; color: #fff;
-  background: #a53a2c; border: 1px solid #7a291f;
-}
-.vermine-des .de.reussite { background: #8aa04a; border-color: #63753a; }
+.vermine-des .de { width: 32px; height: 32px; line-height: 32px; text-align: center; border-radius: 5px; font-weight: 700; color: #fff; background: #a53a2c; border: 1px solid #7a291f; }
+.vermine-des .de.reussite { background: #9ab534; border-color: #6d8226; }
 .vermine-carte-jet .carte-resultat { display: flex; align-items: baseline; gap: 8px; padding: 6px; border-radius: 4px; }
-.vermine-carte-jet .carte-resultat.succes { background: rgba(138,160,74,0.25); }
+.vermine-carte-jet .carte-resultat.succes { background: rgba(154,181,52,0.25); }
 .vermine-carte-jet .carte-resultat.echec { background: rgba(165,58,44,0.25); }
 .vermine-carte-jet .nb-reussites { font-size: 1.7em; font-weight: 700; }
 .vermine-carte-jet .issue { font-weight: 700; text-transform: uppercase; margin-left: auto; }

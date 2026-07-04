@@ -1,5 +1,20 @@
-<form class="vermine2047 sheet personnage" autocomplete="off">
+<form class="vermine2047 sheet personnage layout-app" autocomplete="off">
 
+  {{!-- BARRE LATÉRALE : identité + navigation --}}
+  <aside class="v-sidebar">
+    <div class="side-ident">
+      <img class="side-portrait" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" />
+      <div class="side-nom">{{actor.name}}</div>
+      <div class="side-sub">{{modeLabel}}{{#if totemLabel}} · {{totemLabel}}{{/if}}</div>
+    </div>
+    <nav class="sheet-tabs tabs">
+      <a class="item" data-tab="feuille"><i class="fas fa-address-card"></i> {{localize "VERMINE.Onglet.Feuille"}}</a>
+      <a class="item" data-tab="objets"><i class="fas fa-box-open"></i> {{localize "VERMINE.Onglet.Objets"}}</a>
+      <a class="item" data-tab="bio"><i class="fas fa-book"></i> {{localize "VERMINE.Onglet.Bio"}}</a>
+    </nav>
+  </aside>
+
+  {{!-- EN-TÊTE --}}
   <header class="fiche-entete">
     <img class="portrait" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" />
     <div class="entete-champs">
@@ -33,28 +48,30 @@
         <label class="chaman-check">{{localize "VERMINE.Chaman"}}
           <input type="checkbox" name="system.chaman" {{checked system.chaman}} />
         </label>
-        <div class="comp-search-wrap header-search">
-          <i class="fas fa-magnifying-glass"></i>
-          <input type="text" class="comp-search" placeholder="{{localize 'VERMINE.Comp.Rechercher'}}" />
-        </div>
       </div>
+    </div>
+    <div class="comp-search-wrap header-search">
+      <i class="fas fa-magnifying-glass"></i>
+      <input type="text" class="comp-search" placeholder="{{localize 'VERMINE.Comp.Rechercher'}}" />
     </div>
   </header>
 
-  {{!-- BLOC PERMANENT (toujours affiché) : Caractéristiques (2/3) | Réserves + Blessures (1/3) --}}
-  <section class="bloc-permanent">
-    <div class="perm-caracs">
-      <h3>{{localize "VERMINE.Carac.Titre"}}</h3>
-      <div class="groupes-carac">
-        {{#each groupes as |g gkey|}}
-        <div class="groupe">
-          <h4>{{g.label}}</h4>
-          {{#each g.caracs as |c|}}
-          <div class="carac-ligne">
-            <a class="carac-nom" data-roll-carac="{{c.key}}" title="{{localize 'VERMINE.Jet.Lancer'}}">
-              <i class="fas fa-dice-d10"></i> {{c.label}}
-            </a>
-            <div class="ligne-pips">
+  {{!-- CORPS (onglets) --}}
+  <section class="sheet-body">
+
+    {{!-- ONGLET FEUILLE : Caractéristiques + Compétences --}}
+    <div class="tab feuille" data-tab="feuille">
+      <section class="bloc bloc-caracs">
+        <h3>{{localize "VERMINE.Carac.Titre"}}</h3>
+        <div class="groupes-carac">
+          {{#each groupes as |g gkey|}}
+          <div class="groupe">
+            <h4>{{g.label}}</h4>
+            {{#each g.caracs as |c|}}
+            <div class="carac-ligne">
+              <a class="carac-nom" data-roll-carac="{{c.key}}" title="{{localize 'VERMINE.Jet.Lancer'}}">
+                <i class="fas fa-dice-d10"></i> {{c.label}}
+              </a>
               <span class="pips value-pips">
                 {{#each c.pips as |p|}}
                 <span class="pip value-pip {{#if p.on}}on{{/if}}" data-target="system.caracteristiques.{{c.key}}.value" data-pos="{{p.pos}}"></span>
@@ -62,84 +79,44 @@
               </span>
               <span class="val-num">{{c.value}}<small>D</small></span>
             </div>
+            {{/each}}
           </div>
           {{/each}}
         </div>
-        {{/each}}
-      </div>
-    </div>
-
-    <div class="perm-cote">
-      <section class="bloc bloc-reserves">
-        <h3>{{localize "VERMINE.Reserve.Titre"}}</h3>
-        {{#each reservesAff as |r rkey|}}
-        <div class="reserve">
-          <label>{{r.label}}</label>
-          <span class="pips value-pips reserve-pips">
-            {{#each r.pips as |p|}}
-            <span class="pip value-pip {{#if p.on}}on{{/if}}" data-target="system.reserves.{{rkey}}.value" data-pos="{{p.pos}}"></span>
-            {{/each}}
-          </span>
-          <span class="val-num">{{r.value}}/{{r.max}}</span>
-        </div>
-        {{/each}}
       </section>
 
-      <section class="bloc bloc-blessures">
-        <h3>{{localize "VERMINE.Blessure.Titre"}}</h3>
-        {{#each blessuresAff as |b bkey|}}
-        <div class="blessure-ligne">
-          <span class="blessure-nom" title="{{localize 'VERMINE.Blessure.Seuil'}} {{b.seuil}}">{{b.label}} <small>({{b.seuil}})</small></span>
-          <div class="cercles">
-            {{#each b.dots as |d|}}
-            <span class="cercle {{#if d.coche}}coche{{/if}}" data-blessure="{{bkey}}" data-index="{{d.index}}"></span>
-            {{/each}}
-          </div>
-        </div>
-        {{/each}}
-        {{#if system.malusBlessure}}
-        <p class="malus">{{localize "VERMINE.Jet.MalusBlessure"}} : −{{system.malusBlessure}}D</p>
-        {{/if}}
-      </section>
-    </div>
-  </section>
-
-  <nav class="sheet-tabs tabs">
-    <a class="item" data-tab="competences"><i class="fas fa-list-check"></i> {{localize "VERMINE.Onglet.Competences"}}</a>
-    <a class="item" data-tab="objets"><i class="fas fa-box-open"></i> {{localize "VERMINE.Onglet.Objets"}}</a>
-    <a class="item" data-tab="bio"><i class="fas fa-book"></i> {{localize "VERMINE.Onglet.Bio"}}</a>
-  </nav>
-
-  <section class="sheet-body">
-
-    {{!-- ONGLET COMPÉTENCES --}}
-    <div class="tab competences" data-tab="competences">
       <div class="comp-toolbar">
         <div class="pip-legende">
           {{#each pipLevels as |l|}}
-          <span class="legende-item"><span class="pips">{{#each l.pipsDemo}}<span class="pip on"></span>{{/each}}</span> {{l.label}}</span>
+          <span class="legende-item">
+            <span class="pips">{{#each l.pipsDemo as |d|}}<span class="pip on {{d.kind}}">{{#if (eq d.kind "relance")}}✕{{/if}}</span>{{/each}}</span>
+            {{l.label}}
+          </span>
           {{/each}}
         </div>
       </div>
 
-      <div class="domaines-grid">
-        {{#each domaines as |dom dkey|}}
-        <div class="domaine">
-          <h4>{{dom.label}}</h4>
-          {{#each dom.competences as |c|}}
-          <div class="competence-ligne" data-comp-label="{{c.search}}">
-            <a class="comp-nom" data-roll-competence="{{c.key}}" title="{{localize 'VERMINE.Jet.Lancer'}}">{{c.label}}</a>
-            {{#if c.rarete}}<span class="rarete" title="{{localize 'VERMINE.Rarete'}}">({{#if (eq c.rarete 1)}}I{{else}}II{{/if}})</span>{{/if}}
-            <span class="pips" title="{{c.niveauLabel}}">
-              {{#each c.pips as |p|}}
-              <span class="pip comp-pip {{#if p.on}}on{{/if}}" data-comp="{{p.compKey}}" data-niveau="{{p.niveauKey}}" data-ordre="{{p.ordre}}" title="{{p.label}}"></span>
-              {{/each}}
-            </span>
+      <section class="bloc bloc-competences">
+        <h3>{{localize "VERMINE.Onglet.Competences"}}</h3>
+        <div class="domaines-grid">
+          {{#each domaines as |dom dkey|}}
+          <div class="domaine">
+            <h4>{{dom.label}}</h4>
+            {{#each dom.competences as |c|}}
+            <div class="competence-ligne" data-comp-label="{{c.search}}">
+              <a class="comp-nom" data-roll-competence="{{c.key}}" title="{{localize 'VERMINE.Jet.Lancer'}}">{{c.label}}</a>
+              {{#if c.rarete}}<span class="rarete" title="{{localize 'VERMINE.Rarete'}}">({{#if (eq c.rarete 1)}}I{{else}}II{{/if}})</span>{{/if}}
+              <span class="pips" title="{{c.niveauLabel}}">
+                {{#each c.pips as |p|}}
+                <span class="pip comp-pip {{p.kind}} {{#if p.on}}on{{/if}}" data-comp="{{p.compKey}}" data-niveau="{{p.niveauKey}}" data-ordre="{{p.ordre}}" title="{{p.label}}">{{#if (eq p.kind "relance")}}✕{{/if}}</span>
+                {{/each}}
+              </span>
+            </div>
+            {{/each}}
           </div>
           {{/each}}
         </div>
-        {{/each}}
-      </div>
+      </section>
     </div>
 
     {{!-- ONGLET OBJETS --}}
@@ -153,7 +130,7 @@
       {{> systems/vermine2047/templates/actor/parts/liste-objets.hbs titre=(localize "VERMINE.Item.Historiques") type="historique" items=historiques}}
     </div>
 
-    {{!-- ONGLET BIO --}}
+    {{!-- ONGLET BIOGRAPHIE --}}
     <div class="tab bio" data-tab="bio">
       <label class="predilection">{{localize "VERMINE.Domaine.Predilection"}}
         <select name="system.domainePredilection">
@@ -170,4 +147,38 @@
     </div>
 
   </section>
+
+  {{!-- RAIL DROIT PERMANENT : Réserves + Blessures --}}
+  <aside class="v-rail">
+    <section class="bloc bloc-reserves">
+      <h3>{{localize "VERMINE.Reserve.Titre"}}</h3>
+      {{#each reservesAff as |r rkey|}}
+      <div class="reserve">
+        <label>{{r.label}} <span class="val-num">{{r.value}}/{{r.max}}</span></label>
+        <span class="pips value-pips reserve-pips">
+          {{#each r.pips as |p|}}
+          <span class="pip value-pip {{#if p.on}}on{{/if}}" data-target="system.reserves.{{rkey}}.value" data-pos="{{p.pos}}"></span>
+          {{/each}}
+        </span>
+      </div>
+      {{/each}}
+    </section>
+
+    <section class="bloc bloc-blessures">
+      <h3>{{localize "VERMINE.Blessure.Titre"}}</h3>
+      {{#each blessuresAff as |b bkey|}}
+      <div class="blessure-ligne">
+        <span class="blessure-nom">{{b.label}} <small>({{b.seuil}})</small></span>
+        <div class="cercles">
+          {{#each b.dots as |d|}}
+          <span class="cercle {{#if d.coche}}coche{{/if}}" data-blessure="{{bkey}}" data-index="{{d.index}}"></span>
+          {{/each}}
+        </div>
+      </div>
+      {{/each}}
+      {{#if system.malusBlessure}}
+      <p class="malus">{{localize "VERMINE.Jet.MalusBlessure"}} : −{{system.malusBlessure}}D</p>
+      {{/if}}
+    </section>
+  </aside>
 </form>
