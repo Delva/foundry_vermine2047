@@ -395,7 +395,7 @@ export const PACKS = [
         description: p(LABEL_ARME[a.competence] ?? ""),
         degats: a.degats, degatsVigueur: a.degatsVigueur, typeDommages: a.typeDommages,
         competence: a.competence, porteeCourte: a.porteeCourte, porteeLongue: a.porteeLongue,
-        fiabilite: a.fiabilite, protection: 0, rarete: a.rarete, traits: a.traits
+        fiabilite: a.fiabilite, fiabiliteMax: a.fiabilite, protection: 0, rarete: a.rarete, traits: a.traits
       }
     }))
   },
@@ -408,7 +408,7 @@ export const PACKS = [
       system: {
         description: pr.note ? p(pr.note) : "",
         indiceBase: pr.indiceBase, indiceSpecifique: pr.indiceSpecifique, typeSpecifique: pr.typeSpecifique,
-        handicapMobilite: pr.handicapMobilite, fiabilite: pr.fiabilite, rarete: pr.rarete,
+        handicapMobilite: pr.handicapMobilite, fiabilite: pr.fiabilite, fiabiliteMax: pr.fiabilite, rarete: pr.rarete,
         traits: pr.traits, equipee: false
       }
     }))

@@ -28,6 +28,7 @@ export class ArmeData extends foundry.abstract.TypeDataModel {
       porteeCourte: new fields.NumberField({ required: true, integer: true, min: 0, initial: 0 }),
       porteeLongue: new fields.NumberField({ required: true, integer: true, min: 0, initial: 0 }),
       fiabilite: new fields.NumberField({ required: false, integer: true, min: 0, initial: 6 }),
+      fiabiliteMax: new fields.NumberField({ required: false, integer: true, min: 0, initial: 6 }),
       // Protection conférée (boucliers).
       protection: new fields.NumberField({ required: false, integer: true, min: 0, initial: 0 }),
       // Traits actifs et leur valeur éventuelle (ex. { rafale: 2, lourd: 3 }).
@@ -63,6 +64,7 @@ export class ProtectionData extends foundry.abstract.TypeDataModel {
       // Type visé par l'indice spécifique (dommages ou effet : balle, gaz, radiations…).
       typeSpecifique: new fields.StringField({ required: false, blank: true, initial: "" }),
       fiabilite: new fields.NumberField({ required: false, integer: true, min: 0, initial: 5 }),
+      fiabiliteMax: new fields.NumberField({ required: false, integer: true, min: 0, initial: 5 }),
       handicapMobilite: new fields.NumberField({ required: true, integer: true, min: 0, max: 3, initial: 0 }),
       traits: new fields.ObjectField({ initial: {} }),
       equipee: new fields.BooleanField({ initial: false })

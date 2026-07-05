@@ -2,7 +2,7 @@
   "id": "vermine2047",
   "title": "Vermine 2047",
   "description": "Système de jeu non officiel pour le JDR post-apocalyptique Vermine 2047 (© Studio Agate). Fiches, moteur de dés (Main de d10, Réussites), Réserves et Blessures.",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "compatibility": {
     "minimum": "12",
     "verified": "12",

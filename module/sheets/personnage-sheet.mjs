@@ -126,16 +126,25 @@ export class PersonnageSheet extends ActorSheet {
     }
 
     // Objets classés par type.
-    ctx.armes = this.actor.items.filter(i => i.type === "arme");
-    ctx.protections = this.actor.items.filter(i => i.type === "protection");
-    ctx.equipements = this.actor.items.filter(i => i.type === "equipement");
-    ctx.capacites = this.actor.items.filter(i => i.type === "capacite");
-    ctx.adaptations = this.actor.items.filter(i => i.type === "adaptation");
-    ctx.traumatismes = this.actor.items.filter(i => i.type === "traumatisme");
-    ctx.historiques = this.actor.items.filter(i => i.type === "historique");
-    ctx.afflictions = this.actor.items.filter(i => i.type === "affliction");
-    ctx.rites = this.actor.items.filter(i => i.type === "rite");
-    ctx.profils = this.actor.items.filter(i => i.type === "profil");
+    // Vues d'objets (avec description enrichie, pour l'affichage dépliable).
+    const vm = async (type) => {
+      const list = this.actor.items.filter(i => i.type === type);
+      return Promise.all(list.map(async (i) => ({
+        id: i.id, name: i.name, img: i.img, type: i.type, system: i.system,
+        isArme: i.type === "arme", isProtection: i.type === "protection",
+        enrichedDesc: await TextEditor.enrichHTML(i.system.description ?? "", { async: true })
+      })));
+    };
+    ctx.armes = await vm("arme");
+    ctx.protections = await vm("protection");
+    ctx.equipements = await vm("equipement");
+    ctx.capacites = await vm("capacite");
+    ctx.adaptations = await vm("adaptation");
+    ctx.traumatismes = await vm("traumatisme");
+    ctx.historiques = await vm("historique");
+    ctx.afflictions = await vm("affliction");
+    ctx.rites = await vm("rite");
+    ctx.profils = await vm("profil");
 
     ctx.enrichedBio = await TextEditor.enrichHTML(sys.biographie ?? "", { async: true });
     ctx.enrichedNotes = await TextEditor.enrichHTML(sys.notes ?? "", { async: true });
@@ -175,6 +184,19 @@ export class PersonnageSheet extends ActorSheet {
     html.find("[data-item-create]").on("click", (ev) => this._onItemCreate(ev));
     html.find("[data-item-edit]").on("click", (ev) => this._onItemEdit(ev));
     html.find("[data-item-delete]").on("click", (ev) => this._onItemDelete(ev));
+
+    // Déplier/replier le détail d'un objet.
+    html.find("[data-item-toggle]").on("click", (ev) => {
+      const details = ev.currentTarget.closest(".objet").querySelector(".objet-details");
+      if (details) details.hidden = !details.hidden;
+    });
+
+    // Armes : attaque et dégâts.
+    html.find("[data-item-attaque]").on("click", (ev) => this._onAttaque(ev));
+    html.find("[data-item-degats]").on("click", (ev) => this._onDegats(ev));
+
+    // Usure : dégrader / réparer la Fiabilité.
+    html.find("[data-fiab-delta]").on("click", (ev) => this._onFiabilite(ev));
   }
 
   /** Clic sur un pip : fixe le niveau ; re-clic sur le niveau courant = retour à « Aucun ». */
@@ -236,6 +258,63 @@ export class PersonnageSheet extends ActorSheet {
   async _onItemDelete(ev) {
     const id = ev.currentTarget.closest("[data-item-id]").dataset.itemId;
     await this.actor.deleteEmbeddedDocuments("Item", [id]);
+  }
+
+  /** Attaque avec une arme : ouvre le Jet Vermine préréglé (Caractéristique + Compétence de l'arme). */
+  _onAttaque(ev) {
+    const item = this.actor.items.get(ev.currentTarget.closest("[data-item-id]").dataset.itemId);
+    if (!item) return;
+    const comp = item.system.competence;
+    const carac = ["melee", "corpsACorps"].includes(comp) ? "vigueur" : "precision";
+    this.actor.rollAction({ caracteristique: carac, competence: comp, label: item.name });
+  }
+
+  /** Lance les Dommages d'une arme : Dommages = base (+ Vigueur) + Réussites de l'attaque. */
+  _onDegats(ev) {
+    const item = this.actor.items.get(ev.currentTarget.closest("[data-item-id]").dataset.itemId);
+    if (!item) return;
+    const sys = item.system;
+    const vig = this.actor.system.caracteristiques.vigueur.value;
+    const base = (sys.degats ?? 0) + (sys.degatsVigueur ? vig : 0);
+    const code = CONFIG.VERMINE.typesDommages[sys.typeDommages]?.code ?? "";
+
+    const content = `<p>${game.i18n.localize("VERMINE.Degats.Base")} : <strong>${sys.labelDommages}</strong>${sys.degatsVigueur ? ` (Vigueur ${vig})` : ""}</p>
+      <div class="form-group"><label>${game.i18n.localize("VERMINE.Degats.Reussites")}</label>
+      <input type="number" name="reussites" value="0" min="0" autofocus /></div>`;
+
+    new Dialog({
+      title: `${game.i18n.localize("VERMINE.Item.Degats")} — ${item.name}`,
+      content,
+      buttons: {
+        ok: {
+          icon: '<i class="fas fa-burst"></i>',
+          label: game.i18n.localize("VERMINE.Degats.Lancer"),
+          callback: (html) => {
+            const r = Math.max(0, Number((html[0] ?? html).querySelector('[name="reussites"]').value) || 0);
+            const total = Math.max(0, base + r);
+            ChatMessage.create({
+              speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+              content: `<div class="vermine-degats-card"><header>${item.name}</header>
+                <div class="ligne"><span class="lbl">${game.i18n.localize("VERMINE.Degats.Total")}</span>
+                <span class="total">${total}</span> <span class="type">(${code})</span></div>
+                <div class="detail">${base} (${game.i18n.localize("VERMINE.Degats.Base")}) + ${r} ${game.i18n.localize("VERMINE.Jet.Reussites")}</div></div>`
+            });
+          }
+        },
+        annuler: { icon: '<i class="fas fa-times"></i>', label: game.i18n.localize("VERMINE.Annuler") }
+      },
+      default: "ok"
+    }, { classes: ["vermine2047", "dialog"] }).render(true);
+  }
+
+  /** Usure : dégrade ou répare la Fiabilité d'un objet (borne 0..fiabiliteMax). */
+  async _onFiabilite(ev) {
+    const delta = Number(ev.currentTarget.dataset.fiabDelta);
+    const item = this.actor.items.get(ev.currentTarget.closest("[data-item-id]").dataset.itemId);
+    if (!item) return;
+    const max = item.system.fiabiliteMax ?? item.system.fiabilite ?? 0;
+    const nv = Math.clamp((item.system.fiabilite ?? 0) + delta, 0, max);
+    await item.update({ "system.fiabilite": nv });
   }
 
   /** @override — convertit les spécialités saisies en CSV vers des tableaux. */

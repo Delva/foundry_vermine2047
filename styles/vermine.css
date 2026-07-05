@@ -35,6 +35,9 @@
 .vermine2047 input:focus, .vermine2047 select:focus, .vermine2047 textarea:focus {
   border-color: var(--v-accent); box-shadow: 0 0 4px rgba(154,181,52,0.5);
 }
+/* Options des menus déroulants : fond sombre lisible (sinon texte clair sur fond blanc système). */
+.vermine2047 select option, .vermine2047 select optgroup { background: #1b1b15; color: #ece7db; }
+.vermine2047 select optgroup { font-weight: 700; }
 .vermine2047 .bloc {
   background: var(--v-bg2); border: 1px solid var(--v-border); border-radius: 6px;
   padding: 10px; margin-bottom: 10px;
@@ -178,6 +181,28 @@
 .vermine2047 .objet-info { color: var(--v-muted); font-size: 0.82em; }
 .vermine2047 .objet-controls a { margin-left: 6px; cursor: pointer; color: var(--v-muted); }
 .vermine2047 .objet-controls a:hover { color: var(--v-accent2); }
+.vermine2047 .objet-ligne { display: flex; align-items: center; gap: 8px; }
+.vermine2047 .objet-nom { cursor: pointer; }
+.vermine2047 .objet-nom:hover { color: var(--v-accent2); }
+.vermine2047 .objet-details { padding: 6px 4px 4px 32px; font-size: 0.88em; }
+.vermine2047 .objet-stats { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-bottom: 6px; }
+.vermine2047 .objet-stats .stat { color: var(--v-muted); }
+.vermine2047 .objet-stats .stat b { color: var(--v-text); font-weight: 600; margin-right: 3px; }
+.vermine2047 .objet-stats .usure { display: inline-flex; align-items: center; gap: 5px; }
+.vermine2047 .fiab-btn { cursor: pointer; color: var(--v-muted); }
+.vermine2047 .fiab-btn:hover { color: var(--v-accent); }
+.vermine2047 .fiab-val { font-weight: 700; color: var(--v-accent); }
+.vermine2047 .fiab-val.abimee { color: var(--v-accent2); }
+.vermine2047 .objet-desc { color: var(--v-text); opacity: 0.9; }
+.vermine2047 .objet-desc p { margin: 2px 0; }
+
+/* Carte de chat des Dommages */
+.vermine-degats-card { border: 1px solid #33322a; border-radius: 5px; padding: 8px; background: rgba(0,0,0,0.05); }
+.vermine-degats-card header { font-weight: 700; margin-bottom: 4px; }
+.vermine-degats-card .ligne { display: flex; align-items: baseline; gap: 6px; }
+.vermine-degats-card .total { font-size: 1.6em; font-weight: 700; color: #a53a2c; }
+.vermine-degats-card .type { color: #777; }
+.vermine-degats-card .detail { font-size: 0.82em; color: #777; margin-top: 2px; }
 
 /* ---- Onglet Biographie ---- */
 .vermine2047 .tab.bio .predilection { display: flex; flex-direction: column; gap: 3px; font-size: 0.8em; color: var(--v-muted); margin-bottom: 10px; max-width: 260px; }

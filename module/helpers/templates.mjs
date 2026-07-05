@@ -20,5 +20,6 @@ export function registerHandlebarsHelpers() {
   Handlebars.registerHelper("eq", (a, b) => a === b);
   Handlebars.registerHelper("lt", (a, b) => a < b);
   Handlebars.registerHelper("gt", (a, b) => a > b);
+  Handlebars.registerHelper("or", (a, b) => a || b);
   Handlebars.registerHelper("join", (arr, sep) => Array.isArray(arr) ? arr.join(sep) : "");
 }

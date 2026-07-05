@@ -1,5 +1,22 @@
 # Journal des modifications
 
+## [0.6.1] — Objets dépliables, dégâts & usure
+
+### Ajouté
+- **Objets dépliables** sur la fiche : un clic sur le nom affiche les détails —
+  description pour tous les types, stats d'équipement pour les armes/protections.
+- **Bouton d'attaque** (ouvre le Jet Vermine préréglé) et **bouton de Dommages**
+  (calcule base + Réussites, avec le type C/L/F/B) sur les armes.
+- **Système d'usure** : la Fiabilité des armes et protections se dégrade et se
+  répare dynamiquement (boutons −/+, bornée par la Fiabilité maximale).
+
+### Corrigé
+- **Menus déroulants illisibles** partout : les options s'affichent désormais sur
+  fond sombre.
+
+---
+
+
 ## [0.6.0] — Armes & Protections (phase 4)
 
 ### Ajouté
@@ -202,6 +219,7 @@ La **phase 5 (Confort)** est ainsi complète.
 
 ---
 
+[0.6.1]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.6.1
 [0.6.0]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.6.0
 [0.5.0]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.5.0
 [0.4.1]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.4.1

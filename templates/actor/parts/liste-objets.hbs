@@ -6,14 +6,42 @@
   <ol class="objets">
     {{#each items as |item|}}
     <li class="objet" data-item-id="{{item.id}}">
-      <img class="objet-img" src="{{item.img}}" />
-      <span class="objet-nom">{{item.name}}</span>
-      {{#if (eq item.type "arme")}}<span class="objet-info">{{item.system.labelDommages}}{{#if item.system.labelTraits}} · {{item.system.labelTraits}}{{/if}}</span>{{/if}}
-      {{#if (eq item.type "protection")}}<span class="objet-info">{{item.system.labelIndice}}</span>{{/if}}
-      <span class="objet-controls">
-        <a data-item-edit title="{{localize 'VERMINE.Item.Editer'}}"><i class="fas fa-edit"></i></a>
-        <a data-item-delete title="{{localize 'VERMINE.Item.Supprimer'}}"><i class="fas fa-trash"></i></a>
-      </span>
+      <div class="objet-ligne">
+        <img class="objet-img" src="{{item.img}}" />
+        <a class="objet-nom" data-item-toggle title="{{localize 'VERMINE.Item.Details'}}">{{item.name}}</a>
+        {{#if item.isArme}}<span class="objet-info">{{item.system.labelDommages}}{{#if item.system.labelTraits}} · {{item.system.labelTraits}}{{/if}}</span>{{/if}}
+        {{#if item.isProtection}}<span class="objet-info">{{item.system.labelIndice}}</span>{{/if}}
+        <span class="objet-controls">
+          {{#if item.isArme}}
+          <a data-item-attaque title="{{localize 'VERMINE.Item.Attaque'}}"><i class="fas fa-crosshairs"></i></a>
+          <a data-item-degats title="{{localize 'VERMINE.Item.Degats'}}"><i class="fas fa-burst"></i></a>
+          {{/if}}
+          <a data-item-edit title="{{localize 'VERMINE.Item.Editer'}}"><i class="fas fa-edit"></i></a>
+          <a data-item-delete title="{{localize 'VERMINE.Item.Supprimer'}}"><i class="fas fa-trash"></i></a>
+        </span>
+      </div>
+
+      <div class="objet-details" hidden>
+        {{#if (or item.isArme item.isProtection)}}
+        <div class="objet-stats">
+          {{#if item.isArme}}
+          <span class="stat"><b>{{localize "VERMINE.Arme.Degats"}}</b> {{item.system.labelDommages}}</span>
+          <span class="stat"><b>{{localize "VERMINE.Arme.Portees"}}</b> {{item.system.labelPortees}}</span>
+          {{else}}
+          <span class="stat"><b>{{localize "VERMINE.Protection.Indice"}}</b> {{item.system.labelIndice}}</span>
+          <span class="stat"><b>{{localize "VERMINE.Protection.HandicapMobilite"}}</b> {{item.system.handicapMobilite}}</span>
+          {{/if}}
+          {{#if item.system.labelTraits}}<span class="stat"><b>{{localize "VERMINE.Traits.Titre"}}</b> {{item.system.labelTraits}}</span>{{/if}}
+          <span class="stat usure">
+            <b>{{localize "VERMINE.Item.Fiabilite"}}</b>
+            <a class="fiab-btn" data-fiab-delta="-1" title="{{localize 'VERMINE.Item.Degrader'}}"><i class="fas fa-minus"></i></a>
+            <span class="fiab-val {{#if (lt item.system.fiabilite item.system.fiabiliteMax)}}abimee{{/if}}">{{item.system.fiabilite}}/{{item.system.fiabiliteMax}}</span>
+            <a class="fiab-btn" data-fiab-delta="1" title="{{localize 'VERMINE.Item.Reparer'}}"><i class="fas fa-plus"></i></a>
+          </span>
+        </div>
+        {{/if}}
+        {{#if item.enrichedDesc}}<div class="objet-desc">{{{item.enrichedDesc}}}</div>{{/if}}
+      </div>
     </li>
     {{/each}}
   </ol>
