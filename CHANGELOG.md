@@ -1,5 +1,14 @@
 # Journal des modifications
 
+## [0.6.2] — Détails d'objets dépliés par défaut
+
+### Modifié
+- Les détails d'un objet (description, stats, usure) sont désormais **affichés par
+  défaut** sous la fiche ; un clic sur le nom permet toujours de replier/déplier.
+
+---
+
+
 ## [0.6.1] — Objets dépliables, dégâts & usure
 
 ### Ajouté
@@ -219,6 +228,7 @@ La **phase 5 (Confort)** est ainsi complète.
 
 ---
 
+[0.6.2]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.6.2
 [0.6.1]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.6.1
 [0.6.0]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.6.0
 [0.5.0]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.5.0
