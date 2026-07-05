@@ -157,12 +157,36 @@ VERMINE.alertes = {
   passif:   { label: "VERMINE.Alerte.passif",   difficulte: 9 }
 };
 
-/** Traits d'armes (mécaniques principales — enrichi en phase 2). */
+/** Types de Dommages. code = suffixe affiché entre parenthèses. */
+VERMINE.typesDommages = {
+  choc:  { label: "VERMINE.Degats.choc",  code: "C" },
+  lame:  { label: "VERMINE.Degats.lame",  code: "L" },
+  feu:   { label: "VERMINE.Degats.feu",   code: "F" },
+  balle: { label: "VERMINE.Degats.balle", code: "B" }
+};
+
+/**
+ * Traits du matériel (armes, protections, objets).
+ * valeur = true si le Trait prend un nombre (n).
+ */
 VERMINE.traitsArme = {
-  rapide:  "VERMINE.Trait.rapide",
-  rafale:  "VERMINE.Trait.rafale",
-  lourd:   "VERMINE.Trait.lourd",
-  fetiche: "VERMINE.Trait.fetiche"
+  bienConcu:    { label: "VERMINE.Trait.bienConcu",    valeur: false },
+  cassant:      { label: "VERMINE.Trait.cassant",      valeur: false },
+  coque:        { label: "VERMINE.Trait.coque",        valeur: true },
+  duree:        { label: "VERMINE.Trait.duree",        valeur: true },
+  etanche:      { label: "VERMINE.Trait.etanche",      valeur: false },
+  fetiche:      { label: "VERMINE.Trait.fetiche",      valeur: false },
+  incapacitant: { label: "VERMINE.Trait.incapacitant", valeur: true },
+  intimidant:   { label: "VERMINE.Trait.intimidant",   valeur: false },
+  lourd:        { label: "VERMINE.Trait.lourd",        valeur: true },
+  malus:        { label: "VERMINE.Trait.malus",        valeur: true },
+  maniable:     { label: "VERMINE.Trait.maniable",     valeur: false },
+  ponctuel:     { label: "VERMINE.Trait.ponctuel",     valeur: true },
+  portee:       { label: "VERMINE.Trait.portee",       valeur: true },
+  pratique:     { label: "VERMINE.Trait.pratique",     valeur: false },
+  rapide:       { label: "VERMINE.Trait.rapide",       valeur: true },
+  rafale:       { label: "VERMINE.Trait.rafale",       valeur: true },
+  zone:         { label: "VERMINE.Trait.zone",         valeur: true }
 };
 
 /** Archétypes de personnage (regroupent les profils). */

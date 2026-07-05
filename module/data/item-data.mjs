@@ -15,21 +15,40 @@ function communs() {
 export class ArmeData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     const competences = Object.keys(VERMINE.competences);
-    const traits = Object.keys(VERMINE.traitsArme);
+    const typesDommages = Object.keys(VERMINE.typesDommages);
     return {
       ...communs(),
-      // Dommages de base (ex. "3", "Vigueur+1", "2 (L)"). Chaîne libre au MVP.
-      dommages: new fields.StringField({ required: false, blank: true, initial: "" }),
+      // Dommages de base (nombre). Si degatsVigueur, les Dommages = Vigueur + degats.
+      degats: new fields.NumberField({ required: true, integer: true, min: -3, initial: 1 }),
+      degatsVigueur: new fields.BooleanField({ initial: false }),
+      typeDommages: new fields.StringField({ required: true, choices: typesDommages, initial: "lame" }),
       // Compétence utilisée pour attaquer avec cette arme.
       competence: new fields.StringField({ required: false, blank: true, choices: competences, initial: "melee" }),
-      portees: new fields.StringField({ required: false, blank: true, initial: "" }),
-      fiabilite: new fields.NumberField({ required: false, integer: true, min: 0, initial: 0 }),
+      // Portées en mètres (0 = arme de contact). Courte puis Longue.
+      porteeCourte: new fields.NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+      porteeLongue: new fields.NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+      fiabilite: new fields.NumberField({ required: false, integer: true, min: 0, initial: 6 }),
       // Protection conférée (boucliers).
       protection: new fields.NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-      // Traits actifs et leur valeur éventuelle (ex. { rafale: 2 }).
-      traits: new fields.ObjectField({ initial: {} }),
-      _traitsDispo: new fields.StringField({ required: false, blank: true, initial: traits.join(",") })
+      // Traits actifs et leur valeur éventuelle (ex. { rafale: 2, lourd: 3 }).
+      traits: new fields.ObjectField({ initial: {} })
     };
+  }
+
+  /** Libellés d'affichage (dommages, portées, traits). */
+  prepareDerivedData() {
+    const code = VERMINE.typesDommages[this.typeDommages]?.code ?? "";
+    const base = this.degatsVigueur ? `Vigueur+${this.degats}` : `${this.degats}`;
+    this.labelDommages = `${base} (${code})`;
+    this.labelPortees = (this.porteeCourte || this.porteeLongue)
+      ? `${this.porteeCourte}/${this.porteeLongue}` : "—";
+    this.labelTraits = Object.entries(this.traits ?? {})
+      .filter(([, v]) => v !== false && v !== null && v !== undefined)
+      .map(([k, v]) => {
+        const t = VERMINE.traitsArme[k];
+        const nom = t ? game.i18n.localize(t.label) : k;
+        return (t?.valeur && typeof v === "number") ? `${nom} (${v})` : nom;
+      }).join(", ");
   }
 }
 
@@ -38,12 +57,22 @@ export class ProtectionData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {
       ...communs(),
-      // Indice de Protection (ex. "3" ou "3/5" pour physique/perforant).
-      indice: new fields.StringField({ required: false, blank: true, initial: "" }),
-      zones: new fields.StringField({ required: false, blank: true, initial: "" }),
+      // Indice de base (tous Dommages) et indice spécifique (contre un type précis).
+      indiceBase: new fields.NumberField({ required: true, integer: true, min: 0, initial: 1 }),
+      indiceSpecifique: new fields.NumberField({ required: false, integer: true, min: 0, initial: 0 }),
+      // Type visé par l'indice spécifique (dommages ou effet : balle, gaz, radiations…).
+      typeSpecifique: new fields.StringField({ required: false, blank: true, initial: "" }),
+      fiabilite: new fields.NumberField({ required: false, integer: true, min: 0, initial: 5 }),
       handicapMobilite: new fields.NumberField({ required: true, integer: true, min: 0, max: 3, initial: 0 }),
+      traits: new fields.ObjectField({ initial: {} }),
       equipee: new fields.BooleanField({ initial: false })
     };
+  }
+
+  prepareDerivedData() {
+    this.labelIndice = this.indiceSpecifique
+      ? `${this.indiceBase}/${this.indiceSpecifique}${this.typeSpecifique ? ` (${this.typeSpecifique})` : ""}`
+      : `${this.indiceBase}`;
   }
 }
 

@@ -9,6 +9,7 @@ export async function preloadTemplates() {
     "systems/vermine2047/templates/actor/creature-sheet.hbs",
     "systems/vermine2047/templates/actor/groupe-sheet.hbs",
     "systems/vermine2047/templates/item/item-sheet.hbs",
+    "systems/vermine2047/templates/item/parts/traits.hbs",
     "systems/vermine2047/templates/dice/roll-dialog.hbs",
     "systems/vermine2047/templates/dice/roll-card.hbs"
   ]);

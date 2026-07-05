@@ -111,7 +111,8 @@ Certains tableaux du guide en ligne sont des images non exploitables. Valeurs
   Réaction/initiative, ActiveEffects des Malus.
 - **Phase 3** — Le Groupe ✅ (acteur `groupe` : Réserve de Groupe, Moral, Totem/Instincts/Interdits, Niveau, Objectifs, membres, Capacités ; dépense de la Réserve de Groupe intégrée au jet).
 - **Phase 4** — Compendiums (mécaniques) 🚧 : Adaptations & Mutations, Traumatismes,
-  Historique livrés (`npm run build:packs`). Restent armes/protections et bestiaire.
+  Historique, Afflictions, Rites, Profils, **Armes (35)** et **Protections (17)** livrés
+  (`npm run build:packs`). Reste le bestiaire.
 - **Phase 5** — Confort ✅ : macros (API `game.vermine`, macro « Jet Vermine »),
   Afflictions, Rites chamaniques (16) et Profils par archétype (24) livrés ; sélecteur
   de compendium au clic sur « + ».

@@ -8,7 +8,15 @@
 
     {{#if isArme}}
     <div class="form-grid">
-      <label>{{localize "VERMINE.Arme.Dommages"}}<input type="text" name="system.dommages" value="{{system.dommages}}" /></label>
+      <label>{{localize "VERMINE.Arme.Degats"}}<input type="number" name="system.degats" value="{{system.degats}}" min="0" /></label>
+      <label>{{localize "VERMINE.Arme.TypeDommages"}}
+        <select name="system.typeDommages">
+          {{#each typesDommagesOptions as |d|}}
+          <option value="{{d.key}}" {{#if (eq d.key ../system.typeDommages)}}selected{{/if}}>{{d.label}}</option>
+          {{/each}}
+        </select>
+      </label>
+      <label class="checkbox">{{localize "VERMINE.Arme.DegatsVigueur"}}<input type="checkbox" name="system.degatsVigueur" {{checked system.degatsVigueur}} /></label>
       <label>{{localize "VERMINE.Arme.Competence"}}
         <select name="system.competence">
           {{#each competencesOptions as |c|}}
@@ -16,21 +24,26 @@
           {{/each}}
         </select>
       </label>
-      <label>{{localize "VERMINE.Arme.Portees"}}<input type="text" name="system.portees" value="{{system.portees}}" /></label>
+      <label>{{localize "VERMINE.Arme.PorteeCourte"}}<input type="number" name="system.porteeCourte" value="{{system.porteeCourte}}" min="0" /></label>
+      <label>{{localize "VERMINE.Arme.PorteeLongue"}}<input type="number" name="system.porteeLongue" value="{{system.porteeLongue}}" min="0" /></label>
       <label>{{localize "VERMINE.Arme.Fiabilite"}}<input type="number" name="system.fiabilite" value="{{system.fiabilite}}" min="0" /></label>
       <label>{{localize "VERMINE.Arme.Protection"}}<input type="number" name="system.protection" value="{{system.protection}}" min="0" /></label>
       <label>{{localize "VERMINE.Rarete"}}<input type="number" name="system.rarete" value="{{system.rarete}}" min="0" /></label>
     </div>
+    {{> systems/vermine2047/templates/item/parts/traits.hbs}}
     {{/if}}
 
     {{#if isProtection}}
     <div class="form-grid">
-      <label>{{localize "VERMINE.Protection.Indice"}}<input type="text" name="system.indice" value="{{system.indice}}" placeholder="3 ou 3/5" /></label>
-      <label>{{localize "VERMINE.Protection.Zones"}}<input type="text" name="system.zones" value="{{system.zones}}" /></label>
+      <label>{{localize "VERMINE.Protection.IndiceBase"}}<input type="number" name="system.indiceBase" value="{{system.indiceBase}}" min="0" /></label>
+      <label>{{localize "VERMINE.Protection.IndiceSpecifique"}}<input type="number" name="system.indiceSpecifique" value="{{system.indiceSpecifique}}" min="0" /></label>
+      <label>{{localize "VERMINE.Protection.TypeSpecifique"}}<input type="text" name="system.typeSpecifique" value="{{system.typeSpecifique}}" placeholder="Balles, gaz…" /></label>
       <label>{{localize "VERMINE.Protection.HandicapMobilite"}}<input type="number" name="system.handicapMobilite" value="{{system.handicapMobilite}}" min="0" max="3" /></label>
-      <label class="checkbox">{{localize "VERMINE.Protection.Equipee"}}<input type="checkbox" name="system.equipee" {{checked system.equipee}} /></label>
+      <label>{{localize "VERMINE.Arme.Fiabilite"}}<input type="number" name="system.fiabilite" value="{{system.fiabilite}}" min="0" /></label>
       <label>{{localize "VERMINE.Rarete"}}<input type="number" name="system.rarete" value="{{system.rarete}}" min="0" /></label>
+      <label class="checkbox">{{localize "VERMINE.Protection.Equipee"}}<input type="checkbox" name="system.equipee" {{checked system.equipee}} /></label>
     </div>
+    {{> systems/vermine2047/templates/item/parts/traits.hbs}}
     {{/if}}
 
     {{#if isEquipement}}

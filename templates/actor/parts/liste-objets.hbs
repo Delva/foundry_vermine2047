@@ -8,8 +8,8 @@
     <li class="objet" data-item-id="{{item.id}}">
       <img class="objet-img" src="{{item.img}}" />
       <span class="objet-nom">{{item.name}}</span>
-      {{#if (eq item.type "arme")}}<span class="objet-info">{{item.system.dommages}}</span>{{/if}}
-      {{#if (eq item.type "protection")}}<span class="objet-info">{{item.system.indice}}</span>{{/if}}
+      {{#if (eq item.type "arme")}}<span class="objet-info">{{item.system.labelDommages}}{{#if item.system.labelTraits}} · {{item.system.labelTraits}}{{/if}}</span>{{/if}}
+      {{#if (eq item.type "protection")}}<span class="objet-info">{{item.system.labelIndice}}</span>{{/if}}
       <span class="objet-controls">
         <a data-item-edit title="{{localize 'VERMINE.Item.Editer'}}"><i class="fas fa-edit"></i></a>
         <a data-item-delete title="{{localize 'VERMINE.Item.Supprimer'}}"><i class="fas fa-trash"></i></a>

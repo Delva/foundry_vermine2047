@@ -225,6 +225,14 @@
 .vermine2047 .spec-ligne input { flex: 1; min-width: 0; font-size: 0.8em; }
 .vermine2047 .personnage-options-form .hint { color: var(--v-muted); font-size: 0.78em; margin: 0 0 8px; }
 
+/* ---- Bloc Traits (fiche d'objet) ---- */
+.vermine2047 .traits-bloc { border: 1px solid var(--v-border); border-radius: 4px; padding: 8px; margin-top: 12px; }
+.vermine2047 .traits-bloc legend { padding: 0 6px; font-weight: 700; color: var(--v-accent); font-size: 0.8em; text-transform: uppercase; }
+.vermine2047 .traits-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 10px; }
+.vermine2047 .trait-item { display: flex; align-items: center; gap: 5px; font-size: 0.82em; }
+.vermine2047 .trait-item .trait-nom { flex: 1; }
+.vermine2047 .trait-item .trait-valeur { width: 42px; text-align: center; }
+
 /* ---- Sélecteur de compendium ---- */
 .vermine-picker .picker-search { width: 100%; margin-bottom: 8px; }
 .vermine-picker .picker-liste { list-style: none; margin: 0; padding: 0; max-height: 360px; overflow-y: auto; }

@@ -167,6 +167,154 @@ const profils = [
   ["Le Sorcier", "chamans", "l'Animal, l'Homme, la Survie ou la Terre", "Captivé", "Un rituel choisit deux Domaines : jusqu'au prochain rituel, +1D aux jets du premier Domaine, -1D à ceux du second.", "Déb. : Athlétisme, Environnement, Faune, Flore, Répulsion, Toxiques ; Conf. : Rumeurs, Soins ; Exp. : Psychologie, Vigilance.", "Enseignement, intimidation, manipulation, prestidigitation.", "Rites : bénédiction, fertilité, guérison, guerrier."]
 ];
 
+// --- Armes & Protections (données officielles Vermine 2047, tables p69/p71) ---
+const CODE_DEGATS = { C: "choc", L: "lame", F: "feu", B: "balle" };
+const CODE_PROT = { C: "Choc", L: "Lame", F: "Feu", B: "Balles", "*": "Piqûres, essaims", "**": "Radiations, virus, gaz" };
+const NOM_TRAIT = {
+  "fragile": "cassant", "cassant": "cassant", "pratique": "pratique", "lourd": "lourd",
+  "rafale": "rafale", "zone": "zone", "incapacitant": "incapacitant", "rapide": "rapide",
+  "intimidant": "intimidant", "duree": "duree", "malus": "malus", "etanche": "etanche"
+};
+const sansAccent = (s) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
+const LABEL_ARME = {
+  armesFeu: "Arme à feu.", melee: "Arme de mêlée.", corpsACorps: "Attaque à mains nues.",
+  armesTir: "Arme de tir (portées souvent multipliées par la Vigueur).",
+  lancer: "Arme de lancer (portées souvent multipliées par la Vigueur)."
+};
+
+function parseDegats(str) {
+  const m = str.match(/\(([CLFB])\)/);
+  const type = m ? CODE_DEGATS[m[1]] : "choc";
+  if (/Vigueur/i.test(str)) {
+    const n = str.match(/Vigueur\s*([+-]\s*\d+)?/i);
+    const val = n && n[1] ? parseInt(n[1].replace(/\s/g, ""), 10) : 0;
+    return { degats: val, degatsVigueur: true, typeDommages: type };
+  }
+  const n = str.match(/\d+/);
+  return { degats: n ? parseInt(n[0], 10) : 0, degatsVigueur: false, typeDommages: type };
+}
+function parsePortees(str) {
+  const m = str.match(/(\d+)\s*\/\s*(\d+)/);
+  return m ? [parseInt(m[1], 10), parseInt(m[2], 10)] : [0, 0];
+}
+function parseRarete(str) { const m = String(str).match(/\d+/); return m ? parseInt(m[0], 10) : 0; }
+function parseTraits(str) {
+  const traits = {};
+  if (!str) return traits;
+  for (const part of str.split(",")) {
+    const p2 = part.replace(/\*+/g, "").trim();
+    if (!p2) continue;
+    const val = p2.match(/\((\d+)\)/);
+    const key = NOM_TRAIT[sansAccent(p2.replace(/\(.*\)/, ""))];
+    if (!key) continue;
+    traits[key] = val ? parseInt(val[1], 10) : true;
+  }
+  return traits;
+}
+function parseIndice(str) {
+  if (str === "/" || !str) return null;
+  const m = str.match(/(\d+)(?:\s*\/\s*(\d+))?\s*(?:\((\*{1,2}|[CLFB])\))?/);
+  return {
+    base: parseInt(m[1], 10),
+    spec: m[2] ? parseInt(m[2], 10) : 0,
+    type: m[3] ? (CODE_PROT[m[3]] ?? "") : ""
+  };
+}
+const parseMob = (s) => ({ "(I)": 1, "(II)": 2, "(III)": 3 })[String(s).trim()] ?? 0;
+
+// Tables officielles : [nom, dommages, portées, rareté, fiabilité, traits]
+const TABLES_ARMES = {
+  armesFeu: [
+    ["Pistolet ou fusil sportif", "2 (B)", "5/20", "7 (I)", "6", "Fragile, Pratique"],
+    ["Pistolet, petit calibre", "3 (B)", "10/30", "9", "7", "Pratique"],
+    ["Pistolet, gros calibre", "5 (B)", "10/50", "9 (I)", "8", ""],
+    ["Fusil de chasse, petit calibre", "3 (B)", "10/60", "7 (I)", "6", "Lourd (2)"],
+    ["Fusil de chasse, gros calibre", "4 (B)", "10/100", "7 (II)", "7", ""],
+    ["Fusil de précision + lunette", "4 (B)", "50/500", "9 (III)", "8", ""],
+    ["Fusil à pompe / Canon scié", "5 (B)", "5/20", "9 (I)", "6", "Lourd (2)"],
+    ["Pistolet-mitrailleur", "4 (B)", "15/50", "10 (II)", "6", "Rafale (3)"],
+    ["Fusil d'assaut", "6 (B)", "20/80", "9 (II)", "7", "Rafale (2)"],
+    ["Lance-flammes", "8 (F)", "5/10", "10 (II)", "5", "Zone (10)"]
+  ],
+  melee: [
+    ["Bâton de marche", "Vigueur (C)", "-", "5", "7", ""],
+    ["Pied-de-biche / Batte", "Vigueur +1 (C)", "-", "5 (I)", "9", "Lourd (2)"],
+    ["Batte en alu", "Vigueur +1 (C)", "-", "7", "7", ""],
+    ["Masse de chantier", "Vigueur +2 (C)", "-", "7 (I)", "8", "Lourd (3)"],
+    ["Taser", "1 (F)", "-", "9", "7", "Incapacitant (9)"],
+    ["Poinçon", "1 (L)", "-", "3", "4", "Rapide (2)"],
+    ["Couteau", "2 (L)", "-", "5", "6", ""],
+    ["Sabre, épée", "2 (L)", "-", "7", "7", "Intimidant"],
+    ["Machette / Hachette", "3 (L)", "-", "5 (I)", "8", ""],
+    ["Hache lourde", "Vigueur +2 (L)", "-", "7 (I)", "7", "Lourd (3)"]
+  ],
+  corpsACorps: [
+    ["Coup de poing", "Vigueur -1 (C)", "-", "-", "-", "Rapide (2)"],
+    ["Coup de pied / tête", "Vigueur (C)", "-", "-", "-", ""],
+    ["Poing américain", "Vigueur (C)", "-", "5 (I)", "8", ""]
+  ],
+  armesTir: [
+    ["Sarbacane", "1 (L)", "5/10", "5", "8", "Rapide (2)"],
+    ["Lance-pierre / Fronde", "1 (C)", "6/20", "5", "6", "Rapide (2)"],
+    ["Arc, léger", "3 (L)", "10/25", "7 (I)", "7", "Lourd (2)"],
+    ["Arc, lourd", "5 (L)", "15/50", "9 (II)", "8", "Lourd (3)"],
+    ["Arbalète", "4 (L)", "10/50", "9 (III)", "8", ""]
+  ],
+  lancer: [
+    ["Filet", "-", "1/2", "7", "5", "Durée (2), Malus (3)"],
+    ["Pierre", "Vigueur -1 (C)", "2/6", "3", "9", "Rapide (2)"],
+    ["Couteau de lancer", "2 (L)", "2/4", "5", "6", ""],
+    ["Lance / Javelot", "Vigueur +2 (L)", "4/8", "5 (I)", "8", "Lourd (2)"],
+    ["Cocktail Molotov", "3 (F)", "2/5", "5", "4", "Zone (4)"],
+    ["Grenade offensive", "6 (B)", "3/8", "10 (II)", "5", "Zone (5)"],
+    ["Grenade lacrymogène", "-", "3/8", "9 (II)", "6", "Durée (4), Malus (1), Zone (8)"]
+  ]
+};
+
+const armes = [];
+for (const [competence, lignes] of Object.entries(TABLES_ARMES)) {
+  for (const [nom, dmg, port, rar, fia, tr] of lignes) {
+    const d = parseDegats(dmg);
+    const [pc, pl] = parsePortees(port);
+    armes.push({
+      nom, competence, ...d, porteeCourte: pc, porteeLongue: pl,
+      rarete: parseRarete(rar), fiabilite: parseRarete(fia), traits: parseTraits(tr)
+    });
+  }
+}
+
+// Protections : [nom, indice, rareté, fiabilité, mobilité, traits/note]
+const TABLE_PROTECTIONS = [
+  ["Manteau fourré", "1", "9", "6", "(I)", "", "Ignore les Handicaps dus au froid."],
+  ["Partielle, légère", "2", "3", "4", "-", "", ""],
+  ["Partielle, matelassée", "1/3 (C)", "5 (I)", "6", "-", "", ""],
+  ["Partielle, renforcée", "1/3 (L)", "5 (I)", "5", "-", "", ""],
+  ["Partielle, blindée", "4", "9 (II)", "7", "(II)", "Lourd (3)", ""],
+  ["Partielle, pare-balles", "1/4 (B)", "9 (III)", "6", "(I)", "", ""],
+  ["Intégrale, légère", "3", "5", "5", "(I)", "", ""],
+  ["Intégrale, matelassée", "2/4 (C)", "7 (I)", "7", "(I)", "", ""],
+  ["Intégrale, renforcée", "2/4 (L)", "7 (I)", "6", "(I)", "", ""],
+  ["Intégrale, blindée", "6", "9 (II)", "8", "(III)", "Lourd (3)", ""],
+  ["Intégrale, pare-balles", "2/6 (B)", "10 (III)", "7", "(II)", "Lourd (3)", ""],
+  ["Combinaison de pompier", "2/6 (F)", "9 (II)", "9", "(I)", "Étanche", ""],
+  ["Combinaison d'apiculteur", "0/6 (*)", "7 (II)", "5", "(I)", "", "Protège des piqûres et essaims."],
+  ["Combinaison NRBC", "0/8 (**)", "10 (II)", "7", "(II)", "Étanche", "Protège des radiations, virus et gaz."],
+  ["Bouclier en bois", "1/3 (C)", "6", "5", "(I)", "", "Bouclier (Mêlée) : +1D en parade, réduit seulement les Dommages parés."],
+  ["Bouclier en métal", "1/3 (L)", "5", "6", "(I)", "", "Bouclier (Mêlée) : +1D en parade, réduit seulement les Dommages parés."],
+  ["Bouclier en plexiglas", "2/4 (L)", "10 (I)", "9", "(I)", "", "Bouclier (Mêlée) : +1D en parade, réduit seulement les Dommages parés."]
+];
+
+const protections = [];
+for (const [nom, ind, rar, fia, mob, tr, note] of TABLE_PROTECTIONS) {
+  const i = parseIndice(ind);
+  if (!i) continue;
+  protections.push({
+    nom, indiceBase: i.base, indiceSpecifique: i.spec, typeSpecifique: i.type,
+    handicapMobilite: parseMob(mob), rarete: parseRarete(rar), fiabilite: parseRarete(fia),
+    traits: parseTraits(tr), note
+  });
+}
+
 const macroJet = [
   "// Jet Vermine — ouvre le dialogue de jet pour le personnage sélectionné.",
   "const actor = canvas.tokens?.controlled[0]?.actor ?? game.user.character;",
@@ -234,6 +382,34 @@ export const PACKS = [
           + p(`<strong>Domaine de prédilection :</strong> ${domaine}`)
           + p(`<strong>Spécialités :</strong> ${specialites}`)
           + (ritesTxt ? p(`<strong>${ritesTxt}</strong>`) : "")
+      }
+    }))
+  },
+  {
+    name: "armes",
+    label: "Armes",
+    type: "Item",
+    docs: armes.map((a) => ({
+      name: a.nom, type: "arme", img: "icons/svg/sword.svg",
+      system: {
+        description: p(LABEL_ARME[a.competence] ?? ""),
+        degats: a.degats, degatsVigueur: a.degatsVigueur, typeDommages: a.typeDommages,
+        competence: a.competence, porteeCourte: a.porteeCourte, porteeLongue: a.porteeLongue,
+        fiabilite: a.fiabilite, protection: 0, rarete: a.rarete, traits: a.traits
+      }
+    }))
+  },
+  {
+    name: "protections",
+    label: "Protections",
+    type: "Item",
+    docs: protections.map((pr) => ({
+      name: pr.nom, type: "protection", img: "icons/svg/shield.svg",
+      system: {
+        description: pr.note ? p(pr.note) : "",
+        indiceBase: pr.indiceBase, indiceSpecifique: pr.indiceSpecifique, typeSpecifique: pr.typeSpecifique,
+        handicapMobilite: pr.handicapMobilite, fiabilite: pr.fiabilite, rarete: pr.rarete,
+        traits: pr.traits, equipee: false
       }
     }))
   },

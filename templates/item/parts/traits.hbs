@@ -1,0 +1,14 @@
+<fieldset class="traits-bloc">
+  <legend>{{localize "VERMINE.Traits.Titre"}}</legend>
+  <div class="traits-grid">
+    {{#each traitsListe as |t|}}
+    <label class="trait-item">
+      <input type="checkbox" name="trait.{{t.key}}.actif" {{#if t.actif}}checked{{/if}} />
+      <span class="trait-nom">{{t.label}}</span>
+      {{#if t.aValeur}}
+      <input type="number" class="trait-valeur" name="trait.{{t.key}}.valeur" value="{{t.valeur}}" min="1" title="(n)" />
+      {{/if}}
+    </label>
+    {{/each}}
+  </div>
+</fieldset>

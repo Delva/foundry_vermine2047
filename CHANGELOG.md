@@ -1,5 +1,20 @@
 # Journal des modifications
 
+## [0.6.0] — Armes & Protections (phase 4)
+
+### Ajouté
+- **Modèles Arme et Protection enrichis** : type de Dommages (Choc/Lame/Feu/Balle),
+  base Vigueur, portées courte/longue, indices de Protection (base + spécifique),
+  Handicap de Mobilité, Fiabilité, et **Traits** structurés (les 17 Traits du jeu).
+- **Fiche d'objet** : sections Arme et Protection complètes + bloc **Traits**
+  (cases à cocher avec valeur (n)). Affichage des Dommages/Traits/Indice sur la fiche.
+- **Compendiums Armes (35) et Protections (17)** reprenant les tables du jeu :
+  armes à feu, mêlée, corps à corps, tir, lancer ; protections partielles/intégrales,
+  combinaisons spéciales et boucliers.
+
+---
+
+
 Toutes les évolutions notables du système **Vermine 2047** pour FoundryVTT.
 
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
@@ -187,6 +202,7 @@ La **phase 5 (Confort)** est ainsi complète.
 
 ---
 
+[0.6.0]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.6.0
 [0.5.0]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.5.0
 [0.4.1]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.4.1
 [0.4.0]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.4.0
