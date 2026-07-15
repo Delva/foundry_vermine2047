@@ -57,6 +57,7 @@
   "VERMINE.Rarete": "Rarity",
   "VERMINE.Reputation": "Reputation",
   "VERMINE.XP": "XP",
+  "VERMINE.PointsMutation": "Mutation",
   "VERMINE.Chaman": "Shaman",
   "VERMINE.NomPersonnage": "Character name",
 
@@ -122,6 +123,8 @@
   "VERMINE.Comp.Rechercher": "Search a skill…",
   "VERMINE.Comp.SpecialitesTitre": "Specialties",
   "VERMINE.Options.Titre": "Options",
+  "VERMINE.Options.Reserves": "Reserves (caps)",
+  "VERMINE.Options.RecalculerReserves": "(Re)calculate from Attributes",
   "VERMINE.Comp.arts": "Arts",
   "VERMINE.Comp.civilisation": "Civilisation",
   "VERMINE.Comp.psychologie": "Psychology",
@@ -181,6 +184,7 @@
   "VERMINE.Totem.solitaire": "The Loner",
 
   "VERMINE.Reserve.Titre": "Reserves",
+  "VERMINE.Reserve.Max": "Max",
   "VERMINE.Reserve.sangFroid": "Composure",
   "VERMINE.Reserve.effort": "Effort",
 

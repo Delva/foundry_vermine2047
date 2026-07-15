@@ -57,6 +57,7 @@
   "VERMINE.Rarete": "Rareté",
   "VERMINE.Reputation": "Réputation",
   "VERMINE.XP": "XP",
+  "VERMINE.PointsMutation": "Mutation",
   "VERMINE.Chaman": "Chaman",
   "VERMINE.NomPersonnage": "Nom du personnage",
 
@@ -122,6 +123,8 @@
   "VERMINE.Comp.Rechercher": "Rechercher une compétence…",
   "VERMINE.Comp.SpecialitesTitre": "Spécialités",
   "VERMINE.Options.Titre": "Options",
+  "VERMINE.Options.Reserves": "Réserves (plafonds)",
+  "VERMINE.Options.RecalculerReserves": "(Re)calculer depuis les Caractéristiques",
   "VERMINE.Comp.arts": "Arts",
   "VERMINE.Comp.civilisation": "Civilisation",
   "VERMINE.Comp.psychologie": "Psychologie",
@@ -181,6 +184,7 @@
   "VERMINE.Totem.solitaire": "Le Solitaire",
 
   "VERMINE.Reserve.Titre": "Réserves",
+  "VERMINE.Reserve.Max": "Max",
   "VERMINE.Reserve.sangFroid": "Sang-Froid",
   "VERMINE.Reserve.effort": "Effort",
 

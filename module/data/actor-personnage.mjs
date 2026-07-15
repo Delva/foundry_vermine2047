@@ -29,12 +29,17 @@ function competencesSchema() {
   return new fields.SchemaField(schema);
 }
 
-/** Schéma d'une Réserve (Sang-Froid ou Effort). */
+/**
+ * Schéma d'une Réserve (Sang-Froid ou Effort).
+ * value = points disponibles ; max = plafond stocké (0..10).
+ * Décorrélé des Caractéristiques après la création : le max s'initialise à la création
+ * (bouton « (Re)calculer depuis les Caractéristiques » dans les Options) puis monte via
+ * l'XP, indépendamment des hausses de Caractéristiques (Mutation).
+ */
 function reserveSchema() {
   return new fields.SchemaField({
-    value: new fields.NumberField({ required: true, integer: true, min: 0, initial: 8 }),
-    bonusMax: new fields.NumberField({ required: true, integer: true, initial: 0 })
-    // max est dérivé dans prepareDerivedData (base issue des Caractéristiques + âge + bonusMax)
+    value: new fields.NumberField({ required: true, integer: true, min: 0, max: 10, initial: 8 }),
+    max:   new fields.NumberField({ required: true, integer: true, min: 0, max: 10, initial: 8 })
   });
 }
 
@@ -68,6 +73,7 @@ export class PersonnageData extends foundry.abstract.TypeDataModel {
       }),
       reputation: new fields.NumberField({ required: true, integer: true, min: 0, initial: 10 }),
       xp: new fields.NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+      pointsMutation: new fields.NumberField({ required: true, integer: true, min: 0, initial: 0 }),
       age: new fields.StringField({ required: true, choices: niveauxAge, initial: "adulte" }),
       mode: new fields.StringField({ required: true, choices: modes, initial: "survie" }),
       totem: new fields.StringField({ required: false, blank: true, choices: totems, initial: "" }),
@@ -78,18 +84,29 @@ export class PersonnageData extends foundry.abstract.TypeDataModel {
     };
   }
 
-  /** Dérivations : base des Réserves (somme des caractéristiques ± âge) et Malus de blessure. */
-  prepareDerivedData() {
-    const carac = this.caracteristiques;
-
-    // Réserves : base = somme des caractéristiques du groupe + modificateur d'âge.
-    const modAge = VERMINE.ages[this.age]?.modReserve ?? 0;
+  /**
+   * Migration : découplage des Réserves. Sème le `max` stocké depuis l'ancienne
+   * dérivation (somme des Caractéristiques du groupe + modificateur d'âge + bonusMax)
+   * lorsqu'il est absent, pour préserver le plafond courant des personnages existants.
+   */
+  static migrateData(source) {
+    const modAge = VERMINE.ages[source.age]?.modReserve ?? 0;
     for (const [rKey, caracKeys] of Object.entries(VERMINE.reserves)) {
-      const base = caracKeys.reduce((sum, c) => sum + (carac[c]?.value ?? 0), 0);
+      const res = source.reserves?.[rKey];
+      if (res && res.max === undefined) {
+        const base = caracKeys.reduce((sum, c) => sum + (source.caracteristiques?.[c]?.value ?? 0), 0);
+        res.max = Math.max(0, Math.min(10, base + modAge + (res.bonusMax ?? 0)));
+      }
+    }
+    return super.migrateData(source);
+  }
+
+  /** Dérivations : borne la valeur des Réserves au max stocké, et Malus de blessure. */
+  prepareDerivedData() {
+    // Réserves : décorrélées des Caractéristiques (le max est stocké, cf. Options).
+    // On borne seulement la valeur courante au plafond.
+    for (const rKey of Object.keys(VERMINE.reserves)) {
       const res = this.reserves[rKey];
-      res.base = base;
-      res.max = Math.max(0, base + modAge + (res.bonusMax ?? 0));
-      // On borne la valeur courante au maximum.
       if (res.value > res.max) res.value = res.max;
     }
 

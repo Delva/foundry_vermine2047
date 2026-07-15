@@ -23,6 +23,29 @@
   </section>
 
   <section class="bloc">
+    <h3>{{localize "VERMINE.Options.Reserves"}}</h3>
+    <table class="options-reserves">
+      <thead>
+        <tr>
+          <th></th>
+          <th>{{localize "VERMINE.Reserve.Max"}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each reserves as |r|}}
+        <tr>
+          <td class="reserve-nom">{{r.label}}</td>
+          <td><input type="number" name="system.reserves.{{r.key}}.max" value="{{r.max}}" min="0" max="10" /></td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    <button type="button" class="recalc-reserves">
+      <i class="fas fa-rotate"></i> {{localize "VERMINE.Options.RecalculerReserves"}}
+    </button>
+  </section>
+
+  <section class="bloc">
     <h3>{{localize "VERMINE.Comp.SpecialitesTitre"}}</h3>
     <p class="hint">{{localize "VERMINE.Comp.Specialites"}}</p>
     <div class="options-domaines">

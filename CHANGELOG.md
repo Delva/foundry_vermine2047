@@ -1,5 +1,18 @@
 # Journal des modifications
 
+## [0.7.3] — Points de Mutation & Réserves indépendantes
+
+### Ajouté
+- **Points de Mutation** : champ numérique dans l'en-tête de la fiche (après l'XP)
+  pour stocker les dés de Mutation gagnés.
+
+### Modifié
+- **Réserves (Sang-Froid / Effort)** : désormais décorrélées des Caractéristiques
+  après la création. Le maximum est une valeur stockée, éditable dans la page
+  d'Options, avec un bouton « (Re)calculer depuis les Caractéristiques » pour
+  l'initialiser à la création ; il se monte ensuite librement (XP), sans être
+  modifié par les hausses de Caractéristiques (Mutation).
+
 ## [0.7.2] — Sang-Froid : sélection par boutons
 
 ### Modifié

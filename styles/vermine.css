@@ -342,6 +342,12 @@
 .vermine2047 .spec-ligne .spec-nom { flex: 0 0 40%; font-size: 0.85em; }
 .vermine2047 .spec-ligne input { flex: 1; min-width: 0; font-size: 0.8em; }
 .vermine2047 .personnage-options-form .hint { color: var(--v-muted); font-size: 0.78em; margin: 0 0 8px; }
+.vermine2047 .options-reserves { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+.vermine2047 .options-reserves th { color: var(--v-muted); font-size: 0.72em; text-transform: uppercase; text-align: center; padding-bottom: 4px; }
+.vermine2047 .options-reserves td { padding: 3px; }
+.vermine2047 .options-reserves td.reserve-nom { font-weight: 700; }
+.vermine2047 .options-reserves input { width: 60px; text-align: center; }
+.vermine2047 .recalc-reserves { width: auto; padding: 4px 10px; font-size: 0.82em; cursor: pointer; }
 
 /* ---- Bloc Traits (fiche d'objet) ---- */
 .vermine2047 .traits-bloc { border: 1px solid var(--v-border); border-radius: 4px; padding: 8px; margin-top: 12px; }

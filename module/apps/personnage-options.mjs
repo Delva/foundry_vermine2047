@@ -31,6 +31,13 @@ export class PersonnageOptions extends FormApplication {
       cercles: sys.blessures[key].cercles
     }));
 
+    const reserves = Object.keys(VERMINE.reserves).map((key) => ({
+      key,
+      label: game.i18n.localize(`VERMINE.Reserve.${key}`),
+      value: sys.reserves[key].value,
+      max: sys.reserves[key].max
+    }));
+
     const domaines = {};
     for (const [dKey, dLabel] of Object.entries(VERMINE.domaines)) {
       domaines[dKey] = { label: game.i18n.localize(dLabel), competences: [] };
@@ -43,7 +50,30 @@ export class PersonnageOptions extends FormApplication {
       });
     }
 
-    return { blessures, domaines };
+    return { blessures, reserves, domaines };
+  }
+
+  /** @override — branche le bouton de recalcul des plafonds de Réserve. */
+  activateListeners(html) {
+    super.activateListeners(html);
+    html.find(".recalc-reserves").on("click", () => this._recalculerReserves());
+  }
+
+  /**
+   * (Re)calcule le max de chaque Réserve depuis les Caractéristiques courantes :
+   * somme des Caractéristiques du groupe + modificateur d'âge, borné à 0..10.
+   * À utiliser à la création ; ensuite le max se monte librement via l'XP.
+   */
+  async _recalculerReserves() {
+    const sys = this.object.system;
+    const modAge = VERMINE.ages[sys.age]?.modReserve ?? 0;
+    const data = {};
+    for (const [rKey, caracKeys] of Object.entries(VERMINE.reserves)) {
+      const base = caracKeys.reduce((sum, c) => sum + (sys.caracteristiques?.[c]?.value ?? 0), 0);
+      data[`system.reserves.${rKey}.max`] = Math.max(0, Math.min(10, base + modAge));
+    }
+    await this.object.update(data);
+    this.render();
   }
 
   async _updateObject(event, formData) {
