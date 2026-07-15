@@ -1,5 +1,16 @@
 # Journal des modifications
 
+## [0.7.4] — Correctif : plafond des Réserves qui retombait à 0
+
+### Corrigé
+- **Réserves (Sang-Froid / Effort)** : le plafond (max) découplé n'était pas persisté
+  et se re-dérivait des Caractéristiques à chaque édition — il « retombait » à sa valeur
+  dérivée (0 quand les Caractéristiques concernées étaient basses). Le max est désormais
+  persisté une fois pour toutes (migration automatique au chargement, côté MJ), reste
+  réellement indépendant des Caractéristiques, et n'est plus remis à 0 en modifiant la
+  fiche. La migration ne rogne jamais une Réserve sous ses points courants, et un champ
+  max laissé vide dans les Options n'écrase plus la valeur.
+
 ## [0.7.3] — Points de Mutation & Réserves indépendantes
 
 ### Ajouté

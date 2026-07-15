@@ -82,6 +82,9 @@ export class PersonnageOptions extends FormApplication {
       if (k.startsWith("spec.")) {
         data[`system.competences.${k.slice(5)}.specialites`] =
           String(v ?? "").split(",").map((s) => s.trim()).filter(Boolean);
+      } else if (k.endsWith(".max") && (v === null || v === "" || Number.isNaN(Number(v)))) {
+        // Champ de plafond de Réserve vidé : on ne l'écrase pas à 0.
+        continue;
       } else {
         data[k] = v;
       }

@@ -60,7 +60,7 @@ Hooks.once("init", function () {
   preloadTemplates();
 });
 
-Hooks.once("ready", function () {
+Hooks.once("ready", async function () {
   console.log("Vermine 2047 | Système prêt");
   // API publique pour les macros.
   game.vermine = {
@@ -70,7 +70,36 @@ Hooks.once("ready", function () {
       return ouvrirDialogueJet(a, preset);
     }
   };
+
+  if (game.user.isGM) await migrerReservesMax();
 });
+
+/**
+ * Migration v0.7.4 : persiste le plafond (`max`) des Réserves pour les personnages
+ * créés avant le découplage. Sans persistance, le max était re-dérivé des
+ * Caractéristiques à chaque reconstruction (migrateData) et « retombait » à sa valeur
+ * dérivée — cassant le découplage. On écrit une fois le max déjà semé en mémoire ;
+ * ensuite il reste réellement indépendant et éditable.
+ */
+async function migrerReservesMax() {
+  const updates = [];
+  for (const actor of game.actors) {
+    if (actor.type !== "personnage") continue;
+    const src = actor._source?.system?.reserves;
+    if (!src) continue;
+    const data = {};
+    for (const rKey of Object.keys(VERMINE.reserves)) {
+      if (src[rKey] && src[rKey].max === undefined) {
+        data[`system.reserves.${rKey}.max`] = actor.system.reserves?.[rKey]?.max ?? 8;
+      }
+    }
+    if (Object.keys(data).length) updates.push({ _id: actor.id, ...data });
+  }
+  if (updates.length) {
+    await Actor.updateDocuments(updates);
+    console.log(`Vermine 2047 | Réserves migrées (max persisté) pour ${updates.length} personnage(s).`);
+  }
+}
 
 // Câblage des boutons de Relance sur les cartes de chat.
 Hooks.on("renderChatMessage", (message, html) => {
