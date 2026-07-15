@@ -75,22 +75,27 @@ Hooks.once("ready", async function () {
 });
 
 /**
- * Migration v0.7.4 : persiste le plafond (`max`) des Réserves pour les personnages
- * créés avant le découplage. Sans persistance, le max était re-dérivé des
- * Caractéristiques à chaque reconstruction (migrateData) et « retombait » à sa valeur
- * dérivée — cassant le découplage. On écrit une fois le max déjà semé en mémoire ;
- * ensuite il reste réellement indépendant et éditable.
+ * Migration v0.7.4 : persiste UNE fois le plafond (`max`) des Réserves pour les
+ * personnages créés avant le découplage (max absent en base). La valeur écrite est
+ * l'ancien plafond dérivé (somme des Caractéristiques du groupe + modificateur d'âge
+ * + éventuel bonusMax), lu directement depuis la source — jamais mélangé avec la
+ * valeur possédée. Une fois persisté, le max reste stocké, indépendant et éditable ;
+ * la migration ne le retouche plus (condition `max === undefined`).
  */
 async function migrerReservesMax() {
   const updates = [];
   for (const actor of game.actors) {
     if (actor.type !== "personnage") continue;
-    const src = actor._source?.system?.reserves;
+    const sysSrc = actor._source?.system;
+    const src = sysSrc?.reserves;
     if (!src) continue;
+    const modAge = VERMINE.ages[sysSrc.age]?.modReserve ?? 0;
     const data = {};
-    for (const rKey of Object.keys(VERMINE.reserves)) {
+    for (const [rKey, caracKeys] of Object.entries(VERMINE.reserves)) {
       if (src[rKey] && src[rKey].max === undefined) {
-        data[`system.reserves.${rKey}.max`] = actor.system.reserves?.[rKey]?.max ?? 8;
+        const base = caracKeys.reduce((sum, c) => sum + (sysSrc.caracteristiques?.[c]?.value ?? 0), 0);
+        const derive = base + modAge + (src[rKey].bonusMax ?? 0);
+        data[`system.reserves.${rKey}.max`] = Math.max(0, Math.min(10, derive));
       }
     }
     if (Object.keys(data).length) updates.push({ _id: actor.id, ...data });

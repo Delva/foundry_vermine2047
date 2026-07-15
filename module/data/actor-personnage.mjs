@@ -84,28 +84,12 @@ export class PersonnageData extends foundry.abstract.TypeDataModel {
     };
   }
 
-  /**
-   * Migration : découplage des Réserves. Sème le `max` stocké depuis l'ancienne
-   * dérivation (somme des Caractéristiques du groupe + modificateur d'âge + bonusMax)
-   * lorsqu'il est absent, pour préserver le plafond courant des personnages existants.
-   * Non destructif : le max ne descend jamais sous les points déjà stockés (`value`),
-   * pour ne pas rogner une Réserve lors du passage au nouveau schéma.
-   * NB : cette dérivation n'est qu'un défaut en mémoire tant que le max n'est pas
-   * persisté (cf. migration au `ready` dans vermine.mjs) ; une fois persisté, elle est
-   * ignorée et le max reste réellement découplé des Caractéristiques.
-   */
-  static migrateData(source) {
-    const modAge = VERMINE.ages[source.age]?.modReserve ?? 0;
-    for (const [rKey, caracKeys] of Object.entries(VERMINE.reserves)) {
-      const res = source.reserves?.[rKey];
-      if (res && res.max === undefined) {
-        const base = caracKeys.reduce((sum, c) => sum + (source.caracteristiques?.[c]?.value ?? 0), 0);
-        const derive = base + modAge + (res.bonusMax ?? 0);
-        res.max = Math.max(0, Math.min(10, Math.max(derive, res.value ?? 0)));
-      }
-    }
-    return super.migrateData(source);
-  }
+  // NB : le plafond (`max`) des Réserves est une valeur stockée, totalement
+  // indépendante des Caractéristiques et de la valeur possédée. Aucune dérivation
+  // n'est faite ici (elle « mélangeait » le max avec la valeur). Le peuplement initial
+  // des personnages d'avant le découplage est fait UNE fois et persisté au `ready`
+  // (cf. migrerReservesMax dans vermine.mjs) ; les nouveaux personnages prennent
+  // l'`initial` du schéma.
 
   /** Dérivations : borne la valeur des Réserves au max stocké, et Malus de blessure. */
   prepareDerivedData() {

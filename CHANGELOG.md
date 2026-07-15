@@ -1,15 +1,26 @@
 # Journal des modifications
 
+## [0.7.5] — Correctif : plafond des Réserves qui se mélangeait avec la valeur
+
+### Corrigé
+- **Réserves (Sang-Froid / Effort)** : le plafond (max) était encore recalculé à chaque
+  édition et pouvait se **mélanger avec les points possédés** (le max prenait la valeur
+  courante) — le correctif 0.7.4 persistait cette valeur mélangée. Le plafond est
+  désormais une valeur **purement stockée** : plus aucune dérivation ni mélange avec la
+  valeur au fil des éditions. Les personnages d'avant le découplage sont initialisés une
+  seule fois (migration au chargement, côté MJ) depuis l'ancien plafond dérivé (lu depuis
+  la source, jamais mélangé à la valeur), puis le max reste stable et indépendant.
+  Note : un personnage déjà touché par le bug peut recliquer « (Re)calculer depuis les
+  Caractéristiques » (ou saisir le max) dans les Options — la valeur tient désormais.
+
 ## [0.7.4] — Correctif : plafond des Réserves qui retombait à 0
 
 ### Corrigé
-- **Réserves (Sang-Froid / Effort)** : le plafond (max) découplé n'était pas persisté
-  et se re-dérivait des Caractéristiques à chaque édition — il « retombait » à sa valeur
-  dérivée (0 quand les Caractéristiques concernées étaient basses). Le max est désormais
-  persisté une fois pour toutes (migration automatique au chargement, côté MJ), reste
-  réellement indépendant des Caractéristiques, et n'est plus remis à 0 en modifiant la
-  fiche. La migration ne rogne jamais une Réserve sous ses points courants, et un champ
-  max laissé vide dans les Options n'écrase plus la valeur.
+- **Réserves (Sang-Froid / Effort)** : le plafond (max) découplé n'était pas persisté et
+  se re-dérivait des Caractéristiques à chaque édition, « retombant » à sa valeur dérivée
+  (0 quand les Caractéristiques concernées étaient basses). Ajout d'une persistance du max
+  au chargement (côté MJ) et d'un garde-fou empêchant un champ max vide dans les Options
+  d'écraser la valeur. (Correctif incomplet — voir 0.7.5.)
 
 ## [0.7.3] — Points de Mutation & Réserves indépendantes
 
