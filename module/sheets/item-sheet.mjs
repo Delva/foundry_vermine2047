@@ -52,7 +52,6 @@ export class VermineItemSheet extends ItemSheet {
     ctx.typesCapacite = Object.entries(VERMINE.typesCapacite)
       .map(([key, l]) => ({ key, label: game.i18n.localize(l) }));
 
-    ctx.enrichedDesc = await TextEditor.enrichHTML(this.item.system.description ?? "", { async: true });
     return ctx;
   }
 

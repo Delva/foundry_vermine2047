@@ -41,15 +41,22 @@ export async function ouvrirDialogueJet(actor, preset = {}) {
     });
   }
 
+  const caracDefaut = preset.caracteristique ?? "vigueur";
+  const sangFroidDispo = sys.reserves?.sangFroid?.value ?? 0;
+  // Plafond du Sang-Froid = valeur de la Caractéristique sélectionnée (et réserve disponible) —
+  // recalculé dynamiquement dans activerApercu() quand la Caractéristique change.
+  const sangFroidMax = Math.min(sangFroidDispo, sys.caracteristiques?.[caracDefaut]?.value ?? 0);
+
   const data = {
     caracs,
     domaines,
     difficultes: VERMINE.difficultes,
-    caracDefaut: preset.caracteristique ?? "vigueur",
+    caracDefaut,
     compDefaut: preset.competence ?? "",
     diffDefaut: preset.difficulte ?? 7,
     handicapDefaut: preset.handicap ?? 0,
-    sangFroidDispo: sys.reserves?.sangFroid?.value ?? 0,
+    sangFroidDispo,
+    sangFroidMax,
     effortDispo: sys.reserves?.effort?.value ?? 0,
     malusBlessure: sys.malusBlessure ?? 0,
     groupe: groupe ? { nom: groupe.name, dispo: groupe.system.reserveGroupe.value } : null
@@ -133,11 +140,28 @@ function lireComposants(actor, html, groupe = null) {
   return { caracKey, competenceKey, difficulte, handicap, composants, relancesCompetence, sangFroidUtilise, groupeUtilise };
 }
 
-/** Met en place l'aperçu dynamique de la taille de Main. */
+/**
+ * Met en place l'aperçu dynamique de la taille de Main, et recalcule le plafond du
+ * Sang-Froid (min de la Réserve disponible et de la Caractéristique sélectionnée)
+ * à chaque changement, puisque la Caractéristique peut être modifiée dans le formulaire.
+ */
 function activerApercu(html, actor, groupe = null) {
   const root = html[0] ?? html;
   const apercu = root.querySelector(".apercu-main");
+  const sfInput = root.querySelector('[name="sangFroid"]');
+  const sfHint = root.querySelector(".hint-sang-froid");
+  const sangFroidDispo = actor.system.reserves?.sangFroid?.value ?? 0;
+
   const maj = () => {
+    const caracKey = root.querySelector('[name="caracteristique"]').value;
+    const caracVal = actor.system.caracteristiques?.[caracKey]?.value ?? 0;
+    const sfMax = Math.min(sangFroidDispo, caracVal);
+    if (sfInput) {
+      sfInput.max = sfMax;
+      if (Number(sfInput.value) > sfMax) sfInput.value = sfMax;
+    }
+    if (sfHint) sfHint.textContent = `(max ${sfMax})`;
+
     const { composants } = lireComposants(actor, html, groupe);
     const total = Math.max(0, Object.values(composants).reduce((s, n) => s + n, 0));
     if (apercu) apercu.textContent = String(total);

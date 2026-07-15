@@ -1,6 +1,9 @@
 <form class="vermine2047 sheet creature" autocomplete="off">
   <header class="fiche-entete">
-    <img class="portrait" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" />
+    <div class="entete-portrait-wrap">
+      <img class="portrait" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" />
+      <i class="fas fa-pen portrait-edit"></i>
+    </div>
     <div class="entete-champs">
       <input type="text" name="name" value="{{actor.name}}" class="nom-perso" />
       <div class="entete-ligne">
@@ -20,7 +23,6 @@
         <div class="carac-ligne">
           <a class="carac-nom" data-roll-carac="{{c.key}}" title="{{localize 'VERMINE.Jet.Lancer'}}">{{c.label}}</a>
           <input type="number" name="system.caracteristiques.{{c.key}}.value" value="{{c.value}}" min="0" max="12" />
-          <span class="unite">D</span>
         </div>
         {{/each}}
       </div>
@@ -68,7 +70,7 @@
 
     <div class="bloc-notes">
       <h3>{{localize "VERMINE.Notes"}}</h3>
-      {{editor enrichedNotes target="system.notes" button=true editable=editable}}
+      <textarea name="system.notes" rows="6">{{system.notes}}</textarea>
     </div>
   </section>
 </form>

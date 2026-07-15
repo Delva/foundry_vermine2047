@@ -4,16 +4,16 @@
    ============================================================ */
 
 .vermine2047 {
-  --v-bg: #14140f;
-  --v-bg2: #1b1b15;
-  --v-bg3: #24241c;
-  --v-accent: #9ab534;   /* vert acide */
-  --v-accent2: #c25a34;  /* rouille */
-  --v-text: #ece7db;
-  --v-muted: #8f897b;
-  --v-succes: #9ab534;
-  --v-echec: #a53a2c;
-  --v-border: #33322a;
+  --v-bg: #121410;
+  --v-bg2: #1b1c18;
+  --v-bg3: #1e201c;
+  --v-accent: #c0cab4;   /* sauge pâle */
+  --v-accent2: #cf8f6b;  /* terre cuite */
+  --v-text: #e3e3dc;
+  --v-muted: #8f9289;
+  --v-succes: #c0cab4;
+  --v-echec: #b2564a;
+  --v-border: #454841;
 }
 
 /* ---- Base commune (fiches créature / groupe / objet : colonne flex) ---- */
@@ -33,70 +33,161 @@
   background: var(--v-bg3); color: var(--v-text); border: 1px solid var(--v-border); border-radius: 3px;
 }
 .vermine2047 input:focus, .vermine2047 select:focus, .vermine2047 textarea:focus {
-  border-color: var(--v-accent); box-shadow: 0 0 4px rgba(154,181,52,0.5);
+  border-color: var(--v-accent); box-shadow: 0 0 4px rgba(192,202,180,0.5);
 }
 /* Options des menus déroulants : fond sombre lisible (sinon texte clair sur fond blanc système). */
-.vermine2047 select option, .vermine2047 select optgroup { background: #1b1b15; color: #ece7db; }
+.vermine2047 select option, .vermine2047 select optgroup { background: #1b1c18; color: #e3e3dc; }
 .vermine2047 select optgroup { font-weight: 700; }
 .vermine2047 .bloc {
   background: var(--v-bg2); border: 1px solid var(--v-border); border-radius: 6px;
   padding: 10px; margin-bottom: 10px;
 }
 
+/* Champs de texte long (Description, Biographie, Notes) : textarea simple, pas d'éditeur riche. */
+.vermine2047 .item-description textarea, .vermine2047 .tab.bio textarea, .vermine2047 .bloc-notes textarea {
+  width: 100%; min-height: 120px; resize: vertical; font-family: inherit; padding: 6px; box-sizing: border-box;
+}
+
 /* ============================================================
-   FICHE PERSONNAGE — layout applicatif (barre latérale | corps | rail)
+   FICHE PERSONNAGE — layout applicatif (en-tête | corps | rail)
    ============================================================ */
 .vermine2047.personnage.layout-app {
   display: grid;
-  grid-template-columns: 188px minmax(0, 1fr) 236px;
+  grid-template-columns: minmax(0, 1fr) 236px;
   grid-template-rows: auto minmax(0, 1fr);
   grid-template-areas:
-    "side header header"
-    "side body   rail";
+    "header header"
+    "body   rail";
   height: 100%;
 }
 
-/* Barre latérale */
-.vermine2047 .v-sidebar {
-  grid-area: side; background: var(--v-bg2); border-right: 1px solid var(--v-border);
-  display: flex; flex-direction: column;
-}
-.vermine2047 .side-ident { padding: 12px 10px; border-bottom: 1px solid var(--v-border); display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; }
-.vermine2047 .side-portrait { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; border: 2px solid var(--v-accent); }
-.vermine2047 .side-nom { font-weight: 700; text-transform: uppercase; font-size: 0.9em; color: var(--v-accent); letter-spacing: 0.03em; }
-.vermine2047 .side-sub { font-size: 0.68em; color: var(--v-muted); text-transform: uppercase; }
-.vermine2047 .v-sidebar .sheet-tabs { display: flex; flex-direction: column; padding: 8px 0; border: none; }
-.vermine2047 .v-sidebar .sheet-tabs .item {
-  padding: 10px 14px; color: var(--v-muted); font-size: 0.82em; font-weight: 600;
-  text-transform: uppercase; letter-spacing: 0.03em; border-left: 3px solid transparent; text-align: left;
-}
-.vermine2047 .v-sidebar .sheet-tabs .item i { width: 18px; text-align: center; margin-right: 6px; }
-.vermine2047 .v-sidebar .sheet-tabs .item:hover { color: var(--v-text); background: rgba(255,255,255,0.03); }
-.vermine2047 .v-sidebar .sheet-tabs .item.active { color: var(--v-accent); border-left-color: var(--v-accent); background: rgba(154,181,52,0.08); }
-
 /* En-tête */
 .vermine2047.personnage .fiche-entete {
-  grid-area: header; display: flex; gap: 12px; align-items: center;
-  padding: 10px 14px; background: var(--v-bg); border-bottom: 1px solid var(--v-border);
+  grid-area: header; display: flex; flex-direction: column; align-items: stretch;
+  border-bottom: 1px solid var(--v-border);
+  background-image: linear-gradient(180deg, rgba(18,20,16,0.35) 0%, rgba(18,20,16,0.75) 70%, var(--v-bg) 100%),
+                     url("img/entete-foret.png");
+  background-size: cover; background-position: center 35%;
 }
-.vermine2047.personnage .fiche-entete .portrait { width: 60px; height: 60px; object-fit: cover; border: 1px solid var(--v-border); border-radius: 4px; }
+.vermine2047.personnage .entete-haut { display: flex; gap: 16px; align-items: flex-end; padding: 16px 16px 12px; }
+
+/* Onglets, dans l'en-tête */
+.vermine2047.personnage .entete-tabs { display: flex; gap: 4px; padding: 0 16px; border: none; }
+.vermine2047.personnage .entete-tabs .item {
+  padding: 8px 16px; color: var(--v-muted); font-size: 0.78em; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid transparent;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+}
+.vermine2047.personnage .entete-tabs .item i { margin-right: 5px; }
+.vermine2047.personnage .entete-tabs .item:hover { color: var(--v-text); }
+.vermine2047.personnage .entete-tabs .item.active { color: var(--v-accent); border-bottom-color: var(--v-accent); }
+.vermine2047.personnage .entete-portrait-wrap { position: relative; flex: 0 0 auto; }
+.vermine2047.personnage .fiche-entete .portrait {
+  width: 150px; height: 150px; object-fit: cover; border-radius: 2px;
+  border: none; filter: grayscale(0.15) contrast(1.1);
+}
+.vermine2047.personnage .portrait-edit {
+  position: absolute; bottom: 2px; right: 2px; pointer-events: none;
+  background: rgba(18,20,16,0.8); color: var(--v-text); border: 1px solid var(--v-border);
+  border-radius: 2px; font-size: 9px; padding: 3px 4px;
+}
 .vermine2047 .entete-champs { flex: 1; min-width: 0; }
-.vermine2047 .nom-perso { font-size: 1.5em; font-weight: 700; background: transparent; border: none; border-bottom: 1px solid transparent; color: var(--v-text); width: 100%; }
-.vermine2047 .nom-perso:hover, .vermine2047 .nom-perso:focus { border-bottom-color: var(--v-border); }
+.vermine2047.personnage .nom-perso {
+  font-size: 1.9em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em;
+  background: transparent; border: none; margin-bottom: 15px;
+  color: var(--v-text); width: 100%; padding: 0 0 3px; text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+}
+.vermine2047.personnage .nom-perso:hover, .vermine2047.personnage .nom-perso:focus { border-bottom-color: var(--v-accent); box-shadow: none; }
 .vermine2047 .entete-ligne { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; align-items: end; }
 .vermine2047 .entete-ligne label { display: flex; flex-direction: column; gap: 2px; font-size: 0.68em; text-transform: uppercase; letter-spacing: 0.03em; color: var(--v-muted); }
-.vermine2047 .entete-ligne .rep input { width: 52px; }
+.vermine2047 .entete-ligne .rep input,
+.vermine2047 .entete-ligne .xp input { width: 52px; }
 .vermine2047 .entete-ligne .chaman-check { align-items: center; }
+.vermine2047.personnage .entete-ligne label { color: var(--v-text); text-shadow: 0 1px 3px rgba(0,0,0,0.7); }
+.vermine2047.personnage .entete-ligne input, .vermine2047.personnage .entete-ligne select {
+  background: rgba(18,20,16,0.75); border-color: var(--v-border);
+}
 
-/* Recherche dans l'en-tête, alignée à droite */
+/* Recherche + Lancer un dé, empilés à droite de l'en-tête, même largeur */
+.vermine2047.personnage .entete-actions { flex: 0 0 auto; width: 210px; align-self: center; display: flex; flex-direction: column; gap: 8px; }
 .vermine2047 .header-search {
-  flex: 0 0 auto; width: 210px; align-self: center;
   display: flex; align-items: center; gap: 6px;
   background: var(--v-bg3); border: 1px solid var(--v-border); border-radius: 16px; padding: 5px 12px;
 }
 .vermine2047 .header-search i { color: var(--v-muted); }
 .vermine2047 .header-search .comp-search { flex: 1; background: transparent; border: none; color: var(--v-text); }
 .vermine2047 .header-search .comp-search:focus { box-shadow: none; }
+.vermine2047.personnage .header-search { background: rgba(18,20,16,0.75); }
+
+.vermine2047.personnage .btn-lancer {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--v-accent); color: #232c1e; border: 1px solid var(--v-border); border-radius: 16px;
+  padding: 6px 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.85em;
+  cursor: pointer;
+}
+.vermine2047.personnage .btn-lancer:hover { box-shadow: 0 0 10px rgba(192,202,180,0.4); }
+
+/* ============================================================
+   FICHE GROUPE — même bannière « Nature Reclaimed » que Personnage
+   ============================================================ */
+.vermine2047.groupe .fiche-entete {
+  display: flex; gap: 16px; align-items: flex-end; padding: 16px;
+  border-bottom: 1px solid var(--v-border);
+  background-image: linear-gradient(180deg, rgba(18,20,16,0.35) 0%, rgba(18,20,16,0.75) 70%, var(--v-bg) 100%),
+                     url("img/entete-groupe.png");
+  background-size: cover; background-position: center 45%;
+}
+.vermine2047.groupe .entete-portrait-wrap { position: relative; flex: 0 0 auto; }
+.vermine2047.groupe .fiche-entete .portrait {
+  width: 110px; height: 110px; object-fit: cover; border-radius: 2px;
+  border: none; filter: grayscale(0.15) contrast(1.1);
+}
+.vermine2047.groupe .portrait-edit {
+  position: absolute; bottom: 2px; right: 2px; pointer-events: none;
+  background: rgba(18,20,16,0.8); color: var(--v-text); border: 1px solid var(--v-border);
+  border-radius: 2px; font-size: 9px; padding: 3px 4px;
+}
+.vermine2047.groupe .nom-perso {
+  font-size: 1.7em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em;
+  background: transparent; border: none; margin-bottom: 12px;
+  color: var(--v-text); width: 100%; padding: 0 0 3px; text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+}
+.vermine2047.groupe .nom-perso:focus { box-shadow: none; }
+.vermine2047.groupe .entete-ligne label { color: var(--v-text); text-shadow: 0 1px 3px rgba(0,0,0,0.7); }
+.vermine2047.groupe .entete-ligne input, .vermine2047.groupe .entete-ligne select {
+  background: rgba(18,20,16,0.75); border-color: var(--v-border);
+}
+
+/* ============================================================
+   FICHE CRÉATURE / PNJ — même bannière « Nature Reclaimed »
+   ============================================================ */
+.vermine2047.creature .fiche-entete {
+  display: flex; gap: 16px; align-items: flex-end; padding: 16px;
+  border-bottom: 1px solid var(--v-border);
+  background-image: linear-gradient(180deg, rgba(18,20,16,0.35) 0%, rgba(18,20,16,0.75) 70%, var(--v-bg) 100%),
+                     url("img/entete-creature.png");
+  background-size: cover; background-position: center 35%;
+}
+.vermine2047.creature .entete-portrait-wrap { position: relative; flex: 0 0 auto; }
+.vermine2047.creature .fiche-entete .portrait {
+  width: 100px; height: 100px; object-fit: cover; border-radius: 2px;
+  border: none; filter: grayscale(0.15) contrast(1.1);
+}
+.vermine2047.creature .portrait-edit {
+  position: absolute; bottom: 2px; right: 2px; pointer-events: none;
+  background: rgba(18,20,16,0.8); color: var(--v-text); border: 1px solid var(--v-border);
+  border-radius: 2px; font-size: 9px; padding: 3px 4px;
+}
+.vermine2047.creature .nom-perso {
+  font-size: 1.6em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em;
+  background: transparent; border: none; margin-bottom: 12px;
+  color: var(--v-text); width: 100%; padding: 0 0 3px; text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+}
+.vermine2047.creature .nom-perso:focus { box-shadow: none; }
+.vermine2047.creature .entete-ligne label { color: var(--v-text); text-shadow: 0 1px 3px rgba(0,0,0,0.7); }
+.vermine2047.creature .entete-ligne input, .vermine2047.creature .entete-ligne select {
+  background: rgba(18,20,16,0.75); border-color: var(--v-border);
+}
 
 /* Corps + rail */
 .vermine2047.personnage .sheet-body { grid-area: body; overflow-y: auto; padding: 12px; }
@@ -126,6 +217,9 @@
 /* ---- Compétences : grille de domaines ---- */
 .vermine2047 .domaines-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .vermine2047 .domaine { background: var(--v-bg3); border: 1px solid var(--v-border); border-radius: 6px; padding: 10px; }
+.vermine2047 .domaine-titre { cursor: pointer; }
+.vermine2047 .domaine-titre:hover { color: var(--v-accent2); }
+.vermine2047 .domaine.predilection { background: rgba(192,202,180,0.1); border-color: var(--v-accent); box-shadow: 0 0 0 1px var(--v-accent); }
 .vermine2047 .competence-ligne { display: flex; align-items: center; gap: 6px; padding: 4px 0; border-bottom: 1px solid rgba(51,50,42,0.6); }
 .vermine2047 .competence-ligne:last-child { border-bottom: none; }
 .vermine2047 .competence-ligne .comp-nom { flex: 1; min-width: 0; font-size: 0.92em; }
@@ -197,16 +291,15 @@
 .vermine2047 .objet-desc p { margin: 2px 0; }
 
 /* Carte de chat des Dommages */
-.vermine-degats-card { border: 1px solid #33322a; border-radius: 5px; padding: 8px; background: rgba(0,0,0,0.05); }
+.vermine-degats-card { border: 1px solid #454841; border-radius: 5px; padding: 8px; background: rgba(0,0,0,0.05); }
 .vermine-degats-card header { font-weight: 700; margin-bottom: 4px; }
 .vermine-degats-card .ligne { display: flex; align-items: baseline; gap: 6px; }
-.vermine-degats-card .total { font-size: 1.6em; font-weight: 700; color: #a53a2c; }
+.vermine-degats-card .total { font-size: 1.6em; font-weight: 700; color: #b2564a; }
 .vermine-degats-card .type { color: #777; }
 .vermine-degats-card .detail { font-size: 0.82em; color: #777; margin-top: 2px; }
 
 /* ---- Onglet Biographie ---- */
 .vermine2047 .tab.bio .predilection { display: flex; flex-direction: column; gap: 3px; font-size: 0.8em; color: var(--v-muted); margin-bottom: 10px; max-width: 260px; }
-.vermine2047 .tab.bio .editor { min-height: 140px; border: 1px solid var(--v-border); border-radius: 4px; }
 
 /* ---- Créature ---- */
 .vermine2047 .fiche-entete { display: flex; gap: 12px; align-items: center; padding: 10px; background: var(--v-bg2); border-bottom: 2px solid var(--v-accent); flex: 0 0 auto; }
@@ -262,7 +355,7 @@
 .vermine-picker .picker-search { width: 100%; margin-bottom: 8px; }
 .vermine-picker .picker-liste { list-style: none; margin: 0; padding: 0; max-height: 360px; overflow-y: auto; }
 .vermine-picker .picker-item { display: flex; align-items: center; gap: 8px; padding: 5px 6px; cursor: pointer; border-radius: 4px; }
-.vermine-picker .picker-item:hover { background: rgba(154, 181, 52, 0.18); }
+.vermine-picker .picker-item:hover { background: rgba(192, 202, 180, 0.18); }
 .vermine-picker .picker-item img { width: 24px; height: 24px; border-radius: 3px; flex: 0 0 auto; }
 .vermine-picker .picker-nom { flex: 1; }
 .vermine-picker .picker-pack { font-size: 0.72em; color: #999; }
@@ -276,33 +369,33 @@
 .vermine-jet-form legend { padding: 0 6px; font-weight: 700; }
 .vermine-jet-form .hint { color: #888; font-weight: 400; font-size: 0.8em; }
 .vermine-jet-form .apercu { text-align: center; font-size: 1.05em; margin-top: 10px; }
-.vermine-jet-form .apercu-main { color: #c25a34; font-size: 1.35em; }
-.vermine-jet-form .malus-blessure { color: #c25a34; text-align: center; }
+.vermine-jet-form .apercu-main { color: #cf8f6b; font-size: 1.35em; }
+.vermine-jet-form .malus-blessure { color: #cf8f6b; text-align: center; }
 .vermine-jet-form label.checkbox { display: inline-flex; align-items: center; gap: 5px; font-weight: 400; }
 
 /* ---- Fiche d'objet ---- */
-.vermine2047.sheet.item .item-entete { display: flex; gap: 10px; align-items: center; padding: 10px; background: var(--v-bg2); border-bottom: 2px solid var(--v-accent); }
+.vermine2047.sheet.item .item-entete { display: flex; flex: 0 0 auto; gap: 10px; align-items: center; padding: 10px; background: var(--v-bg2); border-bottom: 2px solid var(--v-accent); }
 .vermine2047.sheet.item .item-img { width: 48px; height: 48px; border-radius: 4px; }
-.vermine2047.sheet.item .item-nom { flex: 1; font-size: 1.3em; font-weight: 700; background: transparent; border: none; border-bottom: 1px solid var(--v-border); color: var(--v-text); }
-.vermine2047.sheet.item .item-body { padding: 10px; overflow-y: auto; }
+.vermine2047.sheet.item .item-nom { flex: 1 1 auto; min-width: 0; font-size: 1.3em; font-weight: 700; background: transparent; border: none; border-bottom: 1px solid var(--v-border); color: var(--v-text); }
+.vermine2047.sheet.item .item-body { flex: 1; min-height: 0; padding: 10px; overflow-y: auto; }
 .vermine2047 .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
 .vermine2047 .form-grid label { display: flex; flex-direction: column; gap: 3px; font-size: 0.78em; color: var(--v-muted); }
 .vermine2047 .form-grid label.checkbox { flex-direction: row; align-items: center; gap: 6px; }
 .vermine2047 .item-description { margin-top: 12px; }
 
 /* ---- Carte de chat ---- */
-.vermine-carte-jet { border: 1px solid #33322a; border-radius: 5px; padding: 8px; background: rgba(0,0,0,0.05); }
+.vermine-carte-jet { border: 1px solid #454841; border-radius: 5px; padding: 8px; background: rgba(0,0,0,0.05); }
 .vermine-carte-jet .carte-flavor { font-weight: 700; margin-bottom: 4px; }
 .vermine-carte-jet .carte-ligne-diff { display: flex; gap: 14px; font-size: 0.85em; color: #666; margin-bottom: 6px; }
 .vermine-des { list-style: none; display: flex; flex-wrap: wrap; gap: 5px; margin: 0 0 8px; padding: 0; }
-.vermine-des .de { width: 32px; height: 32px; line-height: 32px; text-align: center; border-radius: 5px; font-weight: 700; color: #fff; background: #a53a2c; border: 1px solid #7a291f; }
-.vermine-des .de.reussite { background: #9ab534; border-color: #6d8226; }
+.vermine-des .de { width: 32px; height: 32px; line-height: 32px; text-align: center; border-radius: 5px; font-weight: 700; color: #fff; background: #b2564a; border: 1px solid #7a3a32; }
+.vermine-des .de.reussite { background: #c0cab4; color: #232c1e; border-color: #8a9480; }
 .vermine-carte-jet .carte-resultat { display: flex; align-items: baseline; gap: 8px; padding: 6px; border-radius: 4px; }
-.vermine-carte-jet .carte-resultat.succes { background: rgba(154,181,52,0.25); }
-.vermine-carte-jet .carte-resultat.echec { background: rgba(165,58,44,0.25); }
+.vermine-carte-jet .carte-resultat.succes { background: rgba(192,202,180,0.25); }
+.vermine-carte-jet .carte-resultat.echec { background: rgba(178,86,74,0.25); }
 .vermine-carte-jet .nb-reussites { font-size: 1.7em; font-weight: 700; }
 .vermine-carte-jet .issue { font-weight: 700; text-transform: uppercase; margin-left: auto; }
 .vermine-carte-jet .surplus { color: #777; font-size: 0.85em; }
-.vermine-carte-jet .echec-auto { font-style: italic; color: #a53a2c; }
+.vermine-carte-jet .echec-auto { font-style: italic; color: #b2564a; }
 .vermine-carte-jet .carte-relances { display: flex; gap: 6px; margin-top: 8px; }
 .vermine-carte-jet .vermine-relance { flex: 1; font-size: 0.82em; }

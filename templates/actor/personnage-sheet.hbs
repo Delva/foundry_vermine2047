@@ -1,59 +1,56 @@
 <form class="vermine2047 sheet personnage layout-app" autocomplete="off">
 
-  {{!-- BARRE LATÉRALE : identité + navigation --}}
-  <aside class="v-sidebar">
-    <div class="side-ident">
-      <img class="side-portrait" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" />
-      <div class="side-nom">{{actor.name}}</div>
-      <div class="side-sub">{{modeLabel}}{{#if totemLabel}} · {{totemLabel}}{{/if}}</div>
+  {{!-- EN-TÊTE --}}
+  <header class="fiche-entete">
+    <div class="entete-haut">
+      <div class="entete-portrait-wrap">
+        <img class="portrait" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" />
+        <i class="fas fa-pen portrait-edit"></i>
+      </div>
+      <div class="entete-champs">
+        <input type="text" name="name" value="{{actor.name}}" class="nom-perso" placeholder="{{localize 'VERMINE.NomPersonnage'}}" />
+        <div class="entete-ligne">
+          <label>{{localize "VERMINE.Age.Label"}}
+            <select name="system.age">
+              {{#each VERMINE.ages as |a akey|}}
+              <option value="{{akey}}" {{#if (eq akey ../system.age)}}selected{{/if}}>{{localize a.label}}</option>
+              {{/each}}
+            </select>
+          </label>
+          <label class="xp">{{localize "VERMINE.XP"}}
+            <input type="number" name="system.xp" value="{{system.xp}}" min="0" />
+          </label>
+          <label>{{localize "VERMINE.Totem.Label"}}
+            <select name="system.totem">
+              <option value="">—</option>
+              {{#each VERMINE.totems as |t tkey|}}
+              <option value="{{tkey}}" {{#if (eq tkey ../system.totem)}}selected{{/if}}>{{localize t}}</option>
+              {{/each}}
+            </select>
+          </label>
+          <label class="rep">{{localize "VERMINE.Reputation"}}
+            <input type="number" name="system.reputation" value="{{system.reputation}}" min="0" />
+          </label>
+          <label class="chaman-check">{{localize "VERMINE.Chaman"}}
+            <input type="checkbox" name="system.chaman" {{checked system.chaman}} />
+          </label>
+        </div>
+      </div>
+      <div class="entete-actions">
+        <div class="comp-search-wrap header-search">
+          <i class="fas fa-magnifying-glass"></i>
+          <input type="text" class="comp-search" placeholder="{{localize 'VERMINE.Comp.Rechercher'}}" />
+        </div>
+        <button type="button" class="btn-lancer" data-roll-general title="{{localize 'VERMINE.Jet.Lancer'}}">
+          <i class="fas fa-dice-d10"></i> {{localize "VERMINE.Jet.Lancer"}}
+        </button>
+      </div>
     </div>
-    <nav class="sheet-tabs tabs">
+    <nav class="sheet-tabs tabs entete-tabs">
       <a class="item" data-tab="feuille"><i class="fas fa-address-card"></i> {{localize "VERMINE.Onglet.Feuille"}}</a>
       <a class="item" data-tab="objets"><i class="fas fa-box-open"></i> {{localize "VERMINE.Onglet.Objets"}}</a>
       <a class="item" data-tab="bio"><i class="fas fa-book"></i> {{localize "VERMINE.Onglet.Bio"}}</a>
     </nav>
-  </aside>
-
-  {{!-- EN-TÊTE --}}
-  <header class="fiche-entete">
-    <img class="portrait" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" />
-    <div class="entete-champs">
-      <input type="text" name="name" value="{{actor.name}}" class="nom-perso" placeholder="{{localize 'VERMINE.NomPersonnage'}}" />
-      <div class="entete-ligne">
-        <label>{{localize "VERMINE.Age.Label"}}
-          <select name="system.age">
-            {{#each VERMINE.ages as |a akey|}}
-            <option value="{{akey}}" {{#if (eq akey ../system.age)}}selected{{/if}}>{{localize a.label}}</option>
-            {{/each}}
-          </select>
-        </label>
-        <label>{{localize "VERMINE.Mode.Label"}}
-          <select name="system.mode">
-            {{#each VERMINE.modes as |m mkey|}}
-            <option value="{{mkey}}" {{#if (eq mkey ../system.mode)}}selected{{/if}}>{{localize m}}</option>
-            {{/each}}
-          </select>
-        </label>
-        <label>{{localize "VERMINE.Totem.Label"}}
-          <select name="system.totem">
-            <option value="">—</option>
-            {{#each VERMINE.totems as |t tkey|}}
-            <option value="{{tkey}}" {{#if (eq tkey ../system.totem)}}selected{{/if}}>{{localize t}}</option>
-            {{/each}}
-          </select>
-        </label>
-        <label class="rep">{{localize "VERMINE.Reputation"}}
-          <input type="number" name="system.reputation" value="{{system.reputation}}" min="0" />
-        </label>
-        <label class="chaman-check">{{localize "VERMINE.Chaman"}}
-          <input type="checkbox" name="system.chaman" {{checked system.chaman}} />
-        </label>
-      </div>
-    </div>
-    <div class="comp-search-wrap header-search">
-      <i class="fas fa-magnifying-glass"></i>
-      <input type="text" class="comp-search" placeholder="{{localize 'VERMINE.Comp.Rechercher'}}" />
-    </div>
   </header>
 
   {{!-- CORPS (onglets) --}}
@@ -85,23 +82,12 @@
         </div>
       </section>
 
-      <div class="comp-toolbar">
-        <div class="pip-legende">
-          {{#each pipLevels as |l|}}
-          <span class="legende-item">
-            <span class="pips">{{#each l.pipsDemo as |d|}}<span class="pip on {{d.kind}}">{{#if (eq d.kind "relance")}}✕{{/if}}</span>{{/each}}</span>
-            {{l.label}}
-          </span>
-          {{/each}}
-        </div>
-      </div>
-
       <section class="bloc bloc-competences">
         <h3>{{localize "VERMINE.Onglet.Competences"}}</h3>
         <div class="domaines-grid">
           {{#each domaines as |dom dkey|}}
-          <div class="domaine">
-            <h4>{{dom.label}}</h4>
+          <div class="domaine {{#if dom.predilection}}predilection{{/if}}">
+            <h4 class="domaine-titre" data-domaine-select="{{dkey}}" title="{{localize 'VERMINE.Domaine.Predilection'}}">{{dom.label}}</h4>
             {{#each dom.competences as |c|}}
             <div class="competence-ligne" data-comp-label="{{c.search}}">
               <a class="comp-nom" data-roll-competence="{{c.key}}" title="{{localize 'VERMINE.Jet.Lancer'}}">{{c.label}}</a>
@@ -117,6 +103,17 @@
           {{/each}}
         </div>
       </section>
+
+      <div class="comp-toolbar">
+        <div class="pip-legende">
+          {{#each pipLevels as |l|}}
+          <span class="legende-item">
+            <span class="pips">{{#each l.pipsDemo as |d|}}<span class="pip on {{d.kind}}">{{#if (eq d.kind "relance")}}✕{{/if}}</span>{{/each}}</span>
+            {{l.label}}
+          </span>
+          {{/each}}
+        </div>
+      </div>
     </div>
 
     {{!-- ONGLET OBJETS --}}
@@ -144,9 +141,9 @@
         </select>
       </label>
       <h4>{{localize "VERMINE.Onglet.Bio"}}</h4>
-      {{editor enrichedBio target="system.biographie" button=true editable=editable}}
+      <textarea name="system.biographie" rows="6">{{system.biographie}}</textarea>
       <h4>{{localize "VERMINE.Notes"}}</h4>
-      {{editor enrichedNotes target="system.notes" button=true editable=editable}}
+      <textarea name="system.notes" rows="6">{{system.notes}}</textarea>
     </div>
 
   </section>

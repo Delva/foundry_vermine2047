@@ -23,8 +23,8 @@ export class PersonnageSheet extends ActorSheet {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["vermine2047", "sheet", "actor", "personnage"],
       template: "systems/vermine2047/templates/actor/personnage-sheet.hbs",
-      width: 740,
-      height: 800,
+      width: 1000,
+      height: 650,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "feuille" }]
     });
   }
@@ -65,25 +65,26 @@ export class PersonnageSheet extends ActorSheet {
       };
     }
 
-    // Sous-titre latéral (mode · totem).
-    ctx.modeLabel = game.i18n.localize(VERMINE.modes[sys.mode] ?? "");
-    ctx.totemLabel = sys.totem ? game.i18n.localize(VERMINE.totems[sys.totem]) : "";
-
     // Niveaux affichés en pips (Débutant → Légende ; on exclut "Aucun").
-    // Un niveau qui octroie une Relance supplémentaire est marqué "relance" (croix ✕),
-    // sinon "bonus" (dé, cercle plein) — à la manière de la fiche officielle.
+    // Pip de compétence (ladder cliquable, une par niveau) : marqué "relance" (croix ✕)
+    // si ce niveau octroie une Relance supplémentaire, sinon "bonus" (cercle plein).
+    // Légende (pipsDemo) : tous les dés de Bonus du niveau, puis toutes ses Relances
+    // (valeurs cumulées), sans alterner — à la manière de la fiche officielle.
     const niveauxTri = Object.entries(VERMINE.niveauxCompetence)
       .filter(([, n]) => n.ordre >= 1)
       .sort((a, b) => a[1].ordre - b[1].ordre);
     let prevRelances = 0;
-    const kindsByOrdre = [];
     const pipLevels = niveauxTri.map(([key, n]) => {
       const kind = n.relances > prevRelances ? "relance" : "bonus";
       prevRelances = n.relances;
-      kindsByOrdre[n.ordre - 1] = kind;
-      return { key, ordre: n.ordre, label: game.i18n.localize(n.label), kind };
+      return {
+        key, ordre: n.ordre, label: game.i18n.localize(n.label), kind,
+        pipsDemo: [
+          ...Array.from({ length: n.bonus }, () => ({ kind: "bonus" })),
+          ...Array.from({ length: n.relances }, () => ({ kind: "relance" }))
+        ]
+      };
     });
-    for (const l of pipLevels) l.pipsDemo = kindsByOrdre.slice(0, l.ordre).map((k) => ({ kind: k }));
     ctx.pipLevels = pipLevels;
 
     const norm = (s) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
@@ -91,7 +92,7 @@ export class PersonnageSheet extends ActorSheet {
     // Compétences regroupées par domaine.
     ctx.domaines = {};
     for (const [dKey, dLabel] of Object.entries(VERMINE.domaines)) {
-      ctx.domaines[dKey] = { label: game.i18n.localize(dLabel), competences: [] };
+      ctx.domaines[dKey] = { label: game.i18n.localize(dLabel), predilection: dKey === sys.domainePredilection, competences: [] };
     }
     for (const [key, c] of Object.entries(VERMINE.competences)) {
       const comp = sys.competences[key];
@@ -106,9 +107,15 @@ export class PersonnageSheet extends ActorSheet {
         niveauLabel: game.i18n.localize(VERMINE.niveauxCompetence[comp.niveau].label),
         niveauOrdre,
         specialites: comp.specialites ?? [],
-        pips: pipLevels.map((l) => ({
-          compKey: key, niveauKey: l.key, ordre: l.ordre, label: l.label, kind: l.kind, on: l.ordre <= niveauOrdre
-        }))
+        // Pastilles acquises : reprend l'ordre groupé (Bonus puis Relances) du niveau
+        // atteint, identique à la légende. Pastilles à venir : rond neutre (une même
+        // position peut être Bonus à un niveau et Relance à un autre — pas d'indice
+        // de type tant qu'elle n'est pas acquise, pour éviter toute ambiguïté).
+        pips: pipLevels.map((l, idx) => {
+          const on = l.ordre <= niveauOrdre;
+          const kind = on ? pipLevels[niveauOrdre - 1].pipsDemo[idx].kind : "";
+          return { compKey: key, niveauKey: l.key, ordre: l.ordre, label: l.label, kind, on };
+        })
       });
     }
 
@@ -146,9 +153,6 @@ export class PersonnageSheet extends ActorSheet {
     ctx.rites = await vm("rite");
     ctx.profils = await vm("profil");
 
-    ctx.enrichedBio = await TextEditor.enrichHTML(sys.biographie ?? "", { async: true });
-    ctx.enrichedNotes = await TextEditor.enrichHTML(sys.notes ?? "", { async: true });
-
     return ctx;
   }
 
@@ -165,6 +169,7 @@ export class PersonnageSheet extends ActorSheet {
       const comp = ev.currentTarget.dataset.rollCompetence;
       this.actor.rollAction({ competence: comp });
     });
+    html.find("[data-roll-general]").on("click", () => this.actor.rollAction());
 
     // Recherche de compétences (filtre en temps réel, même en lecture seule).
     html.find(".comp-search").on("input", (ev) => this._onSearchCompetence(ev, html));
@@ -176,6 +181,9 @@ export class PersonnageSheet extends ActorSheet {
 
     // Niveau de compétence via pips cliquables.
     html.find(".comp-pip").on("click", (ev) => this._onTogglePip(ev));
+
+    // Domaine de prédilection : sélection unique par clic sur le titre (re-clic = désélection).
+    html.find("[data-domaine-select]").on("click", (ev) => this._onToggleDomainePredilection(ev));
 
     // Valeurs (Caractéristiques, Réserves) via pips cliquables.
     html.find(".value-pip").on("click", (ev) => this._onValuePip(ev));
@@ -208,6 +216,13 @@ export class PersonnageSheet extends ActorSheet {
     const ordreActuel = CONFIG.VERMINE.niveauxCompetence[niveauActuel]?.ordre ?? 0;
     const nouveau = (ordre === ordreActuel) ? "aucun" : el.dataset.niveau;
     this.actor.update({ [`system.competences.${comp}.niveau`]: nouveau });
+  }
+
+  /** Clic sur un titre de domaine : le fixe comme prédilection ; re-clic sur celui déjà sélectionné = désélection. */
+  _onToggleDomainePredilection(ev) {
+    const domaine = ev.currentTarget.dataset.domaineSelect;
+    const actuel = this.actor.system.domainePredilection;
+    this.actor.update({ "system.domainePredilection": (domaine === actuel) ? "" : domaine });
   }
 
   /** Clic sur un pip de valeur (Caractéristique / Réserve) : fixe la valeur ; re-clic = décrémente. */

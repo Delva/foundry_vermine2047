@@ -46,10 +46,10 @@ VERMINE.reserves = {
  */
 VERMINE.domaines = {
   homme:   "VERMINE.Domaine.homme",
+  machine: "VERMINE.Domaine.machine",
   arme:    "VERMINE.Domaine.arme",
   animal:  "VERMINE.Domaine.animal",
   survie:  "VERMINE.Domaine.survie",
-  machine: "VERMINE.Domaine.machine",
   terre:   "VERMINE.Domaine.terre"
 };
 
@@ -96,16 +96,16 @@ VERMINE.competences = {
  * Niveaux de maîtrise d'une compétence.
  * bonus   = dés ajoutés à la Main.
  * relances = relances offertes (à partir de Confirmé).
- * NOTE : les valeurs Maître/Légende ne sont pas explicites dans le guide en ligne
- * (tableau en image). Placeholders raisonnables — À CONFIRMER avec le PDF officiel.
+ * Bonus et Relances augmentent en alternance à chaque niveau (jamais les deux
+ * à la fois) — confirmé par la fiche officielle des Niveaux.
  */
 VERMINE.niveauxCompetence = {
   aucun:    { label: "VERMINE.Niveau.aucun",    bonus: 0, relances: 0, ordre: 0 },
   debutant: { label: "VERMINE.Niveau.debutant", bonus: 1, relances: 0, ordre: 1 },
   confirme: { label: "VERMINE.Niveau.confirme", bonus: 1, relances: 1, ordre: 2 },
-  expert:   { label: "VERMINE.Niveau.expert",   bonus: 2, relances: 2, ordre: 3 },
+  expert:   { label: "VERMINE.Niveau.expert",   bonus: 2, relances: 1, ordre: 3 },
   maitre:   { label: "VERMINE.Niveau.maitre",   bonus: 2, relances: 2, ordre: 4 },
-  legende:  { label: "VERMINE.Niveau.legende",  bonus: 2, relances: 3, ordre: 5 }
+  legende:  { label: "VERMINE.Niveau.legende",  bonus: 3, relances: 2, ordre: 5 }
 };
 
 /** Âges : impact sur les Réserves, compétences, particularités. */

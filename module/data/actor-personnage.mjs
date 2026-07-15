@@ -67,6 +67,7 @@ export class PersonnageData extends foundry.abstract.TypeDataModel {
         mortelle: blessureSchema(9, 1)
       }),
       reputation: new fields.NumberField({ required: true, integer: true, min: 0, initial: 10 }),
+      xp: new fields.NumberField({ required: true, integer: true, min: 0, initial: 0 }),
       age: new fields.StringField({ required: true, choices: niveauxAge, initial: "adulte" }),
       mode: new fields.StringField({ required: true, choices: modes, initial: "survie" }),
       totem: new fields.StringField({ required: false, blank: true, choices: totems, initial: "" }),

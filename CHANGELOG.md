@@ -1,5 +1,77 @@
 # Journal des modifications
 
+## [0.7.0] — Nouvelle identité visuelle et corrections de jets
+
+### Modifié
+- **Thème « Nature Reclaimed »** : nouvelle palette de couleurs (sauge pâle / terre
+  cuite sur fond dead-earth) appliquée à l'ensemble du système via les variables CSS
+  partagées.
+- **Bannières d'en-tête** sur les fiches Personnage, Groupe et Créature/PNJ : image de
+  fond, portrait agrandi sans bordure, nom en grand, champs lisibles sur la photo.
+  Personnage et Créature utilisent une illustration de forêt engloutie ; Groupe une
+  illustration de ruines urbaines bioluminescentes (assets locaux dans `styles/img/`,
+  plus de dépendance à une URL externe).
+- **Fiche Personnage** : barre latérale supprimée, les onglets (Feuille/Objets/
+  Biographie) sont désormais dans l'en-tête ; bouton **Lancer un dé** ajouté à côté de
+  la recherche de compétences ; légende des Niveaux déplacée en bas de l'onglet
+  Feuille ; format d'ouverture par défaut passé en paysage (1000×650).
+- **Domaine de prédilection** : sélection directe en cliquant sur le titre d'un
+  domaine de compétences (mise en évidence visuelle), en plus du menu déroulant de
+  l'onglet Biographie — les deux pilotent le même champ, sans impact sur le jeu.
+- **Ordre des groupes de compétences** harmonisé : Homme, Machine, Arme, Animal,
+  Survie, Terre (partout où les domaines sont listés).
+- **Champs Description / Biographie / Notes** : remplacement des éditeurs de texte
+  riche (TinyMCE, instables dans ce contexte) par de simples champs multilignes,
+  plus légers et fiables.
+
+### Corrigé
+- **Relance d'Effort** : usage unique par jet, avec choix du nombre de dés à relancer
+  (plafonné par la Réserve disponible, le nombre de dés ratés, et la valeur de la
+  Caractéristique utilisée — même règle que le Sang-Froid dépensé en amont dans la
+  Main).
+- **Sang-Froid à dépenser** (dialogue de Jet) : le plafond affiché tenait compte
+  uniquement de la Réserve, pas de la Caractéristique sélectionnée ; il se recalcule
+  maintenant dynamiquement à chaque changement du formulaire.
+- **Résolution de l'acteur lors d'une Relance** : passe désormais par le speaker du
+  message de chat plutôt que par l'acteur du monde, pour refléter correctement les
+  jetons aux données non liées.
+- Divers ajustements d'affichage : zone de contenu des fiches d'Objet qui laissait un
+  vide, unité « D » retirée des Caractéristiques de la fiche Créature.
+
+---
+
+## [0.6.4] — Champ XP
+
+### Ajouté
+- **Champ XP** (numérique) sur la fiche Personnage, dans l'en-tête, à la place du
+  Mode de jeu.
+
+### Retiré
+- **Mode de jeu** masqué de la fiche Personnage (peu utile en jeu). Le champ reste
+  dans le modèle de données (non affiché) pour ne pas perdre les valeurs déjà
+  enregistrées sur les personnages existants.
+
+---
+
+## [0.6.3] — Correctif des niveaux de compétence
+
+### Corrigé
+- **Table des niveaux de compétence** (`VERMINE.niveauxCompetence`) alignée sur la
+  fiche officielle des Niveaux : Bonus et Relances augmentent en alternance à chaque
+  niveau. Expert passe de 2 Relances à **1**, Légende passe de 2D/3 Relances à
+  **3D/2 Relances**. Corrige à la fois l'affichage des pastilles (type Bonus/Relance
+  par niveau) sur la fiche Personnage et le nombre réel de dés/relances accordés
+  lors d'un Jet Vermine pour ces niveaux.
+- **Légende des Niveaux** (bandeau en haut de l'onglet Compétences) et **pastilles
+  de chaque compétence** : les pastilles acquises affichent désormais tous les dés
+  de **Bonus** d'un niveau puis toutes ses **Relances** (valeurs cumulées), au lieu
+  d'alterner Bonus/Relance pastille par pastille — conforme à la fiche officielle.
+  Les pastilles non encore acquises sont désormais neutres (rond vide, sans indice
+  Bonus/Relance) — une même position pouvant être Bonus à un niveau et Relance à un
+  autre, un aperçu par position aurait été trompeur.
+
+---
+
 ## [0.6.2] — Détails d'objets dépliés par défaut
 
 ### Modifié

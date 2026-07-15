@@ -33,7 +33,6 @@ export class CreatureSheet extends ActorSheet {
     }
 
     ctx.capacites = this.actor.items.filter(i => i.type === "capacite");
-    ctx.enrichedNotes = await TextEditor.enrichHTML(sys.notes ?? "", { async: true });
     return ctx;
   }
 

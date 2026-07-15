@@ -2,7 +2,7 @@
   "id": "vermine2047",
   "title": "Vermine 2047",
   "description": "Système de jeu non officiel pour le JDR post-apocalyptique Vermine 2047 (© Studio Agate). Fiches, moteur de dés (Main de d10, Réussites), Réserves et Blessures.",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "compatibility": {
     "minimum": "12",
     "verified": "12",
@@ -100,7 +100,17 @@
     {
       "name": "Vermine 2047",
       "sorting": "m",
-      "packs": ["profils", "armes", "protections", "adaptations", "traumatismes", "historiques", "afflictions", "rites", "macros"]
+      "packs": [
+        "profils",
+        "armes",
+        "protections",
+        "adaptations",
+        "traumatismes",
+        "historiques",
+        "afflictions",
+        "rites",
+        "macros"
+      ]
     }
   ],
   "grid": {
@@ -111,5 +121,5 @@
   "secondaryTokenAttribute": "reserves.sangFroid",
   "url": "https://github.com/Delva/foundry_vermine2047",
   "manifest": "https://github.com/Delva/foundry_vermine2047/releases/latest/download/system.json",
-  "download": "https://github.com/Delva/foundry_vermine2047/releases/latest/download/system.zip"
+  "download": "https://github.com/Delva/foundry_vermine2047/releases/download/v0.7.0/system.zip"
 }

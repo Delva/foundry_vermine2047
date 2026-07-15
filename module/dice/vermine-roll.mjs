@@ -45,7 +45,7 @@ export async function rollVermine(opts) {
   };
 
   const flavor = construireFlavor(etat);
-  const html = await renderCarte(etat, flavor);
+  const html = await renderCarte(etat, flavor, actor);
 
   return ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
@@ -79,15 +79,24 @@ function evaluerEtat(etat) {
   };
 }
 
-/** Rend la carte de chat à partir de l'état. */
-async function renderCarte(etat, flavor) {
+/**
+ * Rend la carte de chat à partir de l'état.
+ * @param {object} etat
+ * @param {string} flavor
+ * @param {Actor} [acteur] - Acteur réel ayant fait le jet (résolu via le speaker du
+ *   message pour les relances, afin de gérer correctement les jetons non liés — un
+ *   simple game.actors.get(id) renvoie l'acteur du monde, pas les données du jeton).
+ */
+async function renderCarte(etat, flavor, acteur = null) {
   const { reussites, succes, surplus } = evaluerEtat(etat);
 
   const des = etat.resultats.map(r => ({ valeur: r, reussite: r >= etat.difficulte }));
 
   // Relances encore disponibles : compétence (offertes) + Effort (réserve de l'acteur) + Groupe (non géré au MVP).
-  const acteur = etat.actorId ? game.actors.get(etat.actorId) : null;
+  acteur ??= etat.actorId ? game.actors.get(etat.actorId) : null;
   const effortDispo = acteur?.system?.reserves?.effort?.value ?? 0;
+  // Plafond du nombre de dés relançables à l'Effort : la Caractéristique utilisée (même règle que le Sang-Froid).
+  const caracVal = acteur?.system?.caracteristiques?.[etat.caracKey]?.value ?? 0;
 
   const donnees = {
     etat,
@@ -99,7 +108,7 @@ async function renderCarte(etat, flavor) {
     surplus,
     mainVide: etat.mainSize === 0,
     peutRelancerCompetence: etat.relancesCompetence > 0 && des.some(d => !d.reussite),
-    peutRelancerEffort: effortDispo > 0 && des.some(d => !d.reussite),
+    peutRelancerEffort: !etat.effortRelanceUtilisee && effortDispo > 0 && caracVal > 0 && des.some(d => !d.reussite),
     relancesCompetence: etat.relancesCompetence,
     effortDispo
   };
@@ -107,9 +116,56 @@ async function renderCarte(etat, flavor) {
   return renderTemplate(CARTE_TEMPLATE, donnees);
 }
 
+/** Relance les `nb` dés ratés les plus faibles (mutate etat.resultats). */
+async function relancerDes(etat, nb) {
+  const cibles = etat.resultats
+    .map((v, i) => i)
+    .filter(i => etat.resultats[i] < etat.difficulte)
+    .sort((a, b) => etat.resultats[a] - etat.resultats[b])
+    .slice(0, nb);
+  for (const idx of cibles) {
+    const relance = new Roll("1d10");
+    await relance.evaluate();
+    etat.resultats[idx] = relance.dice[0].results[0].result;
+  }
+}
+
+/** Dialogue de choix du nombre de dés à relancer avec la Réserve d'Effort (1 à max). Renvoie 0 si annulé. */
+function demanderNombreDesEffort(max) {
+  return new Promise((resolve) => {
+    const content = `<div class="form-group"><label>${game.i18n.localize("VERMINE.Jet.NombreDes")}</label>
+      <input type="number" name="nb" value="1" min="1" max="${max}" autofocus /></div>`;
+    let resolved = false;
+    new Dialog({
+      title: game.i18n.localize("VERMINE.Jet.RelanceEffort"),
+      content,
+      buttons: {
+        ok: {
+          icon: '<i class="fas fa-redo"></i>',
+          label: game.i18n.localize("VERMINE.Jet.Lancer"),
+          callback: (html) => {
+            resolved = true;
+            const val = Math.clamp(Number((html[0] ?? html).querySelector('[name="nb"]').value) || 1, 1, max);
+            resolve(val);
+          }
+        },
+        annuler: {
+          icon: '<i class="fas fa-times"></i>',
+          label: game.i18n.localize("VERMINE.Annuler"),
+          callback: () => { resolved = true; resolve(0); }
+        }
+      },
+      default: "ok",
+      close: () => { if (!resolved) resolve(0); }
+    }, { classes: ["vermine2047", "dialog"] }).render(true);
+  });
+}
+
 /**
  * Gestionnaire de clic sur un bouton de Relance dans une carte de chat.
- * Relance le plus petit dé raté, consomme la ressource, puis met à jour le message.
+ * Compétence : relance 1 dé par clic, tant que des relances sont offertes.
+ * Effort : usage unique par jet — demande le nombre de dés à relancer (borné par la
+ * Réserve disponible et le nombre de dés ratés), les relance tous ensemble.
  */
 export async function onRelance(event) {
   event.preventDefault();
@@ -127,34 +183,38 @@ export async function onRelance(event) {
     return ui.notifications.warn(game.i18n.localize("VERMINE.Jet.RelanceInterdite"));
   }
 
-  // Trouver l'indice du plus petit dé raté.
-  let idxCible = -1;
-  let minVal = Infinity;
-  etat.resultats.forEach((v, i) => {
-    if (v < etat.difficulte && v < minVal) { minVal = v; idxCible = i; }
-  });
-  if (idxCible === -1) return; // rien à relancer
+  const nbRates = etat.resultats.filter(v => v < etat.difficulte).length;
+  if (nbRates === 0) return; // rien à relancer
 
-  const acteur = etat.actorId ? game.actors.get(etat.actorId) : null;
+  // Résolu via le speaker du message (gère les jetons non liés) plutôt que
+  // game.actors.get(etat.actorId), qui renverrait toujours l'acteur du monde.
+  const acteur = ChatMessage.getSpeakerActor(message.speaker) ?? (etat.actorId ? game.actors.get(etat.actorId) : null);
 
-  // Consommer la ressource.
   if (source === "competence") {
     if (etat.relancesCompetence <= 0) return;
     etat.relancesCompetence -= 1;
+    await relancerDes(etat, 1);
   } else if (source === "effort") {
+    if (etat.effortRelanceUtilisee) return; // usage unique par jet
     const dispo = acteur?.system?.reserves?.effort?.value ?? 0;
     if (dispo <= 0) return ui.notifications.warn(game.i18n.localize("VERMINE.Jet.EffortInsuffisant"));
-    if (acteur) await acteur.update({ "system.reserves.effort.value": dispo - 1 });
+
+    // Plafonné par la Réserve disponible, les dés ratés, et la Caractéristique utilisée
+    // (même règle que le Sang-Froid dépensé en amont dans la Main, cf. roll-dialog.mjs).
+    const caracVal = acteur?.system?.caracteristiques?.[etat.caracKey]?.value ?? 0;
+    const max = Math.min(dispo, nbRates, caracVal);
+    if (max <= 0) return ui.notifications.warn(game.i18n.localize("VERMINE.Jet.EffortInsuffisant"));
+    const nb = await demanderNombreDesEffort(max);
+    if (!nb) return; // annulé
+
+    if (acteur) await acteur.update({ "system.reserves.effort.value": dispo - nb });
+    etat.effortRelanceUtilisee = true;
+    await relancerDes(etat, nb);
   } else {
     return;
   }
 
-  // Relancer le dé.
-  const relance = new Roll("1d10");
-  await relance.evaluate();
-  etat.resultats[idxCible] = relance.dice[0].results[0].result;
-
   const flavor = construireFlavor(etat);
-  const html = await renderCarte(etat, flavor);
+  const html = await renderCarte(etat, flavor, acteur);
   await message.update({ content: html, flags: { vermine2047: etat } });
 }
