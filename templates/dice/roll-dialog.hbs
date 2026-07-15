@@ -38,7 +38,8 @@
     <div class="form-group split">
       <div>
         <label>{{localize "VERMINE.Jet.SangFroid"}} <span class="hint hint-sang-froid">(max {{sangFroidMax}})</span></label>
-        <input type="number" name="sangFroid" value="0" min="0" max="{{sangFroidMax}}" step="1" />
+        <input type="hidden" name="sangFroid" value="0" />
+        <div class="boutons-des sang-froid-boutons" data-max="{{sangFroidMax}}"></div>
       </div>
       <div>
         <label>{{localize "VERMINE.Jet.Entraide"}}</label>

@@ -148,23 +148,47 @@ function lireComposants(actor, html, groupe = null) {
 function activerApercu(html, actor, groupe = null) {
   const root = html[0] ?? html;
   const apercu = root.querySelector(".apercu-main");
-  const sfInput = root.querySelector('[name="sangFroid"]');
+  const sfHidden = root.querySelector('[name="sangFroid"]');
+  const sfBoutons = root.querySelector(".sang-froid-boutons");
   const sfHint = root.querySelector(".hint-sang-froid");
   const sangFroidDispo = actor.system.reserves?.sangFroid?.value ?? 0;
+  let sfMaxCourant = -1;
+
+  const majApercu = () => {
+    const { composants } = lireComposants(actor, html, groupe);
+    const total = Math.max(0, Object.values(composants).reduce((s, n) => s + n, 0));
+    if (apercu) apercu.textContent = String(total);
+  };
+
+  // (Re)génère les boutons de Sang-Froid (0 … sfMax) et conserve la sélection valide.
+  const rendreBoutonsSf = (sfMax) => {
+    if (!sfBoutons) return;
+    sfMaxCourant = sfMax;
+    const choisi = Math.min(Math.max(0, Number(sfHidden?.value) || 0), sfMax);
+    if (sfHidden) sfHidden.value = choisi;
+    sfBoutons.innerHTML = "";
+    for (let i = 0; i <= sfMax; i++) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "bouton-de" + (i === choisi ? " actif" : "");
+      b.dataset.val = String(i);
+      b.textContent = i === 0 ? "0" : `${i}D`;
+      b.addEventListener("click", () => {
+        if (sfHidden) sfHidden.value = String(i);
+        sfBoutons.querySelectorAll(".bouton-de").forEach((el) => el.classList.toggle("actif", el === b));
+        majApercu();
+      });
+      sfBoutons.appendChild(b);
+    }
+  };
 
   const maj = () => {
     const caracKey = root.querySelector('[name="caracteristique"]').value;
     const caracVal = actor.system.caracteristiques?.[caracKey]?.value ?? 0;
     const sfMax = Math.min(sangFroidDispo, caracVal);
-    if (sfInput) {
-      sfInput.max = sfMax;
-      if (Number(sfInput.value) > sfMax) sfInput.value = sfMax;
-    }
+    if (sfMax !== sfMaxCourant) rendreBoutonsSf(sfMax);
     if (sfHint) sfHint.textContent = `(max ${sfMax})`;
-
-    const { composants } = lireComposants(actor, html, groupe);
-    const total = Math.max(0, Object.values(composants).reduce((s, n) => s + n, 0));
-    if (apercu) apercu.textContent = String(total);
+    majApercu();
   };
   root.querySelectorAll("input, select").forEach((el) => {
     el.addEventListener("change", maj);

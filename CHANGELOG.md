@@ -1,5 +1,13 @@
 # Journal des modifications
 
+## [0.7.2] — Sang-Froid : sélection par boutons
+
+### Modifié
+- **Sang-Froid** (dialogue de Jet) : la dépense se choisit maintenant par des boutons
+  d'action (`0`, `1D`, `2D`, …) au lieu d'un champ numérique. Le maximum affiché est le
+  plus petit de la Réserve de Sang-Froid et de la Caractéristique sélectionnée, et les
+  boutons se recalculent dynamiquement quand la Caractéristique change.
+
 ## [0.7.1] — Relance d'Effort : sélection par boutons
 
 ### Modifié
