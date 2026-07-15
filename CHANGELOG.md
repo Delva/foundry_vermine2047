@@ -1,5 +1,13 @@
 # Journal des modifications
 
+## [0.7.1] — Relance d'Effort : sélection par boutons
+
+### Modifié
+- **Relance d'Effort** : le choix du nombre de dés à relancer se fait désormais par
+  des boutons d'action (`1D`, `2D`, …) plutôt qu'un champ numérique. Seules les
+  possibilités valides sont proposées, bornées par le plus petit de la Réserve
+  d'Effort, de la Caractéristique utilisée et du nombre de dés ratés.
+
 ## [0.7.0] — Nouvelle identité visuelle et corrections de jets
 
 ### Modifié

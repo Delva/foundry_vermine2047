@@ -133,29 +133,27 @@ async function relancerDes(etat, nb) {
 /** Dialogue de choix du nombre de dés à relancer avec la Réserve d'Effort (1 à max). Renvoie 0 si annulé. */
 function demanderNombreDesEffort(max) {
   return new Promise((resolve) => {
-    const content = `<div class="form-group"><label>${game.i18n.localize("VERMINE.Jet.NombreDes")}</label>
-      <input type="number" name="nb" value="1" min="1" max="${max}" autofocus /></div>`;
+    const content = `<p class="notes">${game.i18n.localize("VERMINE.Jet.NombreDes")}</p>`;
     let resolved = false;
+    // Un bouton d'action par possibilité valide (1D … maxD).
+    const buttons = {};
+    for (let i = 1; i <= max; i++) {
+      buttons[`d${i}`] = {
+        icon: '<i class="fas fa-dice"></i>',
+        label: `${i}D`,
+        callback: () => { resolved = true; resolve(i); }
+      };
+    }
+    buttons.annuler = {
+      icon: '<i class="fas fa-times"></i>',
+      label: game.i18n.localize("VERMINE.Annuler"),
+      callback: () => { resolved = true; resolve(0); }
+    };
     new Dialog({
       title: game.i18n.localize("VERMINE.Jet.RelanceEffort"),
       content,
-      buttons: {
-        ok: {
-          icon: '<i class="fas fa-redo"></i>',
-          label: game.i18n.localize("VERMINE.Jet.Lancer"),
-          callback: (html) => {
-            resolved = true;
-            const val = Math.clamp(Number((html[0] ?? html).querySelector('[name="nb"]').value) || 1, 1, max);
-            resolve(val);
-          }
-        },
-        annuler: {
-          icon: '<i class="fas fa-times"></i>',
-          label: game.i18n.localize("VERMINE.Annuler"),
-          callback: () => { resolved = true; resolve(0); }
-        }
-      },
-      default: "ok",
+      buttons,
+      default: `d${max}`,
       close: () => { if (!resolved) resolve(0); }
     }, { classes: ["vermine2047", "dialog"] }).render(true);
   });
