@@ -1,5 +1,5 @@
 # Playbook interne (méthodologie réutilisable) — local uniquement, hors commit et hors build
-/_playbook/
+#/_playbook/
 
 # OS / éditeurs
 .DS_Store
