@@ -1,21 +1,4 @@
-import { VERMINE } from "../config.mjs";
-
 const fields = foundry.data.fields;
-
-/**
- * Caractéristiques d'une créature/PNJ.
- * Contrairement aux personnages, elles peuvent dépasser 3D (ex. ours 5D)
- * ou tomber à 0D (ex. mouche : 0D en Vigueur).
- */
-function caracteristiquesSchema() {
-  const schema = {};
-  for (const key of Object.keys(VERMINE.caracteristiques)) {
-    schema[key] = new fields.SchemaField({
-      value: new fields.NumberField({ required: true, integer: true, min: 0, max: 12, initial: 1 })
-    });
-  }
-  return new fields.SchemaField(schema);
-}
 
 function blessureSchema(initSeuil, initCercles) {
   return new fields.SchemaField({
@@ -28,13 +11,18 @@ function blessureSchema(initSeuil, initCercles) {
 export class CreatureData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {
-      caracteristiques: caracteristiquesSchema(),
       gabarit: new fields.StringField({ required: false, blank: true, initial: "" }),
       taille: new fields.NumberField({ required: true, integer: true, min: 0, max: 3, initial: 1 }),
       // Certaines créatures utilisent des valeurs d'Action fixes (sans jet).
       valeursAction: new fields.StringField({ required: false, blank: true, initial: "" }),
+      reaction: new fields.StringField({ required: false, blank: true, initial: "" }),
+      attaque: new fields.StringField({ required: false, blank: true, initial: "" }),
       dommages: new fields.StringField({ required: false, blank: true, initial: "" }),
       protection: new fields.StringField({ required: false, blank: true, initial: "" }),
+      // Réserve libre (pas de mécanique associée, simple compteur numérique).
+      reserve: new fields.NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+      // Nombre de Relances offertes sur le Jet simplifié (même mécanique que les Relances de Compétence).
+      relances: new fields.NumberField({ required: true, integer: true, min: 0, initial: 0 }),
       blessures: new fields.SchemaField({
         legere: blessureSchema(2, 3),
         grave: blessureSchema(6, 1),
@@ -55,13 +43,5 @@ export class CreatureData extends foundry.abstract.TypeDataModel {
       type: new fields.StringField({ required: false, blank: true, initial: "" }),
       notes: new fields.HTMLField()
     };
-  }
-
-  getRollData() {
-    const data = {};
-    for (const [key, c] of Object.entries(this.caracteristiques)) {
-      data[key] = c.value;
-    }
-    return data;
   }
 }

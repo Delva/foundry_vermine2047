@@ -3,10 +3,12 @@
 Système de jeu pour **FoundryVTT v12** implémentant les règles de **Vermine 2047**
 (JDR post-apocalyptique © Studio Agate). Projet non officiel, à usage personnel.
 
-> État : **v0.7.0** — fiches Personnage, Créature/PNJ et Groupe, moteur de dés assisté
+> État : **v0.9.0** — fiches Personnage, Créature/PNJ et Groupe, moteur de dés assisté
 > (Main de d10, comptage des Réussites, Relances plafonnées par Caractéristique),
 > Réserves et Blessures, compendiums (Armes, Protections, Adaptations, Traumatismes,
-> Historiques, Afflictions, Rites, Profils), identité visuelle « Nature Reclaimed ».
+> Historiques, Afflictions, Rites, Profils, Capacités de Totems), onglet Profil dédié,
+> identité visuelle « Nature Reclaimed ». La fiche Créature/PNJ n'a pas de
+> Caractéristiques : valeurs d'Action fixes et Jet simplifié (dés contre Difficulté).
 
 ## Installation par manifest (recommandé)
 
@@ -16,7 +18,7 @@ Système de jeu pour **FoundryVTT v12** implémentant les règles de **Vermine 2
 Publier une version :
 
 ```bash
-git tag v0.7.0
+git tag v0.9.0
 git push --tags
 ```
 
@@ -59,9 +61,13 @@ Puis, dans Foundry v12 : **Game Systems → le système « Vermine 2047 » appar
    Choisir *Précision + Armes de tir*, Difficulté **7**, dépenser **1D** de Sang-Froid →
    la Main = Précision + 1 (compétence) + 1 (Sang-Froid). Lancer.
 4. La **carte de chat** montre les dés (verts = Réussite ≥ Difficulté), le total et
-   Succès/Échec. Bouton **Relance (Compétence)** : 1 dé par clic. Bouton
-   **Relance (Effort)** : usage unique, demande le nombre de dés à relancer.
-5. Créer une **Créature** : Caractéristiques libres (0D → échec auto ; >3D possible).
+   Succès/Échec. Bouton **Relance** : un seul clic relance d'un coup jusqu'à N dés
+   ratés (N = Relances offertes par la Compétence, ou champ Relances d'une Créature) —
+   usage unique par jet. Bouton **Relance (Effort)** : usage unique, demande le
+   nombre de dés à relancer.
+5. Créer une **Créature/PNJ** : pas de Caractéristiques — valeurs d'Action fixes
+   (Réaction, Attaque, Dommages, Protection en texte libre) et bouton **Lancer un dé**
+   (nombre de dés fixe contre une Difficulté, avec Relances si renseignées).
 
 ## Architecture
 
@@ -76,17 +82,22 @@ Puis, dans Foundry v12 : **Game Systems → le système « Vermine 2047 » appar
 
 ## Compendiums
 
-Les compendiums (Adaptations & Mutations, Traumatismes, Historique) sont générés à
-partir de données curées et paraphrasées (`tools/pack-data.mjs`) :
+Les compendiums (Adaptations & Mutations, Traumatismes, Historique, Afflictions, Rites,
+Profils, Armes, Protections, **Capacités de Totems**…) sont des données curées et
+reformulées à partir du guide officiel — jamais copiées mot pour mot (droits Studio
+Agate). Ils sont livrés compilés (LevelDB) dans `packs/<nom>` et versionnés tels quels.
+
+Seul le pack **Capacités de Totems** a sa source régénérable dans ce dépôt, via
+`tools/pack-data.mjs` :
 
 ```bash
 npm install
-npm run build:packs   # compile packs/<nom> (LevelDB) lisibles par Foundry v12
+npm run build:packs   # recompile les packs décrits dans tools/pack-data.mjs
 ```
 
-Les packs compilés ne sont pas versionnés ; ils sont reconstruits automatiquement lors
-de la release (workflow CI) et inclus dans le zip. En installation développeur (clone),
-lancez `npm run build:packs` pour les voir apparaître.
+Les autres packs n'ont pas (encore) leurs données sources dans ce dépôt ; ne pas
+relancer `build:packs` sans avoir d'abord complété `pack-data.mjs`, sous peine de ne
+reconstruire que les packs qui y sont décrits.
 
 ## Le moteur de dés
 
@@ -96,7 +107,8 @@ Main (d10) = Caractéristique + Bonus Compétence (+1/+1/+2…) + Spécialité (
            (Sang-Froid et Réserve de Groupe plafonnés par la Caractéristique utilisée)
 Réussite   = dé ≥ Difficulté (3–10)
 Succès     = Réussites ≥ (1 + Handicap)
-Relances   = Compétence (1 dé par clic, tant que le niveau en offre)
+Relances   = Compétence (usage unique par jet ; relance d'un coup jusqu'à N dés
+             ratés, N étant le nombre de Relances offertes par le niveau)
            + Effort (usage unique par jet ; choix du nombre de dés à relancer,
              plafonné par la Réserve, les dés ratés et la Caractéristique utilisée)
 ```
@@ -123,8 +135,10 @@ Certains tableaux du guide en ligne sont des images non exploitables. Valeurs
   de compendium au clic sur « + ».
 - **Phase 6** — Interface ✅ : identité visuelle « Nature Reclaimed » (palette,
   bannières illustrées), fiche Personnage réorganisée (onglets en en-tête, Domaine de
-  prédilection cliquable), Relances plafonnées par Caractéristique, champs de texte
-  simplifiés.
+  prédilection cliquable), onglet **Profil** dédié, onglet Objets aligné sur l'onglet
+  Feuille (blocs dépliables), Instincts/Interdits de Totem à l'en-tête, Relances
+  plafonnées par Caractéristique, champs de texte simplifiés, fiche Créature/PNJ sans
+  Caractéristiques (valeurs fixes + Jet simplifié).
 
 ---
 

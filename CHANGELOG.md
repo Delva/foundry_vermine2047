@@ -1,5 +1,58 @@
 # Journal des modifications
 
+## [0.9.0] — Onglet Profil, Totems à l'en-tête & Créature simplifiée
+
+### Ajouté
+- **Instincts / Interdits de Totem** affichés dans l'en-tête de la fiche Personnage,
+  dans un bloc flottant dédié à côté du bouton Lancer un dé ; se met à jour
+  automatiquement au changement de Totem.
+- **Nouvel onglet « Profil »** (entre Objets et Biographie) regroupant Capacités,
+  Adaptations, Traumatismes, Historiques, Afflictions, Rites chamaniques et Profils.
+- **Type d'objet Spécialité** : texte libre lié à une Compétence, avec description
+  auto-générée (« Bonus de 1D aux lancers impliquant *Compétence* »).
+- **Champ Fiabilité** (0–10) sur les Équipements.
+- **Onglet Biographie** : blocs **Objectifs majeurs / mineurs** et **Instincts /
+  Interdits personnels**, placés en tête d'onglet ; sélecteur de Domaine de
+  prédilection retiré (redondant avec le clic sur le titre de domaine dans l'onglet
+  Feuille).
+- **Onglet Objets** : mise en forme alignée sur l'onglet Feuille (blocs et titres
+  dépliables/repliables au clic) ; l'ajout d'un objet ouvre désormais sa fiche
+  automatiquement au lieu de le créer silencieusement.
+- **Fiche Créature/PNJ** :
+  - Champs **Réaction** et **Attaque** (texte libre, comme les valeurs d'Action fixes).
+  - Champ numérique **Réserve** (libre, sans mécanique associée).
+  - Champ **Relances** : nombre de dés relançables d'un coup depuis la carte de chat
+    (usage unique par jet), même mécanique que les Relances de niveau de Compétence.
+  - **Bouton Lancer un dé** avec dialogue simplifié (nombre de dés fixe contre une
+    Difficulté), sans Caractéristique ni Réserves de jeu.
+
+### Retiré
+- **Caractéristiques** retirées de la fiche Créature/PNJ (modèle de données, fiche,
+  jets) : les Créatures/PNJ n'en utilisent pas, elles reposent sur les valeurs
+  d'Action fixes et le nouveau Jet simplifié.
+
+### Modifié
+- **Relance (Compétence)** de la carte de chat : corrigée pour relancer d'un coup
+  jusqu'à N dés ratés (N = valeur de Relances offerte), au lieu d'autoriser N clics
+  relançant chacun 1 seul dé — usage unique par jet, comme la Relance d'Effort.
+  Bouton renommé **« Relance »** (au lieu de « Relance (Compétence) »), la mécanique
+  étant désormais partagée avec le champ Relances des Créatures.
+
+---
+
+## [0.8.0] — Compendium des Capacités de Totems
+
+### Ajouté
+- **Compendium « Capacités de Totems »** (80 entrées, 10 par Totem) : Capacités
+  individuelles de Prédateur, Charognard, Symbiote, Parasite, Bâtisseur, Horde, Ruche
+  et Solitaire, sous forme d'objets de type Capacité (`type: totem`), curées et
+  reformulées à partir du guide officiel (jamais copiées mot pour mot).
+- **Outillage de build des compendiums** (`tools/pack-data.mjs`, `tools/build-packs.mjs`,
+  `package.json`) recréé — absent du dépôt jusqu'ici bien que documenté dans le README.
+  Compile les packs LevelDB décrits dans `pack-data.mjs` via `npm run build:packs`.
+
+---
+
 ## [0.7.5] — Correctif : plafond des Réserves qui se mélangeait avec la valeur
 
 ### Corrigé
@@ -351,6 +404,7 @@ La **phase 5 (Confort)** est ainsi complète.
 
 ---
 
+[0.9.0]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.9.0
 [0.6.2]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.6.2
 [0.6.1]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.6.1
 [0.6.0]: https://github.com/Delva/foundry_vermine2047/releases/tag/v0.6.0

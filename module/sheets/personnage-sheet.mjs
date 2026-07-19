@@ -36,6 +36,9 @@ export class PersonnageSheet extends ActorSheet {
     ctx.system = sys;
     ctx.VERMINE = VERMINE;
 
+    // Instincts / Interdits du Totem choisi, affichés dans l'en-tête.
+    ctx.totemInstincts = sys.totem ? VERMINE.totemsInstincts[sys.totem] ?? null : null;
+
     // Caractéristiques regroupées par type.
     ctx.groupes = {};
     for (const gKey of Object.keys(VERMINE.groupesCarac)) {
@@ -139,6 +142,9 @@ export class PersonnageSheet extends ActorSheet {
       return Promise.all(list.map(async (i) => ({
         id: i.id, name: i.name, img: i.img, type: i.type, system: i.system,
         isArme: i.type === "arme", isProtection: i.type === "protection",
+        competenceLabel: i.type === "specialite"
+          ? game.i18n.localize(VERMINE.competences[i.system.competence]?.label ?? "")
+          : null,
         enrichedDesc: await TextEditor.enrichHTML(i.system.description ?? "", { async: true })
       })));
     };
@@ -152,6 +158,7 @@ export class PersonnageSheet extends ActorSheet {
     ctx.afflictions = await vm("affliction");
     ctx.rites = await vm("rite");
     ctx.profils = await vm("profil");
+    ctx.specialites = await vm("specialite");
 
     return ctx;
   }
@@ -173,6 +180,10 @@ export class PersonnageSheet extends ActorSheet {
 
     // Recherche de compétences (filtre en temps réel, même en lecture seule).
     html.find(".comp-search").on("input", (ev) => this._onSearchCompetence(ev, html));
+
+    // Instincts/Interdits du Totem : rafraîchis immédiatement au changement, sans
+    // attendre l'enregistrement complet de la fiche.
+    html.find('select[name="system.totem"]').on("change", (ev) => this._onChangeTotem(ev, html));
 
     if (!this.isEditable) return;
 
@@ -197,6 +208,11 @@ export class PersonnageSheet extends ActorSheet {
     html.find("[data-item-toggle]").on("click", (ev) => {
       const details = ev.currentTarget.closest(".objet").querySelector(".objet-details");
       if (details) details.hidden = !details.hidden;
+    });
+
+    // Déplier/replier un groupe d'objets entier (clic sur son titre).
+    html.find("[data-collapse-toggle]").on("click", (ev) => {
+      ev.currentTarget.closest(".liste-objets")?.classList.toggle("collapsed");
     });
 
     // Armes : attaque et dégâts.
@@ -248,6 +264,18 @@ export class PersonnageSheet extends ActorSheet {
       const visible = [...dom.querySelectorAll(".competence-ligne")].some((r) => r.style.display !== "none");
       dom.style.display = visible ? "" : "none";
     });
+  }
+
+  /** Rafraîchit l'affichage des Instincts/Interdits dans l'en-tête au changement de Totem. */
+  _onChangeTotem(ev, html) {
+    const root = html[0] ?? html;
+    const bloc = root.querySelector(".totem-instincts");
+    if (!bloc) return;
+    const info = VERMINE.totemsInstincts[ev.currentTarget.value];
+    bloc.hidden = !info;
+    const [colInstincts, colInterdits] = bloc.querySelectorAll("ul");
+    colInstincts.innerHTML = (info?.instincts ?? []).map((i) => `<li>${i}</li>`).join("");
+    colInterdits.innerHTML = (info?.interdits ?? []).map((i) => `<li>${i}</li>`).join("");
   }
 
   _onToggleBlessure(ev) {

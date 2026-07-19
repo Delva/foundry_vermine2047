@@ -83,7 +83,8 @@ export class EquipementData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {
       ...communs(),
-      poids: new fields.NumberField({ required: false, min: 0, initial: 0 })
+      poids: new fields.NumberField({ required: false, min: 0, initial: 0 }),
+      fiabilite: new fields.NumberField({ required: false, integer: true, min: 0, max: 10, initial: 10 })
     };
   }
 }
@@ -162,6 +163,17 @@ export class ProfilData extends foundry.abstract.TypeDataModel {
       boost: new fields.StringField({ required: false, blank: true, initial: "" }),
       capaciteUnique: new fields.StringField({ required: false, blank: true, initial: "" }),
       competences: new fields.StringField({ required: false, blank: true, initial: "" })
+    };
+  }
+}
+
+/** Spécialité : approfondissement d'une Compétence (+1D aux lancers qui l'impliquent). */
+export class SpecialiteData extends foundry.abstract.TypeDataModel {
+  static defineSchema() {
+    const competences = Object.keys(VERMINE.competences);
+    return {
+      description: new fields.HTMLField(),
+      competence: new fields.StringField({ required: true, choices: competences, initial: competences[0] })
     };
   }
 }

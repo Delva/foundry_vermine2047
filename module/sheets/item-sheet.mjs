@@ -25,6 +25,7 @@ export class VermineItemSheet extends ItemSheet {
     ctx.isAffliction = this.item.type === "affliction";
     ctx.isRite = this.item.type === "rite";
     ctx.isProfil = this.item.type === "profil";
+    ctx.isSpecialite = this.item.type === "specialite";
     ctx.archetypesOptions = Object.entries(VERMINE.archetypes)
       .map(([key, l]) => ({ key, label: game.i18n.localize(l) }));
 
@@ -53,6 +54,27 @@ export class VermineItemSheet extends ItemSheet {
       .map(([key, l]) => ({ key, label: game.i18n.localize(l) }));
 
     return ctx;
+  }
+
+  /** @override */
+  activateListeners(html) {
+    super.activateListeners(html);
+
+    // Spécialité : la Description propose « Bonus de 1D aux lancers impliquant
+    // <Compétence> » d'après la Compétence choisie. Pré-remplie si vide au premier
+    // affichage ; toujours réécrite si l'utilisateur change de Compétence (le texte
+    // libre déjà personnalisé n'est donc écrasé qu'en cas de changement délibéré).
+    if (this.item.type === "specialite") {
+      const root = html[0] ?? html;
+      const select = root.querySelector('[name="system.competence"]');
+      const texte = root.querySelector('[name="system.description"]');
+      const description = () => {
+        const competence = select?.options[select.selectedIndex]?.text ?? "";
+        return game.i18n.format("VERMINE.Specialite.Description", { competence });
+      };
+      if (texte && !texte.value.trim()) texte.value = description();
+      select?.addEventListener("change", () => { if (texte) texte.value = description(); });
+    }
   }
 
   /** @override — assemble l'objet `system.traits` à partir des champs trait.<clé>.*. */

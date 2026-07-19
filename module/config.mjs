@@ -134,6 +134,46 @@ VERMINE.totems = {
   solitaire:  "VERMINE.Totem.solitaire"
 };
 
+/**
+ * Instincts et Interdits de chaque Totem (personnage), curés et reformulés depuis le
+ * guide officiel (Le Groupe, p. 12-13) — jamais copiés mot pour mot. Texte en français
+ * uniquement (comme le reste du contenu de règles du système).
+ */
+VERMINE.totemsInstincts = {
+  predateur: {
+    instincts: ["Triompher", "Relever un défi", "Prendre l'initiative", "Atteindre un objectif"],
+    interdits: ["Fuir", "Abandonner", "Renoncer", "Faire preuve de lâcheté"]
+  },
+  symbiote: {
+    instincts: ["Partager", "Transmettre", "Équilibrer", "Trouver un compromis"],
+    interdits: ["Exploiter", "Abuser", "Profiter de la faiblesse d'autrui", "Mettre en danger"]
+  },
+  charognard: {
+    instincts: ["Achever", "Saboter", "Affaiblir", "S'en prendre au plus faible"],
+    interdits: ["Affronter de face", "S'exposer", "Agir de façon compulsive", "S'apitoyer"]
+  },
+  parasite: {
+    instincts: ["Profiter", "Manipuler", "Voler", "Exploiter"],
+    interdits: ["Partager", "Contribuer", "Tenir une promesse", "Prendre par la force"]
+  },
+  batisseur: {
+    instincts: ["Fonder", "Créer", "S'installer durablement", "Nouer des liens"],
+    interdits: ["Détruire", "Saboter", "Quitter une communauté", "Provoquer le chaos"]
+  },
+  horde: {
+    instincts: ["Piller", "Détruire", "Prendre par la force", "Miser sur le nombre"],
+    interdits: ["Négocier", "Épargner", "Faire des réserves", "Planifier à long terme"]
+  },
+  ruche: {
+    instincts: ["Organiser", "Œuvrer pour la communauté", "Respecter la hiérarchie", "Privilégier l'intérêt collectif"],
+    interdits: ["Trahir", "Désobéir", "Mettre sa communauté en danger", "Faire preuve d'individualisme"]
+  },
+  solitaire: {
+    instincts: ["Survivre", "Anticiper", "S'adapter", "Faire passer sa vie avant tout"],
+    interdits: ["Se sacrifier", "Risquer sa vie", "Dépendre de quelqu'un", "Se résigner"]
+  }
+};
+
 /** Niveaux de Blessure. valeurMalus = Malus en D quand ce niveau est le plus grave. */
 VERMINE.niveauxBlessure = {
   legere:   { label: "VERMINE.Blessure.legere",   malus: 1, perteReserve: 1 },

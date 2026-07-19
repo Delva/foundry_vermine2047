@@ -51,6 +51,7 @@
       <label>{{localize "VERMINE.Equipement.Quantite"}}<input type="number" name="system.quantite" value="{{system.quantite}}" min="0" /></label>
       <label>{{localize "VERMINE.Equipement.Poids"}}<input type="number" name="system.poids" value="{{system.poids}}" min="0" step="0.1" /></label>
       <label>{{localize "VERMINE.Rarete"}}<input type="number" name="system.rarete" value="{{system.rarete}}" min="0" /></label>
+      <label>{{localize "VERMINE.Arme.Fiabilite"}}<input type="number" name="system.fiabilite" value="{{system.fiabilite}}" min="0" max="10" /></label>
     </div>
     {{/if}}
 
@@ -141,6 +142,18 @@
         </select>
       </label>
       <label>{{localize "VERMINE.Capacite.Niveau"}}<input type="number" name="system.niveau" value="{{system.niveau}}" min="1" max="3" /></label>
+    </div>
+    {{/if}}
+
+    {{#if isSpecialite}}
+    <div class="form-grid">
+      <label>{{localize "VERMINE.Specialite.Competence"}}
+        <select name="system.competence">
+          {{#each competencesOptions as |c|}}
+          <option value="{{c.key}}" {{#if (eq c.key ../system.competence)}}selected{{/if}}>{{c.label}}</option>
+          {{/each}}
+        </select>
+      </label>
     </div>
     {{/if}}
 

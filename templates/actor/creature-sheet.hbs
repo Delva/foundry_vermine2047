@@ -13,25 +13,22 @@
         <label>{{localize "VERMINE.Creature.Niveau"}}<input type="number" name="system.niveau" value="{{system.niveau}}" min="1" max="3" /></label>
       </div>
     </div>
+    <div class="entete-actions">
+      <label class="entete-relances">{{localize "VERMINE.Creature.Relances"}}<input type="number" name="system.relances" value="{{system.relances}}" min="0" /></label>
+      <button type="button" class="btn-lancer" data-roll-simple title="{{localize 'VERMINE.Jet.Lancer'}}">
+        <i class="fas fa-dice-d10"></i> {{localize "VERMINE.Jet.Lancer"}}
+      </button>
+    </div>
   </header>
 
   <section class="sheet-body creature-body">
-    <div class="bloc-caracs">
-      <h3>{{localize "VERMINE.Carac.Titre"}}</h3>
-      <div class="caracs-inline">
-        {{#each caracs as |c|}}
-        <div class="carac-ligne">
-          <a class="carac-nom" data-roll-carac="{{c.key}}" title="{{localize 'VERMINE.Jet.Lancer'}}">{{c.label}}</a>
-          <input type="number" name="system.caracteristiques.{{c.key}}.value" value="{{c.value}}" min="0" max="12" />
-        </div>
-        {{/each}}
-      </div>
-    </div>
-
     <div class="bloc-combat">
       <label>{{localize "VERMINE.Creature.ValeursAction"}}<input type="text" name="system.valeursAction" value="{{system.valeursAction}}" placeholder="Pister 4D, Attaquer 3D…" /></label>
+      <label>{{localize "VERMINE.Creature.Reaction"}}<input type="text" name="system.reaction" value="{{system.reaction}}" /></label>
+      <label>{{localize "VERMINE.Creature.Attaque"}}<input type="text" name="system.attaque" value="{{system.attaque}}" /></label>
       <label>{{localize "VERMINE.Creature.Dommages"}}<input type="text" name="system.dommages" value="{{system.dommages}}" placeholder="3 (L)" /></label>
       <label>{{localize "VERMINE.Creature.Protection"}}<input type="text" name="system.protection" value="{{system.protection}}" /></label>
+      <label>{{localize "VERMINE.Creature.Reserve"}}<input type="number" name="system.reserve" value="{{system.reserve}}" min="0" /></label>
     </div>
 
     <div class="bloc-blessures">

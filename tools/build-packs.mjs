@@ -1,64 +1,65 @@
 /**
- * Compile les données curées (tools/pack-data.mjs) en packs LevelDB lisibles par
- * FoundryVTT v12, dans packs/<name>/.
+ * Compile les packs (compendiums) LevelDB à partir de tools/pack-data.mjs.
+ * Usage : npm run build:packs
  *
- * Usage : node tools/build-packs.mjs   (ou npm run build:packs)
+ * Ne reconstruit que les packs pour lesquels un export existe dans pack-data.mjs.
+ * Un pack déjà compilé et non présent dans pack-data.mjs (ex. adaptations,
+ * profils…) n'est pas touché.
  */
 import { ClassicLevel } from "classic-level";
-import crypto from "node:crypto";
-import fs from "node:fs";
+import { randomBytes } from "node:crypto";
+import { rm, mkdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { PACKS } from "./pack-data.mjs";
+import * as packData from "./pack-data.mjs";
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const PACKS_DIR = path.join(ROOT, "packs");
+const ROOT = path.dirname(fileURLToPath(import.meta.url));
+const PACKS_DIR = path.join(ROOT, "..", "packs");
 
-/** Identifiant déterministe de 16 caractères alphanumériques (stable entre builds). */
-function makeId(seed) {
-  const h = crypto.createHash("md5").update(seed).digest("base64").replace(/[^a-zA-Z0-9]/g, "");
-  return (h + "0000000000000000").slice(0, 16);
+/** Génère un identifiant Foundry (16 caractères alphanumériques). */
+function randomID(length = 16) {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const bytes = randomBytes(length);
+  let out = "";
+  for (let i = 0; i < length; i++) out += chars[bytes[i] % chars.length];
+  return out;
 }
 
-/** Construit un document minimal (Item ou Macro) attendu dans un pack v12. */
-function buildDoc(doc, pack) {
-  const collection = pack.type === "Macro" ? "macros" : "items";
-  const _id = makeId(`${pack.name}:${doc.name}`);
-  const base = {
-    _id,
-    _key: `!${collection}!${_id}`,
-    name: doc.name,
-    img: doc.img ?? (pack.type === "Macro" ? "icons/svg/d20.svg" : "icons/svg/item-bag.svg"),
+/** Complète une entrée source avec les champs de document Foundry standards. */
+function toDocument(entry, sort) {
+  const id = randomID();
+  return {
+    _id: id,
+    name: entry.name,
+    img: entry.img ?? "icons/svg/item-bag.svg",
+    type: entry.type,
+    system: entry.system,
+    effects: [],
     folder: null,
-    sort: 0,
+    sort,
+    ownership: { default: 0 },
     flags: {},
     _stats: { systemId: "vermine2047", coreVersion: "12" }
   };
-  if (pack.type === "Macro") {
-    return { ...base, type: "script", scope: "global", command: doc.command ?? "", author: null };
-  }
-  return { ...base, type: doc.type, system: doc.system ?? {}, effects: [] };
 }
 
-async function buildPack(pack) {
-  const dest = path.join(PACKS_DIR, pack.name);
-  fs.rmSync(dest, { recursive: true, force: true });
-  fs.mkdirSync(dest, { recursive: true });
+async function buildPack(name, entries) {
+  const dir = path.join(PACKS_DIR, name);
+  await rm(dir, { recursive: true, force: true });
+  await mkdir(dir, { recursive: true });
 
-  const db = new ClassicLevel(dest, { keyEncoding: "utf8", valueEncoding: "json" });
-  const batch = db.batch();
-  for (const raw of pack.docs) {
-    const doc = buildDoc(raw, pack);
-    batch.put(doc._key, doc);
+  const db = new ClassicLevel(dir, { valueEncoding: "json" });
+  await db.open();
+  let sort = 0;
+  for (const entry of entries) {
+    const doc = toDocument(entry, (sort += 100000));
+    await db.put(`!items!${doc._id}`, doc);
   }
-  await batch.write();
   await db.close();
-  console.log(`  ✓ ${pack.name} : ${pack.docs.length} documents → packs/${pack.name}`);
+  console.log(`✓ packs/${name} (${entries.length} entrées)`);
 }
 
-console.log("Vermine 2047 | Compilation des compendiums…");
-fs.mkdirSync(PACKS_DIR, { recursive: true });
-for (const pack of PACKS) {
-  await buildPack(pack);
+for (const [name, entries] of Object.entries(packData)) {
+  if (!Array.isArray(entries)) continue;
+  await buildPack(name, entries);
 }
-console.log("Terminé.");

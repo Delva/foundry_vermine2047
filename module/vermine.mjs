@@ -2,7 +2,7 @@ import { VERMINE } from "./config.mjs";
 import { PersonnageData } from "./data/actor-personnage.mjs";
 import { CreatureData } from "./data/actor-creature.mjs";
 import { GroupeData } from "./data/actor-groupe.mjs";
-import { ArmeData, ProtectionData, EquipementData, CapaciteData, AdaptationData, TraumatismeData, HistoriqueData, AfflictionData, RiteData, ProfilData } from "./data/item-data.mjs";
+import { ArmeData, ProtectionData, EquipementData, CapaciteData, AdaptationData, TraumatismeData, HistoriqueData, AfflictionData, RiteData, ProfilData, SpecialiteData } from "./data/item-data.mjs";
 import { ouvrirDialogueJet } from "./dice/roll-dialog.mjs";
 import { VermineActor } from "./documents/actor.mjs";
 import { PersonnageSheet } from "./sheets/personnage-sheet.mjs";
@@ -37,6 +37,7 @@ Hooks.once("init", function () {
   CONFIG.Item.dataModels.affliction = AfflictionData;
   CONFIG.Item.dataModels.rite = RiteData;
   CONFIG.Item.dataModels.profil = ProfilData;
+  CONFIG.Item.dataModels.specialite = SpecialiteData;
 
   // Fiches.
   Actors.unregisterSheet("core", ActorSheet);

@@ -80,6 +80,10 @@ export class PersonnageData extends foundry.abstract.TypeDataModel {
       domainePredilection: new fields.StringField({ required: false, blank: true, choices: domaines, initial: "" }),
       chaman: new fields.BooleanField({ initial: false }),
       biographie: new fields.HTMLField(),
+      objectifsMajeurs: new fields.HTMLField(),
+      objectifsMineurs: new fields.HTMLField(),
+      instinctsPersonnels: new fields.HTMLField(),
+      interditsPersonnels: new fields.HTMLField(),
       notes: new fields.HTMLField()
     };
   }

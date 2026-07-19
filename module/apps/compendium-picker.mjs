@@ -34,9 +34,15 @@ async function collecterEntrees(type) {
  */
 export async function ajouterObjet(actor, type) {
   const typeLabel = game.i18n.localize(`TYPES.Item.${type}`);
-  const creerVide = () => actor.createEmbeddedDocuments("Item", [{
+  // Ouvre systématiquement la fiche du nouvel objet, pour saisie immédiate.
+  const creer = async (data) => {
+    const [item] = await actor.createEmbeddedDocuments("Item", [data]);
+    item?.sheet.render(true);
+    return item;
+  };
+  const creerVide = () => creer({
     name: game.i18n.format("VERMINE.Item.Nouveau", { type: typeLabel }), type
-  }]);
+  });
 
   const entrees = await collecterEntrees(type);
   if (!entrees.length) return creerVide();
@@ -81,7 +87,7 @@ export async function ajouterObjet(actor, type) {
         root.querySelectorAll(".picker-item").forEach((li) => {
           li.addEventListener("click", async () => {
             const doc = await fromUuid(li.dataset.uuid);
-            if (doc) await actor.createEmbeddedDocuments("Item", [doc.toObject()]);
+            if (doc) await creer(doc.toObject());
             dlg.close();
             resolve(true);
           });

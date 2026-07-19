@@ -1,6 +1,6 @@
-<div class="liste-objets" data-item-type="{{type}}">
+<section class="bloc liste-objets" data-item-type="{{type}}">
   <div class="liste-entete">
-    <h4>{{titre}}</h4>
+    <h3 class="liste-titre" data-collapse-toggle><i class="fas fa-chevron-down collapse-icone"></i> {{titre}}</h3>
     <a class="ajout-objet" data-item-create="{{type}}" title="{{localize 'VERMINE.Item.Ajouter'}}"><i class="fas fa-plus"></i></a>
   </div>
   <ol class="objets">
@@ -11,6 +11,7 @@
         <a class="objet-nom" data-item-toggle title="{{localize 'VERMINE.Item.Details'}}">{{item.name}}</a>
         {{#if item.isArme}}<span class="objet-info">{{item.system.labelDommages}}{{#if item.system.labelTraits}} · {{item.system.labelTraits}}{{/if}}</span>{{/if}}
         {{#if item.isProtection}}<span class="objet-info">{{item.system.labelIndice}}</span>{{/if}}
+        {{#if item.competenceLabel}}<span class="objet-info">{{item.competenceLabel}}</span>{{/if}}
         <span class="objet-controls">
           {{#if item.isArme}}
           <a data-item-attaque title="{{localize 'VERMINE.Item.Attaque'}}"><i class="fas fa-crosshairs"></i></a>
@@ -45,4 +46,4 @@
     </li>
     {{/each}}
   </ol>
-</div>
+</section>

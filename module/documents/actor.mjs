@@ -1,4 +1,4 @@
-import { ouvrirDialogueJet } from "../dice/roll-dialog.mjs";
+import { ouvrirDialogueJet, ouvrirDialogueJetSimple } from "../dice/roll-dialog.mjs";
 
 /**
  * Classe Acteur du système Vermine 2047.
@@ -19,5 +19,14 @@ export class VermineActor extends Actor {
    */
   async rollAction(preset = {}) {
     return ouvrirDialogueJet(this, preset);
+  }
+
+  /**
+   * Ouvre le dialogue de Jet simplifié (nombre de dés fixe contre une Difficulté),
+   * sans Caractéristique/Compétence ni Réserves. Utilisé par les Créatures/PNJ.
+   * @param {object} [preset] - { nbDes, difficulte, label }
+   */
+  async rollSimple(preset = {}) {
+    return ouvrirDialogueJetSimple(this, preset);
   }
 }

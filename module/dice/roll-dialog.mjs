@@ -87,6 +87,57 @@ export async function ouvrirDialogueJet(actor, preset = {}) {
   });
 }
 
+/**
+ * Ouvre un dialogue simplifié : nombre de dés fixe contre une Difficulté, sans
+ * Caractéristique/Compétence ni Réserves. Utilisé par les fiches Créature/PNJ.
+ * @param {Actor} actor
+ * @param {object} [preset] - { nbDes, difficulte, label }
+ */
+export async function ouvrirDialogueJetSimple(actor, preset = {}) {
+  const contenu = `
+    <form class="vermine2047 jet-dialog-simple">
+      <div class="form-group">
+        <label>${game.i18n.localize("VERMINE.Jet.NombreDesLancer")}</label>
+        <input type="number" name="nbDes" value="${preset.nbDes ?? 1}" min="0" />
+      </div>
+      <div class="form-group">
+        <label>${game.i18n.localize("VERMINE.Jet.Difficulte")}</label>
+        <input type="number" name="difficulte" value="${preset.difficulte ?? 7}" min="3" max="10" />
+      </div>
+    </form>`;
+
+  return new Promise((resolve) => {
+    const dlg = new Dialog({
+      title: `${game.i18n.localize("VERMINE.Jet.Titre")} — ${actor.name}`,
+      content: contenu,
+      buttons: {
+        lancer: {
+          icon: '<i class="fas fa-dice-d10"></i>',
+          label: game.i18n.localize("VERMINE.Jet.Lancer"),
+          callback: async (html) => {
+            const root = html[0] ?? html;
+            const nbDes = Math.max(0, Number(root.querySelector('[name="nbDes"]').value) || 0);
+            const difficulte = Number(root.querySelector('[name="difficulte"]').value);
+            resolve(await rollVermine({
+              actor, difficulte,
+              composants: { des: nbDes },
+              relancesCompetence: actor.system.relances ?? 0,
+              label: preset.label ?? ""
+            }));
+          }
+        },
+        annuler: {
+          icon: '<i class="fas fa-times"></i>',
+          label: game.i18n.localize("VERMINE.Annuler"),
+          callback: () => resolve(null)
+        }
+      },
+      default: "lancer"
+    }, { classes: ["vermine2047", "dialog", "jet-dialog"], width: 320 });
+    dlg.render(true);
+  });
+}
+
 /** Calcule la taille de la Main à partir du formulaire (pour l'aperçu et le lancer). */
 function lireComposants(actor, html, groupe = null) {
   const root = html[0] ?? html;

@@ -12,7 +12,7 @@ const CARTE_TEMPLATE = "systems/vermine2047/templates/dice/roll-card.hbs";
  * @param {number} opts.difficulte        - Difficulté (3 à 10).
  * @param {number} [opts.handicap=0]       - Degré de Handicap (0 à 5). Réussites requises = 1 + handicap.
  * @param {object} opts.composants        - Détail de la Main { carac, competence, specialite, materiel, entraide, sangFroid, groupe }.
- * @param {number} opts.relancesCompetence - Relances offertes par la compétence.
+ * @param {number} opts.relancesCompetence - Nombre de dés relançables d'un coup (Compétence ou Créature).
  * @param {string} [opts.label]           - Libellé du jet.
  * @returns {Promise<ChatMessage>}
  */
@@ -190,8 +190,11 @@ export async function onRelance(event) {
 
   if (source === "competence") {
     if (etat.relancesCompetence <= 0) return;
-    etat.relancesCompetence -= 1;
-    await relancerDes(etat, 1);
+    // relancesCompetence est un nombre de dés à relancer (pas un nombre de clics) :
+    // un seul clic consomme tout le pool d'un coup (usage unique par jet).
+    const nb = Math.min(etat.relancesCompetence, nbRates);
+    etat.relancesCompetence = 0;
+    await relancerDes(etat, nb);
   } else if (source === "effort") {
     if (etat.effortRelanceUtilisee) return; // usage unique par jet
     const dispo = acteur?.system?.reserves?.effort?.value ?? 0;

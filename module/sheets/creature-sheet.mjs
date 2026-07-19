@@ -18,10 +18,6 @@ export class CreatureSheet extends ActorSheet {
     ctx.system = sys;
     ctx.VERMINE = VERMINE;
 
-    ctx.caracs = Object.entries(VERMINE.caracteristiques).map(([key, c]) => ({
-      key, label: game.i18n.localize(c.label), value: sys.caracteristiques[key].value
-    }));
-
     ctx.blessuresAff = {};
     for (const key of Object.keys(VERMINE.niveauxBlessure)) {
       const b = sys.blessures[key];
@@ -38,8 +34,8 @@ export class CreatureSheet extends ActorSheet {
 
   activateListeners(html) {
     super.activateListeners(html);
-    html.find("[data-roll-carac]").on("click", (ev) =>
-      this.actor.rollAction({ caracteristique: ev.currentTarget.dataset.rollCarac }));
+
+    html.find("[data-roll-simple]").on("click", () => this.actor.rollSimple());
 
     if (!this.isEditable) return;
     html.find("[data-blessure]").on("click", (ev) => {
